@@ -3,9 +3,12 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "migrate": "prisma migrate dev",
+    "generate": "prisma generate"
   },
   "dependencies": {
+    "@prisma/client": "^4.13.0",
     "iron-session": "^6.3.1",
     "next": "latest",
     "react": "^18.2.0",
