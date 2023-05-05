@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@prisma/client": "^4.13.0",
+    "bcrypt": "^5.1.0",
     "iron-session": "^6.3.1",
     "next": "latest",
     "react": "^18.2.0",

@@ -19,12 +19,16 @@ export default withIronSessionApiRoute(
             return;
         }
         // ユーザーを作成
-        const user = await prisma.user.create({
-            data: {
-                user_name: req.body.user_name,
-                password: req.body.password
-            }
-        });
+        const bcrypt = require('bcrypt');
+        bcrypt.hash(req.body.password, 10, async function(err, hash) {
+            const user = await prisma.user.create({
+                data: {
+                    user_name: req.body.user_name,
+                    hash: hash,
+                }
+            });
+        })
+        
         res.status(201).send('The user was successfully created.');
     }, {
         cookieName: 'session-id',

@@ -9,5 +9,5 @@ datasource db {
 
 model User {
     user_name String @id
-    password  String
+    hash      String
 }
