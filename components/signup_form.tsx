@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 
-export default function SingInPage() {
+export default function SignUpForm() {
   const router = useRouter();
 
   const handleSubmit = async (event) => {
@@ -10,6 +10,7 @@ export default function SingInPage() {
     const data = {
       user_name: event.target.user_name.value,
       password: event.target.password.value,
+      confirm_password: event.target.confirm_password.value,
     };
 
     const JSONdata = JSON.stringify(data);
@@ -23,13 +24,10 @@ export default function SingInPage() {
       body: JSONdata,
     };
 
-    const response = await fetch('api/signin', options);
+    const response = await fetch('api/signup', options);
 
     const result = await response.text();
     console.log(result);
-
-    // 成功したときトップページに移動
-    router.push('/');
   }
 
   return (
@@ -38,7 +36,9 @@ export default function SingInPage() {
       <input type='text' name='user_name' required/><br />
       <label>Password:</label><br />
       <input type='password' name='password'/><br />
-      <button type='submit'>Sign In</button>
+      <label>Confirm Password:</label><br />
+      <input type='password' name='confirm_password'/><br />
+      <button type='submit'>Sign Up</button>
     </form>
   )
 }
