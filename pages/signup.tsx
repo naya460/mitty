@@ -1,4 +1,8 @@
+import { useRouter } from 'next/router'
+
 export default function SignUpPage() {
+  const router = useRouter();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -24,6 +28,9 @@ export default function SignUpPage() {
 
     const result = await response.text();
     console.log(result);
+
+    // 成功したときトップページに移動
+    router.push('/');
   }
 
   return (
