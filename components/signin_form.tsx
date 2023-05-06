@@ -29,6 +29,8 @@ export default function SingInForm() {
 
     const result = await response.text();
     console.log(result);
+
+    router.reload();
   }
 
   return (

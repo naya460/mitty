@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
+import { useState, useRef, useEffect } from 'react'
 
 import SignInForm from '../components/signin_form'
 import SignUpForm from '../components/signup_form'
@@ -7,8 +8,50 @@ import SignUpForm from '../components/signup_form'
 import styles from './index.module.css'
 
 export default function IndexPage() {
+  const router = useRouter();
+  const [json, setJson] = useState(null);
+  const [page, setPage] = useState(<></>);
   // フォームの切り替え(1: signin, 2:signup)
   const [form, setForm] = useState(1);
+
+  useEffect(() => {
+    (async () => {
+      const user = await fetch('/api/user');
+      const tmp = await user.json();
+      // サインインしていないときのページを設定
+      if (tmp === null) {
+        setPage(
+          <>
+            <div className={styles.top}>
+              <p className={styles.title}>mitty</p>
+              
+              {Form()}
+              {FormChangeButton()}
+            </div>
+          </>
+        );
+      }
+      // サインインしているときのページを設定
+      else {
+        setPage(
+          <>
+            <p>User Name : {tmp.user_name}</p>
+            <a href='/' onClick={handleSignOut}>Sign Out</a>
+          </>
+        );
+      }
+      // jsonが異なるとき更新
+      if (json !== tmp) {
+        setJson(tmp);
+      }
+    })();
+  }, [form, json]);
+
+  // サインアウト処理
+  const handleSignOut = async () => {
+    await fetch('/api/signout');
+    router.reload();
+  }
 
   // フォーム
   const Form = () => {
@@ -50,14 +93,6 @@ export default function IndexPage() {
   }
 
   return (
-    <>
-      <div className={styles.top}>
-        <p className={styles.title}>mitty</p>
-        
-        {Form()}
-        {FormChangeButton()}
-        <Link href='./api/signout'>Sign Out</Link>
-      </div>
-    </>
+    <>{page}</>
   )
 }
