@@ -1,5 +1,7 @@
 import { useRouter } from 'next/router'
 
+import styles from './form.module.css'
+
 export default function SingInForm() {
   const router = useRouter();
 
@@ -30,14 +32,12 @@ export default function SingInForm() {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label>User Name:</label><br />
-        <input type='text' name='user_name' required/><br />
-        <label>Password:</label><br />
-        <input type='password' name='password'/><br />
-        <button type='submit'>Sign In</button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit} className={styles.top}>
+      <label className={styles.form_text}>User Name</label>
+      <input type='text' name='user_name' className={styles.form} required/>
+      <label className={styles.form_text}>Password</label>
+      <input type='password' name='password' className={styles.form} required/>
+      <button type='submit' className={styles.button}>Sign In</button>
+    </form>
   )
 }

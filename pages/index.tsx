@@ -4,6 +4,8 @@ import { useState } from 'react'
 import SignInForm from '../components/signin_form'
 import SignUpForm from '../components/signup_form'
 
+import styles from './index.module.css'
+
 export default function IndexPage() {
   // フォームの切り替え(1: signin, 2:signup)
   const [form, setForm] = useState(1);
@@ -11,9 +13,19 @@ export default function IndexPage() {
   // フォーム
   const Form = () => {
     if (form == 1) {
-      return <SignInForm />;
+      return (
+        <>
+          <div className={styles.description}>Sign In</div>
+          <SignInForm />
+        </>
+      );
     } else if (form == 2) {
-      return <SignUpForm />;
+      return (
+        <>
+          <div className={styles.description}>Sign Up</div>
+          <SignUpForm />
+        </>
+      );
     }
   }
 
@@ -28,14 +40,24 @@ export default function IndexPage() {
       text = 'Change to sign in page';
       handleClick = () => { setForm(1) };
     }
-    return <button onClick={handleClick}>{text}</button>;
+    return (
+      <Link
+        href='/'
+        onClick={handleClick}
+        className={styles.change_a}
+      >{text}</Link>
+    );
   }
 
   return (
     <>
-      {Form()}
-      {FormChangeButton()}<br/>
-      <Link href='./api/signout'>Sign Out</Link>
+      <div className={styles.top}>
+        <p className={styles.title}>mitty</p>
+        
+        {Form()}
+        {FormChangeButton()}
+        <Link href='./api/signout'>Sign Out</Link>
+      </div>
     </>
   )
 }
