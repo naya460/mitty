@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 
-import AuthenticationPage from '../components/authentication_page'
+import AuthenticationPage from '../components/authentication/'
 
 export default function IndexPage() {
   const router = useRouter();
