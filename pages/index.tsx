@@ -10,7 +10,7 @@ export default function IndexPage() {
   useEffect(() => {
     (async () => {
       // ユーザー情報を取得
-      const user = await fetch('/api/user');
+      const user = await fetch('/api/user/user');
       const tmp = await user.json();
       // サインインしていないときのページを設定
       if (tmp === null) {

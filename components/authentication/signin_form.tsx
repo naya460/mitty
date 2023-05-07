@@ -25,7 +25,7 @@ export default function SingInForm() {
       body: JSONdata,
     };
 
-    const response = await fetch('api/signin', options);
+    const response = await fetch('api/user/signin', options);
 
     const result = await response.text();
     console.log(result);

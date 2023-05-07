@@ -9,7 +9,7 @@ export default function MainPage(props: Props) {
 
   // サインアウト処理
   const handleSignOut = async () => {
-    await fetch('/api/signout');
+    await fetch('/api/user/signout');
     router.reload();
   }  
 
@@ -17,9 +17,9 @@ export default function MainPage(props: Props) {
     <>
       <p>User Name : {props.user_name}</p>
       <a href='/' onClick={handleSignOut}>Sign Out</a>
-      <form method='POST' action='/api/send'>
-      <textarea name='message' autoComplete='off' style={{resize: 'none'}} required/><br/>
-      <button type='submit'>Send</button>
+      <form method='POST' action='/api/message/send'>
+        <textarea name='message' autoComplete='off' style={{resize: 'none'}} required/><br/>
+        <button type='submit'>Send</button>
       </form>
     </>
   );

@@ -26,7 +26,7 @@ export default function SignUpForm() {
       body: JSONdata,
     };
 
-    const response = await fetch('api/signup', options);
+    const response = await fetch('api/user/signup', options);
 
     const result = await response.text();
     console.log(result);
