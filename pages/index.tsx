@@ -40,6 +40,10 @@ export default function IndexPage() {
             <>
               <p>User Name : {tmp.user_name}</p>
               <a href='/' onClick={handleSignOut}>Sign Out</a>
+              <form method='POST' action='/api/send'>
+                <textarea name='message' autoComplete='off' style={{resize: 'none'}} required/><br/>
+                <button type='submit'>Send</button>
+              </form>
             </>
           );
         }        

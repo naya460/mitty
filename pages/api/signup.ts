@@ -41,5 +41,5 @@ async function SignUpRoute(req, res) {
   }
   await req.session.save();
   
-  res.status(201).send('The user was successfully created.');
+  res.status(201).send('The message was successfully sent.');
 }

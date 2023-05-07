@@ -8,7 +8,15 @@ datasource db {
 }
 
 model User {
-    user_id   Int    @id @default(autoincrement())
-    user_name String @unique
+    user_id   Int     @id @default(autoincrement())
+    user_name String  @unique
     hash      String
+    messages  Message[]
+}
+
+model Message {
+    message_id   String @id @default(cuid())
+    message_text String
+    author       User   @relation(fields: [author_id], references: [user_id])
+    author_id    Int
 }
