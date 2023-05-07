@@ -1,10 +1,9 @@
-import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 
 import AuthenticationPage from '../components/authentication/'
+import MainPage from '../components/main_page'
 
 export default function IndexPage() {
-  const router = useRouter();
   const [json, setJson] = useState(null);
   const [page, setPage] = useState(<></>);
 
@@ -22,26 +21,11 @@ export default function IndexPage() {
         setJson(tmp);
         // サインインしているときのページを設定
         if (tmp !== null) {
-          setPage(
-            <>
-              <p>User Name : {tmp.user_name}</p>
-              <a href='/' onClick={handleSignOut}>Sign Out</a>
-              <form method='POST' action='/api/send'>
-                <textarea name='message' autoComplete='off' style={{resize: 'none'}} required/><br/>
-                <button type='submit'>Send</button>
-              </form>
-            </>
-          );
+          setPage(<MainPage user_name={tmp.user_name} />);
         }        
       }
     })();
   }, []);
-
-  // サインアウト処理
-  const handleSignOut = async () => {
-    await fetch('/api/signout');
-    router.reload();
-  }  
 
   return (
     <>{page}</>
