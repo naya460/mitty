@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react'
 
-export default function MessageList() {
+import Message from './message'
+
+interface Props {
+  user_name: string
+}
+
+export default function MessageList(props: Props) {
   const [displayMessages, setDisplayMessages] = useState(null);
 
   useEffect(() => {
@@ -12,14 +18,18 @@ export default function MessageList() {
       let display_msg = [];
       for (let i in messages) {
         display_msg.push(
-          <p key={i} style={{whiteSpace: 'pre-line'}}>
-            {messages[i].message_text}<br/>[{messages[i].author.user_name}]
-          </p>
+          <Message
+            key={i}
+            user_name={messages[i].author.user_name}
+            mine={props.user_name == messages[i].author.user_name}
+          >
+            {messages[i].message_text}
+          </Message>
         );
       }
       setDisplayMessages(display_msg);
     })()
     }, [])
 
-    return <>{displayMessages}</>
+    return <div style={{position: 'relative'}}>{displayMessages}</div>;
 }

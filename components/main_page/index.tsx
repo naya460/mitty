@@ -23,7 +23,7 @@ export default function MainPage(props: Props) {
         <textarea name='message' autoComplete='off' style={{resize: 'none'}} required/><br/>
         <button type='submit'>Send</button>
       </form>
-      <MessageList />
+      <MessageList user_name={props.user_name}/>
     </>
   );
 }
