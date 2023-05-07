@@ -31,21 +31,21 @@ export default function IndexPage() {
           </>
         );
       }
-      // サインインしているときのページを設定
-      else {
-        setPage(
-          <>
-            <p>User Name : {tmp.user_name}</p>
-            <a href='/' onClick={handleSignOut}>Sign Out</a>
-          </>
-        );
-      }
       // jsonが異なるとき更新
       if (json !== tmp) {
         setJson(tmp);
+        // サインインしているときのページを設定
+        if (tmp !== null) {
+          setPage(
+            <>
+              <p>User Name : {tmp.user_name}</p>
+              <a href='/' onClick={handleSignOut}>Sign Out</a>
+            </>
+          );
+        }        
       }
     })();
-  }, [form, json]);
+  }, [form]);
 
   // サインアウト処理
   const handleSignOut = async () => {
