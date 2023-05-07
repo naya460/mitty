@@ -1,5 +1,5 @@
-import prisma from '../../../lib/prisma'
-import { withSessionRoute } from '../../../lib/withSession'
+import prisma from 'lib/prisma'
+import { withSessionRoute } from 'lib/withSession'
 
 export default withSessionRoute(SignUpRoute);
 

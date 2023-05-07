@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 
-import AuthenticationPage from '../components/authentication/'
-import MainPage from '../components/main_page'
+import AuthenticationPage from 'components/authentication'
+import MainPage from 'components/main_page'
 
 export default function IndexPage() {
   const [json, setJson] = useState(null);
