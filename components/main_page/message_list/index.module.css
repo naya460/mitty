@@ -1,0 +1,13 @@
+.top {
+    height: 1000px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.messages {
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: scroll;
+    padding: 0.1rem 1rem;
+}
