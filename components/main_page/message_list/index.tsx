@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 
 import Message from './message'
+import MessageInput from './message_input'
 
 interface Props {
   user_name: string
@@ -29,7 +30,12 @@ export default function MessageList(props: Props) {
       }
       setDisplayMessages(display_msg);
     })()
-    }, [])
+  }, []);
 
-    return <div style={{position: 'relative'}}>{displayMessages}</div>;
+  return (
+    <div>
+      <div style={{position: 'relative'}}>{displayMessages}</div>
+      <MessageInput />
+    </div>
+  );
 }

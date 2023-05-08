@@ -1,0 +1,45 @@
+.top {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.form {
+    display: inline-flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.message_box {
+    width: 100%;
+    resize: none;
+    border: 2px;
+    border-style:solid;
+    border-color: #8fbf8f;
+    border-radius: 0.5rem;
+    background-color: #f0f0f0;
+    margin: 0.2rem 0.5rem;
+    font-family: sans-serif;
+    font-size: 1rem;
+    color: black;
+    line-height: 1.2;
+    padding: 0.2rem;
+}
+
+.message_box:focus-visible {
+    outline: none;
+}
+
+.send_button {
+    border: 0;
+    border-radius: 0.5rem;
+    background-color: #a0d0a0;
+    margin: 0.2rem 0;
+}
+
+.send_button:hover {
+    background-color: #b0e0b0;
+}
+
+.send_button:active {
+    background-color: #8fbf8f;
+}

@@ -19,10 +19,6 @@ export default function MainPage(props: Props) {
     <>
       <p>User Name : {props.user_name}</p>
       <a href='/' onClick={handleSignOut}>Sign Out</a>
-      <form method='POST' action='/api/message/send'>
-        <textarea name='message' autoComplete='off' style={{resize: 'none'}} required/><br/>
-        <button type='submit'>Send</button>
-      </form>
       <MessageList user_name={props.user_name}/>
     </>
   );
