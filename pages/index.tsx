@@ -28,6 +28,18 @@ export default function IndexPage() {
   }, []);
 
   return (
-    <>{page}</>
+    <div style={{width: '100%', height: '100%'}}>
+      <div style={{width: '100%', height: '100%'}}>{page}</div>
+      <style global jsx>{`
+        html,
+        body,
+        div#__next,
+        div#__next > div {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+        }
+      `}</style>
+    </div>
   )
 }
