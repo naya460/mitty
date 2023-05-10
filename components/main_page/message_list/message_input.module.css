@@ -1,6 +1,7 @@
 .top {
     width: 100%;
     margin-top: 0.5rem;
+    margin-bottom: 1rem;
     flex-basis: 0;
 }
 
@@ -37,6 +38,7 @@
     border-radius: 0.5rem;
     background-color: #a0d0a0;
     margin: 0.2rem 0;
+    margin-right: 0.5rem;
 }
 
 .send_button:hover {
