@@ -15,12 +15,15 @@ async function SignUpRoute(req, res) {
     where: { user_name: req.body.user_name }
   })
   if (check_user) {
-    res.status(500).send('The user already exists.');
+    // ユーザーが存在していることを返却
+    res.status(500).json({ success: false, user: true });
     return;
   }
 
   // パスワードが一致しているか確認
   if (req.body.password !== req.body.confirm_password) {
+    // パスワードが一致していないことを返却
+    res.status(500).json({ success: false, user: false, password: false});
     return;
   }
   
@@ -41,5 +44,5 @@ async function SignUpRoute(req, res) {
   }
   await req.session.save();
   
-  res.status(201).send('The message was successfully sent.');
+  res.status(201).json({ success: true });
 }

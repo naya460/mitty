@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 
 import styles from './form.module.css'
 
