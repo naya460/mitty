@@ -12,8 +12,10 @@ async function UserRoute(req, res) {
         select: {
           user_name: true
         }
-      }
+      },
+      time: true
     }
   });
+  console.log()
   res.status(200).json(messages);
 }

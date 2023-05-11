@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import {DateTime} from 'luxon'
 
 import Message from './message'
 import MessageInput from './message_input'
@@ -20,11 +21,13 @@ export default function MessageList(props: Props) {
       // メッセージの表示を作成
       let display_msg = [];
       for (let i in messages) {
+        // メッセージを追加
         display_msg.unshift(
           <Message
             key={i}
             user_name={messages[i].author.user_name}
             mine={props.user_name == messages[i].author.user_name}
+            time={messages[i].time}
           >
             {messages[i].message_text}
           </Message>
