@@ -1,15 +1,15 @@
 import prisma from 'lib/prisma'
 import { withSessionRoute } from 'lib/withSession'
 
-export default withSessionRoute(SendRoute);
+export default withSessionRoute(CreateRoute);
 
-async function SendRoute(req, res) {
+async function CreateRoute(req, res) {
   // POST以外のとき失敗
   if (req.method !== 'POST') {
     res.status(400).send('Message is not POST');
     return;
   }
-
+  
   // ユーザー名を入手
   const user_name: string = req.session.user.user_name;
   if (user_name === null) {
@@ -26,26 +26,23 @@ async function SendRoute(req, res) {
     return;
   }
 
-  // グループIDを取得
-  const group_id: string = req.body.group_id;
-  if (group_id === null) {
-    res.status(400).send('The group_id did not exist in the request.');
+  // グループ名を取得
+  const group_name: string = req.body.group_name;
+  if (group_name === null) {
+    res.status(400).send('The group_name did not exist in the request.');
   }
 
-  // メッセージを取り出す
-  const message_text: string = req.body.message;
-  if (message_text === null) {
-    res.status(400).send('The message did not exist in the request.')
-  }
-
-  // メッセージを追加
-  await prisma.message.create({
+  // グループを追加
+  await prisma.group.create({
     data: {
-      message_text: message_text,
-      author_id: user_id,
-      group_id: group_id
+      group_name: group_name,
+      members: {
+        create: [{
+          user_id: user_id
+        }]
+      }
     }
-  });
+  })
 
-  res.status(201).send('Sending message was success.')
+
 }

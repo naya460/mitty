@@ -12,6 +12,23 @@ model User {
     user_name String  @unique
     hash      String
     messages  Message[]
+    groupes   GroupsOnUsers[]
+}
+
+model Group {
+    group_id   String  @id @default(cuid())
+    group_name String
+    messages   Message[]
+    members    GroupsOnUsers[]
+}
+
+model GroupsOnUsers {
+    user     User   @relation(fields: [user_id], references: [user_id])
+    user_id  Int
+    group    Group  @relation(fields: [group_id], references: [group_id])
+    group_id String
+
+    @@id([user_id, group_id])
 }
 
 model Message {
@@ -19,5 +36,7 @@ model Message {
     message_text String
     author       User     @relation(fields: [author_id], references: [user_id])
     author_id    Int
+    group        Group    @relation(fields: [group_id], references: [group_id])   
+    group_id     String
     time         DateTime @default(now())
 }
