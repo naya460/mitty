@@ -2,10 +2,17 @@ import prisma from 'lib/prisma'
 import { withUserRoute } from 'lib/withSession'
 import { NextApiRequest, NextApiResponse } from 'next';
 
-// サインインしているときで、GETリクエストのときのみ実行
-export default withUserRoute(UserRoute, 'GET');
+// サインインしているときで、POSTリクエストのときのみ実行
+// group_idを指定して読み込むため、POSTになっている
+export default withUserRoute(UserRoute, 'POST');
 
 async function UserRoute(req: NextApiRequest, res: NextApiResponse) {
+  // グループを指定しているか確認
+  if (req.body.group_id == null) {
+    res.status(400).send('The group_id did not exist in the request.');
+    return;
+  }
+
   // メッセージを取得
   let messages = await prisma.message.findMany({
     select: {
@@ -15,12 +22,10 @@ async function UserRoute(req: NextApiRequest, res: NextApiResponse) {
           user_name: true
         }
       },
-      group: {
-        select: {
-          group_name: true
-        }
-      },
       time: true
+    },
+    where: {
+      group_id: req.body.group_id
     }
   });
   res.status(200).json(messages);

@@ -6,7 +6,6 @@ import styles from './message.module.css'
 interface Props {
   user_name: string,
   mine: boolean,
-  group_name: string,
   time: Date,
   children?: react.ReactNode
 }
@@ -20,7 +19,7 @@ export default function Message(props: Props) {
       {/* user name and time*/}
       <div
         className={`${styles.name} ${(props.mine) && styles.mine_name}`}
-      >{props.user_name} [{time.toFormat("yyyy/MM/dd HH:mm")}] [{props.group_name}]</div>
+      >{props.user_name} [{time.toFormat("yyyy/MM/dd HH:mm")}]</div>
       {/* message box */}
       <div className={`
         ${styles.message_box}

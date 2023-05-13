@@ -15,8 +15,29 @@ export default function MessageList(props: Props) {
 
   useEffect(() => {
     (async () => {
+      // group_idが指定されていないとき、無視
+      if (props.group_id == null) {
+        return;
+      }
+
+      // 送信するデータを作成
+      const data = {
+        group_id: props.group_id
+      };
+
+      const JSONdata = JSON.stringify(data);
+
+      // 送信するリクエスト内容を作成
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSONdata,
+      };
+
       // メッセージを取得する
-      const res = await fetch('api/message/get');
+      const res = await fetch('api/message/get', options);
       const messages = await res.json();
       // メッセージの表示を作成
       let display_msg = [];
@@ -27,7 +48,6 @@ export default function MessageList(props: Props) {
             key={i}
             user_name={messages[i].author.user_name}
             mine={props.user_name == messages[i].author.user_name}
-            group_name={messages[i].group.group_name}
             time={messages[i].time}
           >
             {messages[i].message_text}
@@ -36,7 +56,7 @@ export default function MessageList(props: Props) {
       }
       setDisplayMessages(display_msg);
     })()
-  }, []);
+  }, [props.group_id]);
 
   return (
     <div className={styles.top}>
