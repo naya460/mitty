@@ -13,6 +13,11 @@ async function UserRoute(req, res) {
           user_name: true
         }
       },
+      group: {
+        select: {
+          group_name: true
+        }
+      },
       time: true
     }
   });

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import {DateTime} from 'luxon'
 
 import Message from './message'
 import MessageInput from './message_input'
@@ -7,7 +6,8 @@ import MessageInput from './message_input'
 import styles from './index.module.css'
 
 interface Props {
-  user_name: string
+  user_name: string,
+  group_id: string
 }
 
 export default function MessageList(props: Props) {
@@ -27,6 +27,7 @@ export default function MessageList(props: Props) {
             key={i}
             user_name={messages[i].author.user_name}
             mine={props.user_name == messages[i].author.user_name}
+            group_name={messages[i].group.group_name}
             time={messages[i].time}
           >
             {messages[i].message_text}
@@ -40,7 +41,7 @@ export default function MessageList(props: Props) {
   return (
     <div className={styles.top}>
       <div className={styles.messages}>{displayMessages}</div>
-      <MessageInput />
+      <MessageInput group_id={props.group_id}/>
     </div>
     
   );
