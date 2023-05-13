@@ -1,8 +1,9 @@
 import { withSessionRoute } from 'lib/withSession'
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default withSessionRoute(UserRoute);
 
-async function UserRoute(req, res) {
+async function UserRoute(req: NextApiRequest, res: NextApiResponse) {
   // GET以外のとき失敗
   if (req.method !== 'GET') {
     res.status(400).send('Message is not GET');

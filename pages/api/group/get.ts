@@ -1,9 +1,11 @@
 import prisma from 'lib/prisma'
-import { withSessionRoute } from 'lib/withSession'
+import { withUserRoute } from 'lib/withSession'
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export default withSessionRoute(GetRoute);
+// サインインしているときで、GETリクエストのときのみ実行
+export default withUserRoute(GetRoute, 'GET');
 
-async function GetRoute(req, res) {
+async function GetRoute(req: NextApiRequest, res: NextApiResponse) {
   // グループを取得
   const groups = await prisma.group.findMany({
     select: {

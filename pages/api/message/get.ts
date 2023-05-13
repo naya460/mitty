@@ -1,9 +1,11 @@
 import prisma from 'lib/prisma'
-import { withSessionRoute } from 'lib/withSession'
+import { withUserRoute } from 'lib/withSession'
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export default withSessionRoute(UserRoute);
+// サインインしているときで、GETリクエストのときのみ実行
+export default withUserRoute(UserRoute, 'GET');
 
-async function UserRoute(req, res) {
+async function UserRoute(req: NextApiRequest, res: NextApiResponse) {
   // メッセージを取得
   let messages = await prisma.message.findMany({
     select: {
@@ -21,6 +23,5 @@ async function UserRoute(req, res) {
       time: true
     }
   });
-  console.log()
   res.status(200).json(messages);
 }

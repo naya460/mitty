@@ -1,20 +1,13 @@
 import prisma from 'lib/prisma'
-import { withSessionRoute } from 'lib/withSession'
+import { withUserRoute } from 'lib/withSession'
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export default withSessionRoute(CreateRoute);
+// サインインしているときで、POSTリクエストのときのみ実行
+export default withUserRoute(CreateRoute, 'POST');
 
-async function CreateRoute(req, res) {
-  // POST以外のとき失敗
-  if (req.method !== 'POST') {
-    res.status(400).send('Message is not POST');
-    return;
-  }
-  
+async function CreateRoute(req: NextApiRequest, res: NextApiResponse) {
   // ユーザー名を入手
   const user_name: string = req.session.user.user_name;
-  if (user_name === null) {
-    res.status(400).send('The user_name did not exist in the request.')
-  }
   
   // ユーザーIDを取得
   const user_id = (await prisma.user.findUnique({
@@ -42,7 +35,5 @@ async function CreateRoute(req, res) {
         }]
       }
     }
-  })
-
-
+  });
 }
