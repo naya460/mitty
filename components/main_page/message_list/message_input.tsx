@@ -4,7 +4,7 @@ import react, { useState } from 'react'
 import styles from './message_input.module.css'
 
 interface Props {
-  group_id: string;
+  selected_group_id: string;
 }
 
 export default function MessageInput(props: Props) {
@@ -18,7 +18,7 @@ export default function MessageInput(props: Props) {
     // 送信するデータを作成
     const data = {
       message: event.target.message.value,
-      group_id: props.group_id
+      group_id: props.selected_group_id
     };
 
     const JSONdata = JSON.stringify(data);

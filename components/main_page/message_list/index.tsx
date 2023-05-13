@@ -7,7 +7,7 @@ import styles from './index.module.css'
 
 interface Props {
   user_name: string,
-  group_id: string
+  selected_group_id: string
 }
 
 export default function MessageList(props: Props) {
@@ -16,13 +16,13 @@ export default function MessageList(props: Props) {
   useEffect(() => {
     (async () => {
       // group_idが指定されていないとき、無視
-      if (props.group_id == null) {
+      if (props.selected_group_id == null) {
         return;
       }
 
       // 送信するデータを作成
       const data = {
-        group_id: props.group_id
+        group_id: props.selected_group_id
       };
 
       const JSONdata = JSON.stringify(data);
@@ -56,12 +56,12 @@ export default function MessageList(props: Props) {
       }
       setDisplayMessages(display_msg);
     })()
-  }, [props.group_id]);
+  }, [props.selected_group_id]);
 
   return (
     <div className={styles.top}>
       <div className={styles.messages}>{displayMessages}</div>
-      <MessageInput group_id={props.group_id}/>
+      <MessageInput selected_group_id={props.selected_group_id}/>
     </div>
     
   );

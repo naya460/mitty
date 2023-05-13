@@ -12,7 +12,7 @@ interface Props {
 
 export default function MainPage(props: Props) {
   const router = useRouter();
-  const [displayGroupId, setDisplayGroupId] = useState(null);
+  const [selectedGroupId, setSelectedGroupId] = useState(null);
 
   // サインアウト処理
   const handleSignOut = async () => {
@@ -21,18 +21,23 @@ export default function MainPage(props: Props) {
   }
   
   // 表示するグループを変更する関数
-  const handleSetDisplayGroupId = (id: string) => {
-    setDisplayGroupId(() => id);
+  const handleSetSelectedGroupId = (id: string) => {
+    setSelectedGroupId(() => id);
   }
 
   return (
     <div className={styles.top}>
       <p>User Name : {props.user_name}</p>
-      <p>Group Id : {displayGroupId}</p>
       <a href='/' onClick={handleSignOut}>Sign Out</a>
       <div className={styles.main_view}>
-        <GroupList setDisplayGroupId={handleSetDisplayGroupId}/>
-        <MessageList user_name={props.user_name} group_id={displayGroupId}/>
+        <GroupList
+          setSelectedGroupId={handleSetSelectedGroupId}
+          selected_group_id={selectedGroupId}
+        />
+        <MessageList
+          user_name={props.user_name}
+          selected_group_id={selectedGroupId}
+        />
       </div>
     </div>
   );

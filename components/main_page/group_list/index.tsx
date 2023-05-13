@@ -2,8 +2,11 @@ import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react';
 import styles from './index.module.css'
 
+import Group from './group'
+
 interface Props {
-  setDisplayGroupId: (id: string) => void,
+  setSelectedGroupId: (id: string) => void;
+  selected_group_id: string;
 }
 
 export default function GroupList(props: Props) {
@@ -44,19 +47,20 @@ export default function GroupList(props: Props) {
       for (let i in groups) {
         // グループの表示を追加
         display_groups.push(
-          <button
+          <Group
             onClick={() => {
-              props.setDisplayGroupId(groups[i].group_id);
+              props.setSelectedGroupId(groups[i].group_id);
             }}
+            group_name={groups[i].group_name}
+            group_id={groups[i].group_id}
+            selected_group_id={props.selected_group_id}
             key={i}
-          >
-            {groups[i].group_name}
-          </button>
+          />
         )
       }
       setDisplayGroups(display_groups);
     })()
-  }, [])
+  }, [props.selected_group_id])
 
   return (
     <div className={styles.top}>
