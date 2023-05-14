@@ -16,7 +16,7 @@ async function UserRoute(req: NextApiRequest, res: NextApiResponse) {
   }
 
   // グループに所属しているか確認
-  let is_belong = await isBelongGroup(req.session.user.user_name, req.body.group_id);
+  const is_belong = await isBelongGroup(req.session.user.user_name, req.body.group_id);
   if (!is_belong) {
     res.status(400).send('You do not belong to the group.');
     return;
