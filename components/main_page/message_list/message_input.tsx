@@ -7,10 +7,10 @@ import styles from './message_input.module.css'
 
 interface Props {
   selected_group_id: string;
+  updateMessages: () => void;
 }
 
 export default function MessageInput(props: Props) {
-  const router = useRouter();
   const [text, setText] = useState('');
   const [lineCount, setLineCount] = useState(1);
 
@@ -23,8 +23,12 @@ export default function MessageInput(props: Props) {
       group_id: props.selected_group_id
     });
 
+    // メッセージを送信
     await fetch('api/message/send', options);
-    router.reload();
+    // 表示を更新
+    props.updateMessages();
+    // 入力欄をリセット
+    setText('');
   }
 
   const handleChange: react.ChangeEventHandler<HTMLTextAreaElement> = (event) => {
