@@ -2,6 +2,8 @@ import prisma from 'lib/prisma'
 import { withUserRoute } from 'lib/withSession'
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import isBelongGroup from 'components/api/is_belong_group';
+
 // サインインしているときで、POSTリクエストのときのみ実行
 // group_idを指定して読み込むため、POSTになっている
 export default withUserRoute(UserRoute, 'POST');
@@ -14,22 +16,8 @@ async function UserRoute(req: NextApiRequest, res: NextApiResponse) {
   }
 
   // グループに所属しているか確認
-  let groups = await prisma.user.findMany({
-    include: {
-      groups: {
-        include: {
-          user: true
-        },
-        where: {
-          user: {
-            user_name: req.session.user.user_name
-          },
-          group_id: req.body.group_id
-        }
-      }
-    }
-  });
-  if (groups.length) {
+  let is_belong = await isBelongGroup(req.session.user.user_name, req.body.group_id);
+  if (!is_belong) {
     res.status(400).send('You do not belong to the group.');
     return;
   }
