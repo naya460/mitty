@@ -6,7 +6,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default withUserRoute(GetRoute, 'GET');
 
 async function GetRoute(req: NextApiRequest, res: NextApiResponse) {
-  // グループを取得
   const groups = await prisma.group.findMany({
     select: {
       group_id: true,
@@ -17,6 +16,15 @@ async function GetRoute(req: NextApiRequest, res: NextApiResponse) {
             select: {
               user_name: true
             }
+          }
+        }
+      }
+    },
+    where: {
+      members: {
+        every: {
+          user: {
+            user_name: req.session.user.user_name
           }
         }
       }
