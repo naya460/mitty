@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react';
 import styles from './index.module.css'
 
+import CreatePostRequest from 'components/common/create_post_request'
 import Group from './group'
 
 interface Props {
@@ -17,21 +18,10 @@ export default function GroupList(props: Props) {
   const handleCreateGroup = async (event) => {
     event.preventDefault();
 
-    // 送信するデータを作成
-    const data = {
+    // 送信するリクエストを作成
+    const options = CreatePostRequest({
       group_name: event.target.group_name.value
-    };
-
-    const JSONdata = JSON.stringify(data);
-
-    // 送信するリクエスト内容を作成
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSONdata,
-    };
+    });
 
     await fetch('api/group/create', options);
     router.reload();

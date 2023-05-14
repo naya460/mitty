@@ -10,7 +10,7 @@ interface Props {
   children?: react.ReactNode
 }
 
-export default function Message(props: Props) { 
+export default function Message(props: Props) {
   // 時間の形式を変更
   const time = DateTime.fromJSDate(new Date(props.time));
 

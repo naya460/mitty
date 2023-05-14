@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router'
 import react, { useState } from 'react'
 
+import CreatePostRequest from 'components/common/create_post_request';
+
 import styles from './message_input.module.css'
 
 interface Props {
@@ -15,22 +17,11 @@ export default function MessageInput(props: Props) {
   const handleSend = async (event) => {
     event.preventDefault();
     
-    // 送信するデータを作成
-    const data = {
+    // 送信するリクエストを作成
+    const options = CreatePostRequest({
       message: event.target.message.value,
       group_id: props.selected_group_id
-    };
-
-    const JSONdata = JSON.stringify(data);
-
-    // 送信するリクエスト内容を作成
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSONdata,
-    };
+    });
 
     await fetch('api/message/send', options);
     router.reload();

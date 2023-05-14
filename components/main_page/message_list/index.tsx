@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 
+import CreatePostRequest from 'components/common/create_post_request'
 import Message from './message'
 import MessageInput from './message_input'
 
@@ -20,21 +21,10 @@ export default function MessageList(props: Props) {
         return;
       }
 
-      // 送信するデータを作成
-      const data = {
+      // 送信するリクエストを作成
+      const options = CreatePostRequest({
         group_id: props.selected_group_id
-      };
-
-      const JSONdata = JSON.stringify(data);
-
-      // 送信するリクエスト内容を作成
-      const options = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSONdata,
-      };
+      });
 
       // メッセージを取得する
       const res = await fetch('api/message/get', options);
