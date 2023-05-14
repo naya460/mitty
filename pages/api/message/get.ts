@@ -13,6 +13,27 @@ async function UserRoute(req: NextApiRequest, res: NextApiResponse) {
     return;
   }
 
+  // グループに所属しているか確認
+  let groups = await prisma.user.findMany({
+    include: {
+      groups: {
+        include: {
+          user: true
+        },
+        where: {
+          user: {
+            user_name: req.session.user.user_name
+          },
+          group_id: req.body.group_id
+        }
+      }
+    }
+  });
+  if (groups.length) {
+    res.status(400).send('You do not belong to the group.');
+    return;
+  }
+
   // メッセージを取得
   let messages = await prisma.message.findMany({
     select: {

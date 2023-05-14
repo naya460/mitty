@@ -12,7 +12,7 @@ model User {
     user_name String  @unique
     hash      String
     messages  Message[]
-    groupes   GroupsOnUsers[]
+    groups    GroupsOnUsers[]
 }
 
 model Group {
