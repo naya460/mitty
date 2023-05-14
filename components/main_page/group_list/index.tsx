@@ -6,7 +6,7 @@ import CreatePostRequest from 'components/common/create_post_request'
 import Group from './group'
 
 interface Props {
-  setSelectedGroupId: (id: string) => void;
+  setSelectedGroupData: (id: string, name: string) => void;
   selected_group_id: string;
 }
 
@@ -39,7 +39,7 @@ export default function GroupList(props: Props) {
         display_groups.push(
           <Group
             onClick={() => {
-              props.setSelectedGroupId(groups[i].group_id);
+              props.setSelectedGroupData(groups[i].group_id, groups[i].group_name);
             }}
             group_name={groups[i].group_name}
             group_id={groups[i].group_id}

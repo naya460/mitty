@@ -1,0 +1,13 @@
+.top {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.group_name {
+    font-size: 1.2rem;
+    font-family: sans-serif;
+    color: black;
+    padding-left: 0.5rem;
+    padding-bottom: 0.5rem;
+}
