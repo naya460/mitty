@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router'
 import { useRef } from 'react'
 
+import CreatePostRequest from 'components/common/create_post_request'
+
 import styles from './form.module.css'
 
 export default function SignUpForm() {
@@ -13,22 +15,11 @@ export default function SignUpForm() {
     event.preventDefault();
 
     // 送信するデータを作成
-    const data = {
+    const options = CreatePostRequest({
       user_name: event.target.user_name.value,
       password: event.target.password.value,
       confirm_password: event.target.confirm_password.value,
-    };
-
-    const JSONdata = JSON.stringify(data);
-
-    // 送信するリクエスト内容を作成
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSONdata,
-    };
+    });
 
     const response = await fetch('api/user/signup', options);
     const resJson = await response.json();

@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router'
 import { useRef } from 'react'
 
+import CreatePostRequest from 'components/common/create_post_request'
+
 import styles from './form.module.css'
 
 export default function SingInForm() {
@@ -11,22 +13,11 @@ export default function SingInForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // 送信するデータを作成
-    const data = {
+    // 送信するリクエストを作成
+    const options = CreatePostRequest({
       user_name: event.target.user_name.value,
       password: event.target.password.value,
-    };
-
-    const JSONdata = JSON.stringify(data);
-
-    // 送信するリクエスト内容を作成
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSONdata,
-    };
+    });
 
     const response = await fetch('api/user/signin', options);
     const resJson = await response.json();
