@@ -1,0 +1,14 @@
+.top {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    flex-basis: 0;
+    flex-grow: 0;
+}
+
+.user_name {
+    font-size: 1rem;
+    font-family: sans-serif;
+    color: black;
+}

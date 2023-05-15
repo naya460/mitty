@@ -1,7 +1,6 @@
-import { useRouter } from 'next/router'
 import { useState } from 'react'
 
-import GroupList from './group_list'
+import MainMenu from './main_menu'
 import GroupContents from './group_contents'
 
 import styles from './index.module.css'
@@ -11,15 +10,8 @@ interface Props {
 }
 
 export default function MainPage(props: Props) {
-  const router = useRouter();
   const [selectedGroupId, setSelectedGroupId] = useState(null);
   const [selectedGroupName, setSelectedGroupName] = useState(null);
-
-  // サインアウト処理
-  const handleSignOut = async () => {
-    await fetch('/api/user/signout');
-    router.reload();
-  }
   
   // 表示するグループを変更する関数
   const handleSetSelectedGroupData = (id: string, name: string) => {
@@ -29,10 +21,9 @@ export default function MainPage(props: Props) {
 
   return (
     <div className={styles.top}>
-      <p>User Name : {props.user_name}</p>
-      <a href='/' onClick={handleSignOut}>Sign Out</a>
       <div className={styles.main_view}>
-        <GroupList
+        <MainMenu
+          user_name={props.user_name}
           setSelectedGroupData={handleSetSelectedGroupData}
           selected_group_id={selectedGroupId}
         />
