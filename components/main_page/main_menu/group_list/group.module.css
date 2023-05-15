@@ -21,3 +21,13 @@
 .top_selected:hover {
     background-color: #cfe0cf;
 }
+
+@media screen and (max-width: 30rem) {
+    .top_selected {
+        background-color: #f0f0f0;
+    }
+
+    .top_selected:hover {
+        background-color: #f0f0f0;
+    }
+}

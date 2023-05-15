@@ -7,6 +7,16 @@
     flex-grow: 0;
 }
 
+@media screen and (max-width: 30rem) {
+    .top {
+        flex-grow: 1;
+    }
+    .top_selected {
+        width: 0;
+        scale: 0;
+    }
+}
+
 .user_name {
     font-size: 1rem;
     font-family: sans-serif;

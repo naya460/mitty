@@ -22,7 +22,10 @@ export default function MainMenu(props: Props) {
   }
 
   return (
-    <div className={styles.top}>
+    <div className={`
+      ${styles.top}
+      ${(props.selected_group_id != null) && styles.top_selected}
+    `}>
       <div className={styles.user_name}>User : {props.user_name}</div>
       <a href='/' onClick={handleSignOut}>Sign Out</a>
       <GroupList

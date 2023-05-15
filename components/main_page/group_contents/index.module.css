@@ -4,10 +4,37 @@
     width: 100%;
 }
 
+@media screen and (max-width: 30rem) {
+    .top_null {
+        width: 0;
+        scale: 0;
+    }
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 0.5rem 0;
+}
+
+.back_button {
+    width: 0;
+    scale: 0;
+}
+
+@media screen and (max-width: 30rem) {
+    .back_button {
+        width: auto;
+        scale: 1;
+        margin-left: 0.5rem;
+    }
+}
+
 .group_name {
     font-size: 1.2rem;
     font-family: sans-serif;
     color: black;
-    padding-left: 0.5rem;
-    padding-bottom: 0.5rem;
+    height: 100%;
+    margin-left: 0.5rem;
 }
