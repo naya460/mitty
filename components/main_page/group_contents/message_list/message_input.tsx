@@ -27,6 +27,7 @@ export default function MessageInput(props: Props) {
     await fetch('api/message/send', options);
     // 表示を更新
     props.updateMessages();
+    setLineCount(1);
     // 入力欄をリセット
     setText('');
   }
