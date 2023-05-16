@@ -15,8 +15,9 @@ export default function MessageList(props: Props) {
   const [displayMessages, setDisplayMessages] = useState(null);
 
   const updateMessages = async () => {
-    // group_idが指定されていないとき、無視
+    // group_idが指定されていないとき、空にする
     if (props.selected_group_id == null) {
+      setDisplayMessages(null);
       return;
     }
 
