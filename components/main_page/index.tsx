@@ -26,6 +26,7 @@ export default function MainPage(props: Props) {
           user_name={props.user_name}
           setSelectedGroupData={handleSetSelectedGroupData}
           selected_group_id={selectedGroupId}
+          selected_group_name={selectedGroupName}
         />
         <GroupContents
           user_name={props.user_name}
