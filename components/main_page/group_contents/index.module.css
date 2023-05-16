@@ -42,8 +42,10 @@
         color: black;
     }
 
-    .back_button:hover {
-        background-color: #dff0df;
+    @media screen and (hover: hover) {
+        .back_button:hover {
+            background-color: #dff0df;
+        }
     }
 }
 

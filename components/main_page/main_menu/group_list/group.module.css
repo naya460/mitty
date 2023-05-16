@@ -11,8 +11,10 @@
     background-color: #f0f0f0;
 }
 
-.top:hover {
-    background-color: #dff0df;
+@media screen and (hover: hover) {
+    .top:hover {
+        background-color: #dff0df;
+    }
 }
 
 .top_selected {
