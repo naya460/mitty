@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 import MainMenu from './main_menu'
 import GroupContents from './group_contents'
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function MainPage(props: Props) {
+  const router = useRouter();
   const [selectedGroupId, setSelectedGroupId] = useState(null);
   const [selectedGroupName, setSelectedGroupName] = useState(null);
   
@@ -26,13 +28,14 @@ export default function MainPage(props: Props) {
           user_name={props.user_name}
           setSelectedGroupData={handleSetSelectedGroupData}
           selected_group_id={selectedGroupId}
-          selected_group_name={selectedGroupName}
         />
         <GroupContents
           user_name={props.user_name}
           selected_group_id={selectedGroupId}
           selected_group_name={selectedGroupName}
-          clearSelectedGroup={() => handleSetSelectedGroupData(null, null)}
+          clearSelectedGroup={() => router.push({
+            pathname: '/', query: {}
+          })}
         />
       </div>
     </div>
