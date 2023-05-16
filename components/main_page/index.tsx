@@ -33,9 +33,7 @@ export default function MainPage(props: Props) {
           user_name={props.user_name}
           selected_group_id={selectedGroupId}
           selected_group_name={selectedGroupName}
-          clearSelectedGroup={() => router.push({
-            pathname: '/', query: {}
-          })}
+          clearSelectedGroup={() => router.back()}
         />
       </div>
     </div>

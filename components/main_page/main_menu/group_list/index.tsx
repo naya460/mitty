@@ -67,10 +67,20 @@ export default function GroupList(props: Props) {
         display_groups.push(
           <Group
             onClick={() => {
-              router.push({
+              // router optionを作成
+              const option = {
                 pathname: '/',
                 query: { group_id: groups[i].group_id }
-              });
+              };
+
+              // グループを選択していないとき、ページを追加して移動
+              if (router.query.group_id == null) {
+                router.push(option);
+              }
+              // グループを選択しているとき、ページを置き換え
+              else {
+                router.replace(option);
+              }
             }}
             group_name={groups[i].group_name}
             group_id={groups[i].group_id}
