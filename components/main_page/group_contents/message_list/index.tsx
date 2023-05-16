@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import CreatePostRequest from 'components/common/create_post_request'
 import Message from './message'
@@ -13,6 +13,7 @@ interface Props {
 
 export default function MessageList(props: Props) {
   const [displayMessages, setDisplayMessages] = useState(null);
+  const ref_messages_div = useRef<HTMLDivElement>(null);
 
   const updateMessages = async () => {
     // group_idが指定されていないとき、空にする
@@ -51,6 +52,9 @@ export default function MessageList(props: Props) {
       );
     }
     setDisplayMessages(display_msg);
+
+    // 最新のメッセージまでスクロール
+    ref_messages_div.current.scrollTo(0, 0);
   }
 
   useEffect(() => {
@@ -61,7 +65,7 @@ export default function MessageList(props: Props) {
 
   return (
     <div className={styles.top}>
-      <div className={styles.messages}>{displayMessages}</div>
+      <div className={styles.messages} ref={ref_messages_div}>{displayMessages}</div>
       <MessageInput
         selected_group_id={props.selected_group_id}
         updateMessages={updateMessages}
