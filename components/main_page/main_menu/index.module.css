@@ -1,18 +1,34 @@
 .top {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    width: 100%;
-    flex-basis: 0;
-    flex-grow: 0;
+    height: auto;
+    min-width: 15rem;
+    max-width: 15rem;
+    background-color: #f0f0f0;
+    z-index: 20;
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 50%);
+    padding: 0.5rem 0.2rem;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.top::-webkit-scrollbar {
+    display: none;
 }
 
 @media screen and (max-width: 30rem) {
     .top {
+        max-width: 100%;
+        min-width: 0%;
+        flex-basis: 1;
         flex-grow: 1;
+        background-color: initial;
+        padding: 0.5rem 1rem;
     }
+
     .top_selected {
         width: 0;
+        padding: 0;
         scale: 0;
     }
 }

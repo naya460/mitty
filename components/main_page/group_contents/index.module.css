@@ -18,15 +18,8 @@
     flex-grow: 1;
     padding: 0.5rem;
     background-color: #f0f0f0;
-    border-bottom-left-radius: 0.5rem;
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 50%);
     z-index: 10;
-}
-
-@media screen and (max-width: 30rem) {
-    .header {
-        border-bottom-left-radius: 0;
-    }
 }
 
 .back_button {
