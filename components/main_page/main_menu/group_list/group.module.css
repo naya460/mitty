@@ -25,7 +25,7 @@
     background-color: #cfe0cf;
 }
 
-@media screen and (max-width: 30rem) {
+@media screen and (max-width: 40rem) {
     .top_selected {
         background-color: #f0f0f0;
     }
