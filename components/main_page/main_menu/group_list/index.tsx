@@ -6,13 +6,13 @@ import CreatePostRequest from 'components/common/create_post_request'
 import Group from './group'
 
 interface Props {
-  setSelectedGroupData: (id: string, name: string) => void;
+  setSelectedGroupData: (id: string, name: string, members: string[]) => void;
   selected_group_id: string;
 }
 
 export default function GroupList(props: Props) {
   const router = useRouter();
-  const [groupList, setGroupList] = useState<{ id: string, name: string}[]>(null);
+  const [groupList, setGroupList] = useState<{ id: string, name: string, members: string[]}[]>(null);
   const [displayGroups, setDisplayGroups] = useState(null);
 
   // グループの作成関数
@@ -43,12 +43,16 @@ export default function GroupList(props: Props) {
 
     // クエリが指定されていないとき、選択を解除
     if (router.query.group_id as string == null) {
-      props.setSelectedGroupData(null, null);
+      props.setSelectedGroupData(null, null, null);
       return;
     }
     // 表示を更新
     const id = router.query.group_id as string;
-    props.setSelectedGroupData(id, groupList.find(list => list.id === id).name);
+    props.setSelectedGroupData(
+      id,
+      groupList.find(list => list.id === id).name,
+      groupList.find(list => list.id === id).members
+    );
   }, [router.query])
 
   // 選択されたグループが変更されたら、表示を変更
@@ -62,7 +66,17 @@ export default function GroupList(props: Props) {
       let display_groups = [];
       for (let i in groups) {
         // グループの一覧に追加
-        group_list.push({ id: groups[i].group_id, name: groups[i].group_name });
+        group_list.push({
+          id: groups[i].group_id,
+          name: groups[i].group_name,
+          members: function(){
+            let list = [];
+            for (let j in groups[i].members) {
+              list.push(groups[i].members[j].user.user_name);
+            }
+            return list;
+          }()
+        });
         // グループの表示を追加
         display_groups.push(
           <Group
