@@ -10,7 +10,6 @@ interface Props {
   selected_group_id: string
   selected_group_name: string
   clearSelectedGroup: () => void;
-  members: string[];
 }
 
 export default function GroupContents(props: Props) {
@@ -42,7 +41,6 @@ export default function GroupContents(props: Props) {
             if (displayMemberList) {
               return (
                 <MemberList
-                  members={props.members}
                   toggleMessageList={() => setMemberList(!displayMemberList)}
                   selected_group_id={props.selected_group_id}
                 />

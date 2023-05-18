@@ -6,13 +6,13 @@ import CreatePostRequest from 'components/common/create_post_request'
 import Group from './group'
 
 interface Props {
-  setSelectedGroupData: (id: string, name: string, members: string[]) => void;
+  setSelectedGroupData: (id: string, name: string) => void;
   selected_group_id: string;
 }
 
 export default function GroupList(props: Props) {
   const router = useRouter();
-  const [groupList, setGroupList] = useState<{ id: string, name: string, members: string[]}[]>(null);
+  const [groupList, setGroupList] = useState<{ id: string, name: string}[]>(null);
   const [displayGroups, setDisplayGroups] = useState(null);
 
   // グループの作成関数
@@ -43,15 +43,14 @@ export default function GroupList(props: Props) {
 
     // クエリが指定されていないとき、選択を解除
     if (router.query.group_id as string == null) {
-      props.setSelectedGroupData(null, null, null);
+      props.setSelectedGroupData(null, null);
       return;
     }
     // 表示を更新
     const id = router.query.group_id as string;
     props.setSelectedGroupData(
       id,
-      groupList.find(list => list.id === id).name,
-      groupList.find(list => list.id === id).members
+      groupList.find(list => list.id === id).name
     );
   }, [router.query])
 

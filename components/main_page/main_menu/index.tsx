@@ -8,7 +8,7 @@ interface Props {
   // main menu
   user_name: string;
   // group list
-  setSelectedGroupData: (id: string, name: string, members: string[]) => void;
+  setSelectedGroupData: (id: string, name: string) => void;
   selected_group_id: string;
 }
 

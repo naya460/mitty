@@ -14,13 +14,11 @@ export default function MainPage(props: Props) {
   const router = useRouter();
   const [selectedGroupId, setSelectedGroupId] = useState(null);
   const [selectedGroupName, setSelectedGroupName] = useState(null);
-  const [selectedGroupMembers, setSelectedGroupMembers] = useState(null);
   
   // 表示するグループを変更する関数
-  const handleSetSelectedGroupData = (id: string, name: string, members: string[]) => {
+  const handleSetSelectedGroupData = (id: string, name: string) => {
     setSelectedGroupId(() => id);
     setSelectedGroupName(() => name);
-    setSelectedGroupMembers(() => members);
   }
 
   return (
@@ -36,7 +34,6 @@ export default function MainPage(props: Props) {
           selected_group_id={selectedGroupId}
           selected_group_name={selectedGroupName}
           clearSelectedGroup={() => router.back()}
-          members={selectedGroupMembers}
         />
       </div>
     </div>
