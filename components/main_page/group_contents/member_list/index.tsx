@@ -22,7 +22,7 @@ export default function MemberList(props: Props) {
       group_id: props.selected_group_id,
       add_user_name: event.target.user_name.value
     });
-    const res = await fetch('api/group/add_member', option);
+    const res = await fetch('api/group/member/add', option);
     const message = await res.text();
     alert(message);
     if (res.status != 200) return;
