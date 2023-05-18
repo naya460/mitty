@@ -9,24 +9,12 @@ export default async function isBelongGroup(user_name: string, group_id: string)
     }
   })).user_id;
 
-  // グループに属しているか確認
-  return (await prisma.group.findMany({
-    include: {
-      members: {
-        include: {
-          user: true,
-        }
-      }
-    },
+  return (await prisma.groupsOnUsers.findUnique({
     where: {
-      group_id: group_id,
-      members: {
-        every: {
-          user: {
-            user_name: user_name
-          }
-        }
+      user_id_group_id: {
+        user_id: user_id,
+        group_id: group_id
       }
-    },
-  })).length != 0;
+    }
+  })) != null;
 }

@@ -44,6 +44,7 @@ export default function GroupContents(props: Props) {
                 <MemberList
                   members={props.members}
                   toggleMessageList={() => setMemberList(!displayMemberList)}
+                  selected_group_id={props.selected_group_id}
                 />
               );
             }

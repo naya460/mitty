@@ -22,7 +22,7 @@ async function GetRoute(req: NextApiRequest, res: NextApiResponse) {
     },
     where: {
       members: {
-        every: {
+        some: {
           user: {
             user_name: req.session.user.user_name
           }
