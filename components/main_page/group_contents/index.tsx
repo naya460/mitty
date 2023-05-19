@@ -36,18 +36,11 @@ export default function GroupContents(props: Props) {
           user_name={props.user_name}
           selected_group_id={props.selected_group_id}
         />
-        {
-          function() {
-            if (displayMemberList) {
-              return (
-                <MemberList
-                  toggleMessageList={() => setMemberList(!displayMemberList)}
-                  selected_group_id={props.selected_group_id}
-                />
-              );
-            }
-          }()
-        }
+        <MemberList
+          display={displayMemberList}
+          toggleMessageList={() => setMemberList(!displayMemberList)}
+          selected_group_id={props.selected_group_id}
+        />
       </div>
     </div>
   )

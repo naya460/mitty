@@ -5,6 +5,7 @@ import CreatePostRequest from 'components/common/create_post_request'
 import styles from './index.module.css'
 
 interface Props {
+  display: boolean;
   toggleMessageList: () => void;
   selected_group_id: string;
 }
@@ -51,10 +52,16 @@ export default function MemberList(props: Props) {
   return (
     <>
       <div
-        className={styles.background}
+        className={`
+          ${styles.background}
+          ${(props.display) && styles.bg_display}
+        `}
         onClick={props.toggleMessageList}
       />
-      <div className={styles.top}>
+      <div className={`
+        ${styles.top}
+        ${(props.display) && styles.top_display}
+      `}>
         <div className={styles.title_text}>Group Member</div>
         {
           function() {

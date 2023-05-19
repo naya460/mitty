@@ -3,39 +3,42 @@
     flex-direction: column;
     flex-basis: 0;
     flex-grow: 0;
-    padding: 0.5rem 1rem;;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: 0.5rem 1rem;
     background-color: #f0f0f0;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 50%);
     z-index: 5;
-    min-width: 10rem;
+    transform: translate(calc(100% + 5px), 0);
+    transition: transform 0.25s 50ms;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 50%);
 }
 
-@media screen and (max-width: 50rem) {
-    .top {
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-    }
+.top_display {
+    scale: 1;
+    min-width: 10rem;
+    transform: translate(0, 0);
 }
 
 .background {
-    width: 0;
-    scale: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 4;
+    pointer-events: none;
+    background-color: #000000;
+    opacity: 0%;
+    transition: opacity 0.3s;
 }
 
-@media screen and (max-width: 50rem) {
-    .background {
-        position: absolute;
-        width: auto;
-        scale: 1;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 4;
-        background-color: rgba(0, 0, 0, 30%);
-    }
+.bg_display {
+    width: auto;
+    scale: 1;
+    opacity: 30%;
+    pointer-events: initial;
 }
 
 .title_text {
