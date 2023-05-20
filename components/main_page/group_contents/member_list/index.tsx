@@ -15,6 +15,9 @@ export default function MemberList(props: Props) {
 
   // メンバーを取得
   useEffect(() => {
+    // グループが指定されていないとき、何もしない
+    if (props.selected_group_id == null) return;
+
     (async () => {
       // 送信するリクエストを作成
       const options = CreatePostRequest({
