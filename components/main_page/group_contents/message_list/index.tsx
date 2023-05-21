@@ -14,6 +14,18 @@ interface Props {
 export default function MessageList(props: Props) {
   const [displayMessages, setDisplayMessages] = useState(null);
   const ref_messages_div = useRef<HTMLDivElement>(null);
+  const socketRef = useRef<WebSocket>(null);
+
+  // websocketを初期化
+  useEffect(() => {
+    (async () => {
+      await fetch('/api/ws');
+      socketRef.current = new WebSocket('ws://192.168.1.31:3000/api/ws');
+      socketRef.current.onmessage = (event) => {
+        console.log(event.data);
+      }
+    })();
+  }, []);
 
   const updateMessages = async () => {
     // group_idが指定されていないとき、空にする
