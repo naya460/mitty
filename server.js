@@ -21,19 +21,18 @@ app.prepare().then(() => {
       res.statusCode = 500;
       res.end('internal server error');
     }
-
-    const wss = new WebSocketServer({ noserver: true, port: 8080 });
-
-    wss.on('connection', (ws) => {
-      console.log('connection', ws);
-      ws.on('message', (data) => {
-        console.log('received: %s', data);
-      });
-
-      ws.send('something');
-    });
-
   }).listen(port, () => {
     console.log(`> Ready on http://${hostname}:${port}`)
-  })
+  });
+
+  const wss = new WebSocketServer({ port: 8080 });
+
+  wss.on('connection', (ws, socket) => {
+    console.log('websocket: connection to', socket.socket.remoteAddress);
+    ws.on('message', (data) => {
+      console.log('received: %s', data);
+    });
+
+    ws.send('something');
+  });
 });
