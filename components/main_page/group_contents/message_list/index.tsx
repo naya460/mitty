@@ -19,6 +19,7 @@ export default function MessageList(props: Props) {
   // websocketを初期化
   useEffect(() => {
     (async () => {
+      const a = await fetch('api/use_ws');
       socketRef.current = new WebSocket(`ws://${location.hostname}:8080/`);
       socketRef.current.onmessage = (event) => {
         console.log(event.data);

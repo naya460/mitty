@@ -13,6 +13,7 @@ model User {
     hash      String
     messages  Message[]
     groups    GroupsOnUsers[]
+    cookie    String?
 }
 
 model Group {

@@ -1,7 +1,9 @@
-const { createServer } = require('http');
-const { parse } = require('url');
-const next = require('next');
-const { WebSocketServer } = require('ws')
+import { createServer } from 'http';
+import { parse } from 'url';
+import next from 'next';
+import { WebSocketServer } from 'ws';
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
@@ -25,7 +27,17 @@ app.prepare().then(() => {
     console.log(`> Ready on http://${hostname}:${port}`)
   });
 
-  const wss = new WebSocketServer({ port: 8080 });
+  const wss = new WebSocketServer({ port: 8080, verifyClient: async (info, cb) => {
+    const c = await prisma.user.findMany({
+      select: {
+        cookie: true
+      },
+      where: {
+        cookie: info.req.headers.cookie.split('=')[1]
+      }
+    });
+    cb(c.length != 0);
+  } });
 
   wss.on('connection', (ws, socket) => {
     console.log('websocket: connection to', socket.socket.remoteAddress);
