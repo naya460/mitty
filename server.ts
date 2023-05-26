@@ -25,5 +25,5 @@ app.prepare().then(() => {
     console.log(`> Ready on http://${hostname}:${port}`)
   });
 
-  const wss = CreateWebSocketServer();
+  CreateWebSocketServer();
 });
