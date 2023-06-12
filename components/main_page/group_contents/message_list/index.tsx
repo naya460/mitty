@@ -81,6 +81,7 @@ export default function MessageList(props: Props) {
       <MessageInput
         selected_group_id={props.selected_group_id}
         updateMessages={updateMessages}
+        socket={socketRef.current}
       />
     </div>
     

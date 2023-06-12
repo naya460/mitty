@@ -21,7 +21,8 @@ export function CreateWebSocketServer() {
   wss.on('connection', (ws, socket) => {
     console.log('websocket: connection to', socket.socket.remoteAddress);
     ws.on('message', (data) => {
-      console.log('received: %s', data);
+      const json_message = JSON.parse(data.toString());
+      
     });
   
     ws.send('something');
