@@ -2,9 +2,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "ts-node server.ts",
+    "dev": "node --loader ts-node/esm server.ts",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "start": "NODE_ENV=production node --loader ts-node/esm server.ts",
     "migrate": "prisma migrate dev",
     "generate": "prisma generate"
   },
