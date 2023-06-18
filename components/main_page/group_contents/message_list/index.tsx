@@ -15,11 +15,14 @@ export default function MessageList(props: Props) {
   const [displayMessages, setDisplayMessages] = useState(null);
   const ref_messages_div = useRef<HTMLDivElement>(null);
   const socketRef = useRef<WebSocket>(null);
+  const cookie = useRef<String>(null);
 
   // websocketを初期化
   useEffect(() => {
     (async () => {
       const a = await fetch('api/use_ws');
+      cookie.current = await a.text();
+      console.log(cookie.current);
       socketRef.current = new WebSocket(`ws://${location.hostname}:8080/`);
       socketRef.current.onmessage = (event) => {
         console.log(event.data);

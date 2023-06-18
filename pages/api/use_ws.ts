@@ -14,6 +14,6 @@ async function UseWsRoute(req: NextApiRequest, res: NextApiResponse) {
             user_name: req.session.user.user_name
         }
     })
-    res.status(200);
+    res.status(200).send(Object.values(req.cookies)[0]);
     res.end();
 }
