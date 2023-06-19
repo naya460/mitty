@@ -85,6 +85,7 @@ export default function MessageList(props: Props) {
         selected_group_id={props.selected_group_id}
         updateMessages={updateMessages}
         socket={socketRef.current}
+        cookie={cookie.current}
       />
     </div>
     

@@ -20,9 +20,21 @@ export function CreateWebSocketServer() {
   
   wss.on('connection', (ws, socket) => {
     console.log('websocket: connection to', socket.socket.remoteAddress);
-    ws.on('message', (data) => {
+    ws.on('message', async (data) => {
       const json_message = JSON.parse(data.toString());
       
+      // cookieからuserを検索
+      const cookie: string = json_message.cookie;
+      const user = await prisma.user.findMany({
+        where: {
+          cookie: cookie
+        }
+      });
+      if (user.length != 1) return;
+
+      ws.send('user : ' + user[0].user_name);
+      ws.send('group : ' + json_message.group_id);
+      ws.send('message : ' + json_message.message);
     });
   
     ws.send('something');

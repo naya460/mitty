@@ -9,6 +9,7 @@ interface Props {
   selected_group_id: string;
   updateMessages: () => void;
   socket: WebSocket;
+  cookie: String;
 }
 
 export default function MessageInput(props: Props) {
@@ -20,6 +21,7 @@ export default function MessageInput(props: Props) {
     
     // 送信するリクエストを作成
     const message = {
+      cookie: props.cookie,
       message: event.target.message.value,
       group_id: props.selected_group_id
     };
