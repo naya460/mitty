@@ -2,6 +2,8 @@ import { WebSocketServer } from 'ws';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
+const clients = new Map();
+
 export function CreateWebSocketServer() {
   const wss = new WebSocketServer({
     port: 8080,
@@ -20,6 +22,10 @@ export function CreateWebSocketServer() {
   
   wss.on('connection', (ws, socket) => {
     console.log('websocket: connection to', socket.socket.remoteAddress);
+
+    clients.set(socket.headers.cookie.split('=')[1], ws);
+    console.log(clients.keys())
+
     ws.on('message', async (data) => {
       const json_message = JSON.parse(data.toString());
       
