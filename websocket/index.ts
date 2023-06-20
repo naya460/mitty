@@ -38,12 +38,40 @@ export function CreateWebSocketServer() {
       });
       if (user.length != 1) return;
 
-      ws.send('user : ' + user[0].user_name);
-      ws.send('group : ' + json_message.group_id);
-      ws.send('message : ' + json_message.message);
+      // グループIDを取得
+      const group_id: string = json_message.group_id;
+      if (group_id === null) {
+        return;
+      }
+
+      // グループに所属しているか確認
+      const is_belong = await prisma.groupsOnUsers.findUnique({
+        where: {
+          user_id_group_id: {
+            user_id: user[0].user_id,
+            group_id: group_id
+          }
+        }
+      }) != null;
+      if (!is_belong) {
+        return;
+      }
+
+      // メッセージを取り出す
+      const message_text: string = json_message.message;
+      if (message_text == null) {
+        return;
+      }
+
+      // メッセージを追加
+      await prisma.message.create({
+        data: {
+          message_text: message_text,
+          author_id: user[0].user_id,
+          group_id: group_id
+        }
+      });
     });
-  
-    ws.send('something');
   });
 
   return wss;

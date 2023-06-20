@@ -25,10 +25,8 @@ export default function MessageInput(props: Props) {
       message: event.target.message.value,
       group_id: props.selected_group_id
     };
-    const options = CreatePostRequest(message);
 
     // メッセージを送信
-    await fetch('api/message/send', options);
     if (props.socket.OPEN) {
       props.socket.send(JSON.stringify(message));
     }
