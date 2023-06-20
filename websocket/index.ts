@@ -24,7 +24,6 @@ export function CreateWebSocketServer() {
     console.log('websocket: connection to', socket.socket.remoteAddress);
 
     clients.set(socket.headers.cookie.split('=')[1], ws);
-    console.log(clients.keys())
 
     ws.on('message', async (data) => {
       const json_message = JSON.parse(data.toString());
@@ -71,6 +70,28 @@ export function CreateWebSocketServer() {
           group_id: group_id
         }
       });
+
+      // グループのメンバーのクッキーを取得
+      const member_cookie = await prisma.groupsOnUsers.findMany({
+        select: {
+          user: {
+            select: {
+              cookie: true
+            }
+          }
+        },
+        where: {
+          group_id: group_id
+        }
+      });
+
+      // メッセージを送信
+      member_cookie.forEach((data) => {
+        const ws = clients.get(data.user.cookie);
+        if (ws) {
+          ws.send(message_text);
+        }
+      })
     });
   });
 
