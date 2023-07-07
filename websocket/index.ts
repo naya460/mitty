@@ -97,6 +97,7 @@ export function CreateWebSocketServer() {
             author: {
               user_name: data.user.user_name
             },
+            group_id: group_id,
             time: new Date()
           }))
         }

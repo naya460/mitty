@@ -12,10 +12,14 @@ interface Props {
 }
 
 export default function MessageList(props: Props) {
+  const message_list = useRef([]);
   const [displayMessages, setDisplayMessages] = useState(null);
   const ref_messages_div = useRef<HTMLDivElement>(null);
   const socketRef = useRef<WebSocket>(null);
   const cookie = useRef<String>(null);
+  const selected_group_id = useRef(null);
+
+  selected_group_id.current = props.selected_group_id;
 
   // websocketを初期化
   useEffect(() => {
@@ -25,7 +29,25 @@ export default function MessageList(props: Props) {
       console.log(cookie.current);
       socketRef.current = new WebSocket(`ws://${location.hostname}:8080/`);
       socketRef.current.onmessage = (event) => {
-        console.log(event.data);
+        const message = JSON.parse(event.data);
+        if (message.group_id != selected_group_id.current) return;
+
+        setDisplayMessages(() => {
+          message_list.current = [(
+            <Message
+              key={message_list.current.length}
+              user_name={message.author.user_name}
+              mine={props.user_name == message.author.user_name}
+              time={message.time}
+            >
+              {message.message_text}
+            </Message>
+          ), ...message_list.current];
+          return message_list.current;
+        });
+
+      // 最新のメッセージまでスクロール
+      ref_messages_div.current.scrollTo(0, 0);
       }
     })();
   }, []);
@@ -52,10 +74,10 @@ export default function MessageList(props: Props) {
     const messages = await res.json();
 
     // メッセージの表示を作成
-    let display_msg = [];
+    message_list.current = [];
     for (let i in messages) {
       // メッセージを追加
-      display_msg.unshift(
+      message_list.current.unshift(
         <Message
           key={i}
           user_name={messages[i].author.user_name}
@@ -66,7 +88,7 @@ export default function MessageList(props: Props) {
         </Message>
       );
     }
-    setDisplayMessages(display_msg);
+    setDisplayMessages(message_list.current);
 
     // 最新のメッセージまでスクロール
     ref_messages_div.current.scrollTo(0, 0);

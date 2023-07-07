@@ -30,10 +30,8 @@ export default function MessageInput(props: Props) {
     if (props.socket.OPEN) {
       props.socket.send(JSON.stringify(message));
     }
-    // 表示を更新
-    props.updateMessages();
-    setLineCount(1);
     // 入力欄をリセット
+    setLineCount(1);
     setText('');
   }
 
