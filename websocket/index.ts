@@ -1,5 +1,6 @@
 import { WebSocketServer } from 'ws';
 import { PrismaClient } from '@prisma/client';
+import { DateTime } from 'luxon';
 const prisma = new PrismaClient();
 
 const clients = new Map();
@@ -76,6 +77,7 @@ export function CreateWebSocketServer() {
         select: {
           user: {
             select: {
+              user_name: true,
               cookie: true
             }
           }
@@ -89,7 +91,14 @@ export function CreateWebSocketServer() {
       member_cookie.forEach((data) => {
         const ws = clients.get(data.user.cookie);
         if (ws) {
-          ws.send(message_text);
+          // ws.send(message_text);
+          ws.send(JSON.stringify({
+            message_text: message_text,
+            author: {
+              user_name: data.user.user_name
+            },
+            time: new Date()
+          }))
         }
       })
     });
