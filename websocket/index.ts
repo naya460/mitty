@@ -95,7 +95,7 @@ export function CreateWebSocketServer() {
           ws.send(JSON.stringify({
             message_text: message_text,
             author: {
-              user_name: data.user.user_name
+              user_name: user[0].user_name
             },
             group_id: group_id,
             time: new Date()
