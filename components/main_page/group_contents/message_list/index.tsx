@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function MessageList(props: Props) {
-  const message_list = useRef([]);
+  const message_list = useRef(new Map<String, Object[]>());
   const [displayMessages, setDisplayMessages] = useState(null);
   const ref_messages_div = useRef<HTMLDivElement>(null);
   const socketRef = useRef<WebSocket>(null);
@@ -30,24 +30,33 @@ export default function MessageList(props: Props) {
       socketRef.current = new WebSocket(`ws://${location.hostname}:8080/`);
       socketRef.current.onmessage = (event) => {
         const message = JSON.parse(event.data);
-        if (message.group_id != selected_group_id.current) return;
 
-        setDisplayMessages(() => {
-          message_list.current = [(
+        if (!message_list.current.has(message.group_id)) {
+          message_list.current.set(message.group_id, []);
+        }
+
+        message_list.current.set(
+          message.group_id,
+          [(
             <Message
-              key={message_list.current.length}
+              key={message_list.current.get(message.group_id).length}
               user_name={message.author.user_name}
               mine={props.user_name == message.author.user_name}
               time={message.time}
             >
               {message.message_text}
             </Message>
-          ), ...message_list.current];
-          return message_list.current;
-        });
+          ), ...message_list.current.get(message.group_id)]
+        );
 
-      // 最新のメッセージまでスクロール
-      ref_messages_div.current.scrollTo(0, 0);
+        if (selected_group_id.current === message.group_id) {
+          setDisplayMessages(() => {
+            return message_list.current.get(message.group_id);
+          });
+
+          // 最新のメッセージまでスクロール
+          ref_messages_div.current.scrollTo(0, 0);
+        }
       }
     })();
   }, []);
@@ -74,10 +83,10 @@ export default function MessageList(props: Props) {
     const messages = await res.json();
 
     // メッセージの表示を作成
-    message_list.current = [];
+    let tmp = [];
     for (let i in messages) {
       // メッセージを追加
-      message_list.current.unshift(
+      tmp.unshift(
         <Message
           key={i}
           user_name={messages[i].author.user_name}
@@ -88,7 +97,8 @@ export default function MessageList(props: Props) {
         </Message>
       );
     }
-    setDisplayMessages(message_list.current);
+    message_list.current.set(selected_group_id.current, tmp);
+    setDisplayMessages(tmp);
 
     // 最新のメッセージまでスクロール
     ref_messages_div.current.scrollTo(0, 0);
