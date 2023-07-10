@@ -8,7 +8,7 @@ import styles from './message_input.module.css'
 interface Props {
   selected_group_id: string;
   updateMessages: () => void;
-  socket: WebSocket;
+  socketSend: (message: Object) => void;
   cookie: String;
 }
 
@@ -27,9 +27,8 @@ export default function MessageInput(props: Props) {
     };
 
     // メッセージを送信
-    if (props.socket.OPEN) {
-      props.socket.send(JSON.stringify(message));
-    }
+    props.socketSend(message);
+
     // 入力欄をリセット
     setLineCount(1);
     setText('');

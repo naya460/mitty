@@ -11,55 +11,68 @@ interface Props {
   selected_group_id: string
 }
 
+function useWebSocket(callback? : (message) => void): [(message) => void, String] {
+  const socket = useRef<WebSocket>(null);
+  const [cookie, setCookie] = useState<String>(null);
+  
+  useEffect(() => {
+    (async () => {
+      const a = await fetch('api/use_ws');
+      setCookie(await a.text());
+      socket.current = new WebSocket(`ws://${location.hostname}:8080/`);
+
+      socket.current.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        callback(data);
+      }
+    })();
+  }, []);
+
+  return [
+    (message: Object): void => {
+      if (socket.current.OPEN) {
+        socket.current.send(JSON.stringify(message));
+      }
+    }, cookie
+  ];
+}
+
 export default function MessageList(props: Props) {
   const message_list = useRef(new Map<String, Object[]>());
   const [displayMessages, setDisplayMessages] = useState(null);
   const ref_messages_div = useRef<HTMLDivElement>(null);
-  const socketRef = useRef<WebSocket>(null);
-  const cookie = useRef<String>(null);
   const selected_group_id = useRef(null);
 
   selected_group_id.current = props.selected_group_id;
 
-  // websocketを初期化
-  useEffect(() => {
-    (async () => {
-      const a = await fetch('api/use_ws');
-      cookie.current = await a.text();
-      console.log(cookie.current);
-      socketRef.current = new WebSocket(`ws://${location.hostname}:8080/`);
-      socketRef.current.onmessage = (event) => {
-        const message = JSON.parse(event.data);
+  const [socketSend, cookie] = useWebSocket((message) => {
+    if (!message_list.current.has(message.group_id)) {
+      message_list.current.set(message.group_id, []);
+    }
 
-        if (!message_list.current.has(message.group_id)) {
-          message_list.current.set(message.group_id, []);
-        }
+    message_list.current.set(
+      message.group_id,
+      [(
+        <Message
+          key={message_list.current.get(message.group_id).length}
+          user_name={message.author.user_name}
+          mine={props.user_name == message.author.user_name}
+          time={message.time}
+        >
+          {message.message_text}
+        </Message>
+      ), ...message_list.current.get(message.group_id)]
+    );
 
-        message_list.current.set(
-          message.group_id,
-          [(
-            <Message
-              key={message_list.current.get(message.group_id).length}
-              user_name={message.author.user_name}
-              mine={props.user_name == message.author.user_name}
-              time={message.time}
-            >
-              {message.message_text}
-            </Message>
-          ), ...message_list.current.get(message.group_id)]
-        );
+    if (selected_group_id.current === message.group_id) {
+      setDisplayMessages(() => {
+        return message_list.current.get(message.group_id);
+      });
 
-        if (selected_group_id.current === message.group_id) {
-          setDisplayMessages(() => {
-            return message_list.current.get(message.group_id);
-          });
-
-          // 最新のメッセージまでスクロール
-          ref_messages_div.current.scrollTo(0, 0);
-        }
-      }
-    })();
-  }, []);
+      // 最新のメッセージまでスクロール
+      ref_messages_div.current.scrollTo(0, 0);
+    }
+  });
 
   const updateMessages = async () => {
     // group_idが指定されていないとき、空にする
@@ -116,10 +129,9 @@ export default function MessageList(props: Props) {
       <MessageInput
         selected_group_id={props.selected_group_id}
         updateMessages={updateMessages}
-        socket={socketRef.current}
-        cookie={cookie.current}
+        socketSend={socketSend}
+        cookie={cookie}
       />
     </div>
-    
   );
 }
