@@ -20,7 +20,7 @@ export default function MessageList(props: Props) {
 
   selected_group_id.current = props.selected_group_id;
 
-  const [socketSend, cookie] = useWebSocket((message) => {
+  useWebSocket((message) => {
     if (!message_list.current.has(message.group_id)) {
       message_list.current.set(message.group_id, []);
     }
@@ -103,9 +103,6 @@ export default function MessageList(props: Props) {
       <div className={styles.messages} ref={ref_messages_div}>{displayMessages}</div>
       <MessageInput
         selected_group_id={props.selected_group_id}
-        updateMessages={updateMessages}
-        socketSend={socketSend}
-        cookie={cookie}
       />
     </div>
   );
