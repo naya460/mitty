@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 
 import CreatePostRequest from 'components/common/create_post_request'
+import useWebSocket from 'components/common/useWebSocket'
 import Message from './message'
 import MessageInput from './message_input'
 
@@ -9,32 +10,6 @@ import styles from './index.module.css'
 interface Props {
   user_name: string,
   selected_group_id: string
-}
-
-function useWebSocket(callback? : (message) => void): [(message) => void, String] {
-  const socket = useRef<WebSocket>(null);
-  const [cookie, setCookie] = useState<String>(null);
-  
-  useEffect(() => {
-    (async () => {
-      const a = await fetch('api/use_ws');
-      setCookie(await a.text());
-      socket.current = new WebSocket(`ws://${location.hostname}:8080/`);
-
-      socket.current.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        callback(data);
-      }
-    })();
-  }, []);
-
-  return [
-    (message: Object): void => {
-      if (socket.current.OPEN) {
-        socket.current.send(JSON.stringify(message));
-      }
-    }, cookie
-  ];
 }
 
 export default function MessageList(props: Props) {
