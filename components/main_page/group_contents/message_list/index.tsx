@@ -21,8 +21,9 @@ export default function MessageList(props: Props) {
   selected_group_id.current = props.selected_group_id;
 
   useWebSocket((message) => {
+    // グループのメッセージを読み込んでいないとき、無視
     if (!message_list.current.has(message.group_id)) {
-      message_list.current.set(message.group_id, []);
+      return;
     }
 
     message_list.current.set(
@@ -86,7 +87,6 @@ export default function MessageList(props: Props) {
       );
     }
     message_list.current.set(selected_group_id.current, tmp);
-    setDisplayMessages(tmp);
 
     // 最新のメッセージまでスクロール
     ref_messages_div.current.scrollTo(0, 0);
@@ -94,7 +94,10 @@ export default function MessageList(props: Props) {
 
   useEffect(() => {
     (async () => {
-      await updateMessages();
+      if (!message_list.current.has(props.selected_group_id)) {
+        await updateMessages();
+      }
+      setDisplayMessages(message_list.current.get(props.selected_group_id));
     })();
   }, [props.selected_group_id]);
 
