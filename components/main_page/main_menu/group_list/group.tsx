@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import styles from './group.module.css'
+import useWebSocket from 'components/common/useWebSocket';
 
 interface Props {
   onClick: () => void;
@@ -9,6 +11,21 @@ interface Props {
 
 export default function Group(props: Props) {
   const selected = props.group_id == props.selected_group_id;
+  const [newMessageCount, setNewMessageCount] = useState(0);
+
+  // メッセージを受信したとき、数を増やす
+  useWebSocket((message) => {
+    if (message.group_id != props.group_id) {
+      return;
+    }
+    setNewMessageCount((prev) => prev + 1);
+  });
+
+  // ボタンを押したとき
+  const onClick = () => {
+    props.onClick();
+    setNewMessageCount(() => 0);
+  }
   
   return (
     <button
@@ -16,7 +33,16 @@ export default function Group(props: Props) {
         ${styles.top}
         ${selected && styles.top_selected}
       `}
-      onClick={props.onClick}
-    >{props.group_name}</button>
+      onClick={onClick}
+    >
+      <div>{props.group_name}</div>
+      <div className={styles.count}>{
+        (() => {
+          if (newMessageCount != 0) {
+            return newMessageCount;
+          }
+        })()
+      }</div>
+    </button>
   );
 }
