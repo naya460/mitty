@@ -14,13 +14,11 @@ export default function MessageInput(props: Props) {
 
   const [socketSend, cookie] = useWebSocket();
 
-  const handleSend = async (event) => {
-    event.preventDefault();
-    
+  const sendMessage = () => {
     // 送信するリクエストを作成
     const message = {
       cookie: cookie,
-      message: event.target.message.value,
+      message: text,
       group_id: props.selected_group_id
     };
 
@@ -32,10 +30,27 @@ export default function MessageInput(props: Props) {
     setText('');
   }
 
+  const handleSend = async (event) => {
+    event.preventDefault();
+
+    // メッセージを送信
+    sendMessage();
+  }
+
   const handleChange: react.ChangeEventHandler<HTMLTextAreaElement> = (event) => {
+    // 文字列を更新
     setText(event.target.value);
+    // 表示行数を設定
     const length = event.target.value.split('\n').length;
     setLineCount(Math.min(length, 5));
+  }
+
+  const handleKeyDown: react.KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
+    if (event.ctrlKey || event.shiftKey || event.altKey) {
+      if (event.key == "Enter") {
+        sendMessage();
+      }
+    }
   }
 
   return (
@@ -48,6 +63,7 @@ export default function MessageInput(props: Props) {
           style={{height: `${lineCount * 1.5}rem`}}
           value={text}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           required
         />
         <button type='submit' className={styles.send_button}>Send</button>
