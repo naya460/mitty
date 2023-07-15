@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import MainMenu from './main_menu'
 import GroupContents from './group_contents'
 
-import styles from './index.module.css'
+import styles from './index.css'
 
 interface Props {
   user_name: string;
