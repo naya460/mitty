@@ -53,6 +53,8 @@ export default function MessageInput(props: Props) {
     }
   }
 
+  const disabled = props.selected_group_id == null;
+
   return (
     <div className={styles.top}>
       <form onSubmit={handleSend} className={styles.form}>
@@ -64,9 +66,14 @@ export default function MessageInput(props: Props) {
           value={text}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
+          disabled={disabled}
           required
         />
-        <button type='submit' className={styles.send_button}>Send</button>
+        <button
+          type='submit'
+          className={styles.send_button}
+          disabled={disabled}
+        >Send</button>
       </form>
     </div>
   );
