@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 
-import styles from './index.module.css'
+import styles from './index.css'
 
 import GroupList from './group_list'
 
