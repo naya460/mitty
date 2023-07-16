@@ -5,7 +5,7 @@ import useWebSocket from 'components/common/useWebSocket'
 import Message from './message'
 import MessageInput from './message_input'
 
-import styles from './index.module.css'
+import styles from './index.css'
 
 interface Props {
   user_name: string,
