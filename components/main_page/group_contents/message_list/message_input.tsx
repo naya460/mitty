@@ -2,7 +2,7 @@ import react, { useState } from 'react'
 
 import useWebSocket from 'components/common/useWebSocket';
 
-import styles from './message_input.module.css'
+import styles from './message_input.css'
 
 interface Props {
   selected_group_id: string;
