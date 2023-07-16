@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react';
-import styles from './index.module.css'
+import styles from './index.css'
 
 import CreatePostRequest from 'components/common/create_post_request'
 import Group from './group'
