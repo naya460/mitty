@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import styles from './group.module.css'
+import styles from './group.css'
 import useWebSocket from 'components/common/useWebSocket';
 
 interface Props {
@@ -38,7 +38,7 @@ export default function Group(props: Props) {
     <button
       className={`
         ${styles.top}
-        ${selected.current && styles.top_selected}
+        ${(selected.current)? styles.top_selected : styles.top_not_selected}
       `}
       onClick={onClick}
     >
