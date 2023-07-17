@@ -3,7 +3,7 @@ import { useState } from 'react'
 import MessageList from './message_list'
 import MemberList from './member_list'
 
-import styles from './index.module.css'
+import styles from './index.css'
 
 interface Props {
   user_name: string
