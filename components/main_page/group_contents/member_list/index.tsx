@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 import CreatePostRequest from 'components/common/create_post_request'
 
-import styles from './index.module.css'
+import styles from './index.css'
 
 interface Props {
   display: boolean;

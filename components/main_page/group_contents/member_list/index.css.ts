@@ -1,0 +1,51 @@
+import { style } from "@vanilla-extract/css"
+
+export default {
+  top: style({
+    display: "flex",
+    flexDirection: "column",
+    flexBasis: "0",
+    flexGrow: "0",
+    position: "absolute",
+    right: "0",
+    top: "0",
+    bottom: "0",
+    padding: "0.5rem 1rem",
+    backgroundColor: "#f0f0f0",
+    zIndex: "5",
+    transform: "translate(calc(100% + 5px), 0)",
+    transition: "transform 0.25s 50ms",
+    boxShadow: "0 0 5px 0 rgba(0, 0, 0, 50%)",
+  }),
+  top_display: style({
+    scale: "1",
+    minWidth: "10rem",
+    transform: "translate(0, 0)",
+  }),
+  background: style({
+    position: "absolute",
+    top: "0",
+    bottom: "0",
+    left: "0",
+    right: "0",
+    zIndex: "4",
+    pointerEvents: "none",
+    backgroundColor: "#000000",
+    opacity: "0%",
+    transition: "opacity 0.3s",
+  }),
+  bg_display: style({
+    width: "auto",
+    scale: "1",
+    opacity: "30%",
+    pointerEvents: "initial",
+  }),
+  title_text: style({
+    fontFamily: "sans-serif",
+    color: "black",
+    fontSize: "1.2rem",
+    width: "100%",
+    textAlign: "center",
+    marginBottom: "0.5rem",
+  }),
+};
