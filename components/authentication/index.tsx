@@ -4,7 +4,7 @@ import { useState } from 'react'
 import SignInForm from './signin_form'
 import SignUpForm from './signup_form'
 
-import styles from './index.module.css'
+import styles from './index.css'
 
 export default function AuthenticationPage() {
   // フォームの切り替え(1: signin, 2:signup)
