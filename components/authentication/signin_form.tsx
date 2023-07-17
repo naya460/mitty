@@ -3,7 +3,7 @@ import { useRef } from 'react'
 
 import CreatePostRequest from 'components/common/create_post_request'
 
-import styles from './form.module.css'
+import styles from './form.css'
 
 export default function SingInForm() {
   const router = useRouter();
