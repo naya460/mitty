@@ -19,7 +19,7 @@ export default function Message(props: Props) {
       {/* user name and time*/}
       <div
         className={`${styles.name} ${(props.mine) && styles.name_mine}`}
-      >{props.user_name} [{time.toFormat("yyyy/MM/dd HH:mm")}]</div>
+      >{props.user_name} [{time.toFormat("HH:mm")}]</div>
       {/* message box */}
       <div className={`
         ${styles.message_box}

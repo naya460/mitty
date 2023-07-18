@@ -18,4 +18,23 @@ export default {
     overflowY: "scroll",
     padding: "0.1rem 1rem",
   }),
+  date: style({
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: "0.5rem 0",
+  }),
+  date_hline: style({
+    height: "1px",
+    width: "100%",
+    backgroundColor: "#bbbbbb",
+  }),
+  date_text: style({
+    fontFamily: "sans-serif",
+    fontSize: "0.9rem",
+    color: "#777777",
+    margin: "0 0.5rem",
+  })
 };

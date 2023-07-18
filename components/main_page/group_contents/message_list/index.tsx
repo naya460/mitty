@@ -73,11 +73,38 @@ export default function MessageList(props: Props) {
 
     // メッセージの表示を作成
     let tmp = [];
+    let before_date = null;
+    let offset = 0;
     for (let i in messages) {
+      const date = new Date(messages[i].time);
+      // 日付が変わったとき
+      if (before_date != null) {
+        if (before_date != date.toLocaleDateString()) {
+          tmp.unshift(
+            <div key={offset} className={styles.date}>
+              <div className={styles.date_hline} />
+              <div className={styles.date_text}>{date.toLocaleDateString()}</div>
+              <div className={styles.date_hline} />
+            </div>
+          );
+          offset++;
+        }
+      } else {
+        tmp.unshift(
+          <div key={offset} className={styles.date}>
+            <div className={styles.date_hline} />
+            <div className={styles.date_text}>{date.toLocaleDateString()}</div>
+            <div className={styles.date_hline} />
+          </div>
+        );
+        offset++;
+      }
+      before_date = date.toLocaleDateString();
+
       // メッセージを追加
       tmp.unshift(
         <Message
-          key={i}
+          key={offset}
           user_name={messages[i].author.user_name}
           mine={props.user_name == messages[i].author.user_name}
           time={messages[i].time}
@@ -85,6 +112,7 @@ export default function MessageList(props: Props) {
           {messages[i].message_text}
         </Message>
       );
+      offset++;
     }
     message_list.current.set(selected_group_id.current, tmp);
 
