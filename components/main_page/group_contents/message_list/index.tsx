@@ -12,82 +12,82 @@ interface Props {
   selected_group_id: string
 }
 
+type MessageElement = {
+  message_text: string,
+  author: { user_name: string },
+  time: Date,
+}
+
+type DateElement = {
+  date: Date,
+}
+
+type DisplayElements = MessageElement | DateElement;
+
 export default function MessageList(props: Props) {
-  const message_list = useRef(new Map<String, Object[]>());
+  const message_list = useRef(new Map<String, DisplayElements[]>());
   const [displayMessages, setDisplayMessages] = useState(null);
   const ref_messages_div = useRef<HTMLDivElement>(null);
   const selected_group_id = useRef(null);
 
   selected_group_id.current = props.selected_group_id;
 
-  // 表示を追加する
-  const addDisplay = (
+  // 表示を作成する
+  const createDisplay = (group_id: string): JSX.Element[] => {
+    // グループのメッセージを取り出す
+    const messages = message_list.current.get(group_id);
+    if (messages == null) return null;
+
+    // 表示を作成
+    let tmp = [];
+    let count = 0;
+    messages.forEach((value) => {
+      // メッセージのとき
+      if (typeof (value as MessageElement).message_text === "string") {
+        value = value as MessageElement;
+        tmp.push(
+          <Message
+            key={count}
+            user_name={value.author.user_name}
+            mine={props.user_name == value.author.user_name}
+            time={value.time}
+          >
+            {value.message_text}
+          </Message>
+        );
+      }
+      // 日付のとき
+      else {
+        value = value as DateElement;
+        tmp.push(
+          <div key={count} className={styles.date}>
+            <div className={styles.date_hline} />
+            <div className={styles.date_text}>{value.date.toLocaleDateString()}</div>
+            <div className={styles.date_hline} />
+          </div>
+        );
+      }
+      ++count;
+    });
+
+    return tmp;
+  }
+
+  // 要素を追加する
+  const addElement = (
     group_id: string,
-    element: JSX.Element
+    element: DisplayElements,
   ) => {
     // グループを読み込んでいないとき作成
     if (!message_list.current.has(group_id)) {
       message_list.current.set(group_id, []);
     }
 
-    // 表示を追加
+    // 要素を追加
     message_list.current.set(
       group_id,
       [element, ...message_list.current.get(group_id)]
     );
-  }
-
-  // メッセージを追加する
-  const addMessage = (
-    message: {
-      group_id: string,
-      message_text: string,
-      author: { user_name: string},
-      time: Date,
-    },
-  ) => {
-    // グループを読み込んでいないとき作成
-    if (!message_list.current.has(message.group_id)) {
-      message_list.current.set(message.group_id, []);
-    }
-
-    // メッセージの表示を作成
-    const tmp = (
-      <Message
-        key={message_list.current.get(message.group_id).length}
-        user_name={message.author.user_name}
-        mine={props.user_name == message.author.user_name}
-        time={message.time}
-      >
-        {message.message_text}
-      </Message>
-    );
-
-    // 表示を追加
-    addDisplay(message.group_id, tmp);
-  }
-
-  // 日付を追加する
-  const addDate = (
-    group_id: string,
-    date: Date,
-  ) => {
-    // グループを読み込んでいないとき作成
-    if (!message_list.current.has(group_id)) {
-      message_list.current.set(group_id, []);
-    }
-    
-    // 日付の表示を作成
-    const tmp = (
-      <div key={message_list.current.get(group_id).length} className={styles.date}>
-        <div className={styles.date_hline} />
-        <div className={styles.date_text}>{date.toLocaleDateString()}</div>
-        <div className={styles.date_hline} />
-      </div>
-    );
-
-    // 表示を追加
-    addDisplay(group_id, tmp);
   }
 
   useWebSocket((message) => {
@@ -95,13 +95,11 @@ export default function MessageList(props: Props) {
     if (!message_list.current.has(message.group_id)) {
       return;
     }
-
-    addMessage(message);
+    
+    addElement(selected_group_id.current, message);
 
     if (selected_group_id.current === message.group_id) {
-      setDisplayMessages(() => {
-        return message_list.current.get(message.group_id);
-      });
+      setDisplayMessages(createDisplay(selected_group_id.current));
 
       // 最新のメッセージまでスクロール
       ref_messages_div.current.scrollTo(0, 0);
@@ -130,26 +128,21 @@ export default function MessageList(props: Props) {
     const messages = await res.json();
 
     // メッセージの表示を作成
-    let tmp = [];
     let before_date = null;
-    let offset = 0;
     for (let i in messages) {
       const date = new Date(messages[i].time);
       // 日付が変わったとき
       if (before_date != null) {
         if (before_date != date.toLocaleDateString()) {
-          addDate(props.selected_group_id, date);
-          offset++;
+          addElement(props.selected_group_id, {date});
         }
       } else {
-        addDate(props.selected_group_id, date);
-        offset++;
+        addElement(props.selected_group_id, {date});
       }
       before_date = date.toLocaleDateString();
 
       // メッセージを追加
-      addMessage({...messages[i], group_id: props.selected_group_id});
-      offset++;
+      addElement(props.selected_group_id, messages[i]);
     }
 
     // 最新のメッセージまでスクロール
@@ -161,7 +154,7 @@ export default function MessageList(props: Props) {
       if (!message_list.current.has(props.selected_group_id)) {
         await updateMessages();
       }
-      setDisplayMessages(message_list.current.get(props.selected_group_id));
+      setDisplayMessages(createDisplay(props.selected_group_id));
     })();
   }, [props.selected_group_id]);
 
