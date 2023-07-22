@@ -48,14 +48,36 @@ export default function useElementList(props: Props): void {
     );
   };
 
+  // メッセージ要素を追加する
+  const addMessageElement = (
+    group_id: string,
+    element: MessageElement,
+  ) => {
+    // 日付が変わるとき、日付要素を追加
+    if (element_list.current.has(group_id)) {
+      const last_message = element_list.current.get(group_id).slice().find(
+        (value) => (value as MessageElement).message_text != null
+      ) as MessageElement;
+
+      if (new Date(last_message.time).toLocaleDateString() != new Date(element.time).toLocaleDateString()) {
+        addElement(group_id, { date: new Date(element.time) });
+      }
+    } else {
+      addElement(group_id, { date: new Date(element.time) });
+    }
+    
+    // 要素を追加
+    addElement(group_id, element);
+  }
+
   useWebSocket((message) => {
     // グループのメッセージを読み込んでいないとき、無視
     if (!element_list.current.has(message.group_id)) {
       return;
     }
     
-    // 要素を追加
-    addElement(message.group_id, message);
+    // メッセージ要素を追加
+    addMessageElement(message.group_id, message);
     
     // コールバック関数を呼ぶ
     if (onMessage.current != null) {
@@ -66,6 +88,7 @@ export default function useElementList(props: Props): void {
     }
   });
 
+  // メッセージを取得する
   const getMessages = async () => {
     if (props.selected_group_id == null) return;
 
@@ -84,21 +107,9 @@ export default function useElementList(props: Props): void {
     const messages = await res.json();
 
     // メッセージの表示を作成
-    let before_date = null;
     for (let i in messages) {
-      const date = new Date(messages[i].time);
-      // 日付が変わったとき
-      if (before_date != null) {
-        if (before_date != date.toLocaleDateString()) {
-          addElement(props.selected_group_id, {date});
-        }
-      } else {
-        addElement(props.selected_group_id, {date});
-      }
-      before_date = date.toLocaleDateString();
-
-      // メッセージを追加
-      addElement(props.selected_group_id, messages[i]);
+      // メッセージ要素を追加
+      addMessageElement(props.selected_group_id, messages[i]);
     }
   }
 
