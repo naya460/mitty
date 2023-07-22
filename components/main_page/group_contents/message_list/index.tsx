@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { DateTime } from 'luxon'
 
 import Message from './message'
 import MessageInput from './message_input'
@@ -41,16 +42,35 @@ export default function MessageList(props: Props) {
     // 表示を作成
     let tmp = [];
     let count = 0;
-    messages.forEach((value) => {
+    let last_message: MessageElement = null;
+    messages.slice().reverse().forEach((value) => {
       // メッセージのとき
       if (typeof (value as MessageElement).message_text === "string") {
         value = value as MessageElement;
-        tmp.push(
+
+        // 名前と時刻の表示を切り替え
+        // 時間差が5分以内で、ユーザーが同じとき、非表示
+        let status = true;
+        if (last_message != null) {
+          const last_time = DateTime.fromJSDate(new Date(last_message.time));
+          const value_time = DateTime.fromJSDate(new Date(value.time));
+
+          const time_diff = value_time.diff(last_time).as("minutes");
+          
+          if (time_diff <= 5 && last_message.author.user_name === value.author.user_name) {
+            status = false;
+          }
+        }
+        last_message = value;
+
+        // 表示を追加
+        tmp.unshift(
           <Message
             key={count}
             user_name={value.author.user_name}
             mine={props.user_name == value.author.user_name}
             time={value.time}
+            status={status}
           >
             {value.message_text}
           </Message>
@@ -59,7 +79,7 @@ export default function MessageList(props: Props) {
       // 日付のとき
       else {
         value = value as DateElement;
-        tmp.push(
+        tmp.unshift(
           <div key={count} className={styles.date}>
             <div className={styles.date_hline} />
             <div className={styles.date_text}>{value.date.toLocaleDateString()}</div>
