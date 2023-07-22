@@ -20,7 +20,6 @@ export default {
     textAlign: "right",
   }),
   message_box: style({
-    backgroundColor: "#cfe0cf",
     whiteSpace: "pre-line",
     padding: "0.5rem 1rem",
     borderRadius: "0.5rem",
@@ -29,9 +28,11 @@ export default {
     color: "black",
   }),
   message_box_mine: style({
+    backgroundColor: "#cfe0cf",
     borderBottomRightRadius: "0",
   }),
   message_box_member: style({
+    backgroundColor: "#ededed",
     borderBottomLeftRadius: "0",
   }),
 };
