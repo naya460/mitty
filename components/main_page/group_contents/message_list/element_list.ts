@@ -54,7 +54,7 @@ export default function useElementList(props: Props): void {
     element: MessageElement,
   ) => {
     // 日付が変わるとき、日付要素を追加
-    if (element_list.current.has(group_id)) {
+    if (element_list.current.has(group_id) && element_list.current.get(group_id).length != 0) {
       const last_message = element_list.current.get(group_id).slice().find(
         (value) => (value as MessageElement).message_text != null
       ) as MessageElement;
@@ -105,6 +105,11 @@ export default function useElementList(props: Props): void {
       return;
     }
     const messages = await res.json();
+
+    // まだメッセージが無いとき、グループのみ作成
+    if (messages.length == 0) {
+      element_list.current.set(props.selected_group_id, []);
+    }
 
     // メッセージの表示を作成
     for (let i in messages) {
