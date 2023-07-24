@@ -13,7 +13,7 @@ export default {
   status: style({
     display: "flex",
     flexDirection: "row",
-    alignItems: "end"
+    alignItems: "flex-end"
   }),
   status_mine: style({
     justifyContent: "right",
@@ -23,6 +23,10 @@ export default {
     marginRight: "0.5rem",
     fontFamily: "sans-serif",
     color: "black",
+  }),
+  name_mine: style({
+    scale: "0",
+    width: "0",
   }),
   time: style({
     fontFamily: "sans-serif",
