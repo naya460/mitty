@@ -10,14 +10,24 @@ export default {
   top_mine: style({
     marginLeft: "auto",
   }),
+  status: style({
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "end"
+  }),
+  status_mine: style({
+    justifyContent: "right",
+  }),
   name: style({
     marginLeft: "0.5rem",
     marginRight: "0.5rem",
     fontFamily: "sans-serif",
     color: "black",
   }),
-  name_mine: style({
-    textAlign: "right",
+  time: style({
+    fontFamily: "sans-serif",
+    color: "#999999",
+    fontSize: "0.8rem",
   }),
   message_box: style({
     whiteSpace: "pre-line",

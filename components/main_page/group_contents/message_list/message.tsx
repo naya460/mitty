@@ -26,9 +26,10 @@ export default function Message(props: Props) {
           }
           // 表示が有効のとき
           return (
-            <div
-            className={`${styles.name} ${(props.mine) && styles.name_mine}`}
-          >{props.user_name} [{time.toFormat("HH:mm")}]</div>
+            <div className={`${styles.status} ${props.mine && styles.status_mine}`}>
+              <div className={styles.name}>{props.user_name}</div>
+              <div className={styles.time}>{time.toFormat("HH:mm")}</div>
+            </div>
           )
         }()
       }
