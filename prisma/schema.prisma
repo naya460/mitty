@@ -40,4 +40,6 @@ model Message {
     group        Group    @relation(fields: [group_id], references: [group_id])   
     group_id     String
     time         DateTime @default(now())
+
+    @@index([message_id, group_id])
 }
