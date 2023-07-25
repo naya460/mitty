@@ -61,28 +61,7 @@ export default function useElementList(props: Props): void {
     group_id: string,
     element: MessageElement,
     oldest?: true,
-  ) => {
-    // 日付が変わるとき、日付要素を追加
-    if (oldest) {
-      if (element_list.current.has(group_id) && element_list.current.get(group_id).length != 0) {
-        const last_message = element_list.current.get(group_id).slice().findLast(
-          (value) => (value as MessageElement).message_text != null
-        ) as MessageElement;
-  
-        if (new Date(last_message.time).toLocaleDateString() != new Date(element.time).toLocaleDateString()) {
-          addElement(group_id, { date: new Date(last_message.time) }, oldest);
-        }
-      }
-    } else {
-      const last_message = element_list.current.get(group_id).slice().find(
-        (value) => (value as MessageElement).message_text != null
-      ) as MessageElement;
-
-      if (new Date(last_message.time).toLocaleDateString() != new Date(element.time).toLocaleDateString()) {
-        addElement(group_id, { date: new Date(element.time) });
-      }
-    }
-    
+  ) => {    
     // 要素を追加
     addElement(group_id, element, oldest);
   }

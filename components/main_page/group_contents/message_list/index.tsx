@@ -48,6 +48,21 @@ export default function MessageList(props: Props) {
       if (typeof (value as MessageElement).message_text === "string") {
         value = value as MessageElement;
 
+        // 日付が変わったとき、日付の線を表示
+        if (last_message != null) {
+          if (new Date(last_message.time).toLocaleDateString() != new Date(value.time).toLocaleDateString()) {
+            // 表示を追加
+            tmp.unshift(
+              <div key={count} className={styles.date}>
+                <div className={styles.date_hline} />
+                <div className={styles.date_text}>{new Date(value.time).toLocaleDateString()}</div>
+                <div className={styles.date_hline} />
+              </div>
+            );
+            ++count;
+          }
+        }        
+
         // 名前と時刻の表示を切り替え
         // 時間差が5分以内で、ユーザーが同じとき、非表示
         let status = true;
@@ -74,17 +89,6 @@ export default function MessageList(props: Props) {
           >
             {value.message_text}
           </Message>
-        );
-      }
-      // 日付のとき
-      else {
-        value = value as DateElement;
-        tmp.unshift(
-          <div key={count} className={styles.date}>
-            <div className={styles.date_hline} />
-            <div className={styles.date_text}>{value.date.toLocaleDateString()}</div>
-            <div className={styles.date_hline} />
-          </div>
         );
       }
       ++count;
