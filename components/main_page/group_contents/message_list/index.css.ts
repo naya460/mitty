@@ -3,6 +3,7 @@ import { style } from "@vanilla-extract/css"
 export default {
   top: style({
     height: "100%",
+    width: "100%",
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-end",
