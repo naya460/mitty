@@ -35,6 +35,7 @@ export default function useElementList(props: Props): void {
   const addElement = (
     group_id: string,
     element: Element,
+    oldest?: boolean,
   ) => {
     // グループを読み込んでいないとき作成
     if (!element_list.current.has(group_id)) {
@@ -42,19 +43,37 @@ export default function useElementList(props: Props): void {
     }
 
     // 要素を追加
-    element_list.current.set(
-      group_id,
-      [element, ...element_list.current.get(group_id)]
-    );
+    if (oldest == true) {
+      element_list.current.set(
+        group_id,
+        [...element_list.current.get(group_id), element]
+      );
+    } else {
+      element_list.current.set(
+        group_id,
+        [element, ...element_list.current.get(group_id)]
+      );
+    }
   };
 
   // メッセージ要素を追加する
   const addMessageElement = (
     group_id: string,
     element: MessageElement,
+    oldest?: true,
   ) => {
     // 日付が変わるとき、日付要素を追加
-    if (element_list.current.has(group_id) && element_list.current.get(group_id).length != 0) {
+    if (oldest) {
+      if (element_list.current.has(group_id) && element_list.current.get(group_id).length != 0) {
+        const last_message = element_list.current.get(group_id).slice().findLast(
+          (value) => (value as MessageElement).message_text != null
+        ) as MessageElement;
+  
+        if (new Date(last_message.time).toLocaleDateString() != new Date(element.time).toLocaleDateString()) {
+          addElement(group_id, { date: new Date(last_message.time) }, oldest);
+        }
+      }
+    } else {
       const last_message = element_list.current.get(group_id).slice().find(
         (value) => (value as MessageElement).message_text != null
       ) as MessageElement;
@@ -62,12 +81,10 @@ export default function useElementList(props: Props): void {
       if (new Date(last_message.time).toLocaleDateString() != new Date(element.time).toLocaleDateString()) {
         addElement(group_id, { date: new Date(element.time) });
       }
-    } else {
-      addElement(group_id, { date: new Date(element.time) });
     }
     
     // 要素を追加
-    addElement(group_id, element);
+    addElement(group_id, element, oldest);
   }
 
   useWebSocket((message) => {
@@ -89,12 +106,13 @@ export default function useElementList(props: Props): void {
   });
 
   // メッセージを取得する
-  const getMessages = async () => {
+  const getMessages = async (last_message_id?: string) => {
     if (props.selected_group_id == null) return;
 
     // 送信するリクエストを作成
     const options = CreatePostRequest({
-      group_id: props.selected_group_id
+      group_id: props.selected_group_id,
+      last_message_id,
     });
 
     // メッセージを取得する
@@ -106,29 +124,38 @@ export default function useElementList(props: Props): void {
     }
     const messages = await res.json();
 
-    // まだメッセージが無いとき、グループのみ作成
-    if (messages.length == 0) {
-      element_list.current.set(props.selected_group_id, []);
-    }
-
     // メッセージの表示を作成
     for (let i in messages) {
       // メッセージ要素を追加
-      addMessageElement(props.selected_group_id, messages[i]);
+      addMessageElement(props.selected_group_id, messages[i], true);
     }
+
+    if (messages.length == 0) {
+      return { length: messages.length };
+    }
+
+    return { length: messages.length, id: messages[messages.length - 1].message_id };
   }
 
   // selected_group_idが更新されたとき
   useEffect(() => {
     (async () => {
+      // グループが選択されていないとき無視
+      if (props.selected_group_id == null) {
+        return;
+      }
+
       // まだ読み込んでいないselected_group_idのとき、メッセージを取得する
       if (!element_list.current.has(props.selected_group_id)) {
-        await getMessages();
+        let last_message = await getMessages();
+        while (last_message.length != 0) {
+          last_message = await getMessages(last_message.id);
+        }
       }
 
       // コールバック関数を呼ぶ
       if (props.onUpdate != null) {
-      props.onUpdate(element_list.current.get(props.selected_group_id));
+        props.onUpdate(element_list.current.get(props.selected_group_id));
       }
     })();    
   }, [props.selected_group_id]);

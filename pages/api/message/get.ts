@@ -22,9 +22,15 @@ async function UserRoute(req: NextApiRequest, res: NextApiResponse) {
     return;
   }
 
+  // 読み込んでいる最後のメッセージを取得
+  const last_message_id = await req.body.last_message_id;
+
+  const startTime = performance.now();
+
   // メッセージを取得
   let messages = await prisma.message.findMany({
     select: {
+      message_id: true,
       message_text: true,
       author: {
         select: {
@@ -34,8 +40,19 @@ async function UserRoute(req: NextApiRequest, res: NextApiResponse) {
       time: true
     },
     where: {
-      group_id: req.body.group_id
-    }
+      group_id: req.body.group_id,
+      message_id: {
+        lt: last_message_id,
+      }
+    },
+    orderBy: {
+      message_id: "desc",
+    },
+    take: 500,
   });
+
+  const endTime = performance.now();
+  console.log("message get time : " + (endTime - startTime));
+
   res.status(200).json(messages);
 }
