@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { DateTime } from 'luxon'
 
 import Message from './message'
@@ -15,6 +15,7 @@ interface Props {
 export default function MessageList(props: Props) {
   const [displayMessages, setDisplayMessages] = useState(null);
   const ref_messages_div = useRef<HTMLDivElement>(null);
+  const scroll_pos = useRef(new Map<string, number>());
 
   const [loadNext] = useElementList({
     selected_group_id: props.selected_group_id,
@@ -28,8 +29,11 @@ export default function MessageList(props: Props) {
     onUpdate: (elements) => {
       // メッセージの表示を更新
       setDisplayMessages(createDisplay(elements));
-
-      loadNext();
+      
+      if (!scroll_pos.current.has(props.selected_group_id)) {
+        scroll_pos.current.set(props.selected_group_id, 0);
+      }
+      ref_messages_div.current.scrollTo(0, scroll_pos.current.get(props.selected_group_id));
     }
   });
 
@@ -96,9 +100,18 @@ export default function MessageList(props: Props) {
     return tmp;
   }
 
+  // スクロール時の処理
+  const onScroll = (event) => {
+    scroll_pos.current.set(props.selected_group_id, ref_messages_div.current.scrollTop);
+  }
+
   return (
     <div className={styles.top}>
-      <div className={styles.messages} ref={ref_messages_div}>{displayMessages}</div>
+      <div
+        className={styles.messages}
+        ref={ref_messages_div}
+        onScroll={onScroll}
+      >{displayMessages}</div>
       <MessageInput
         selected_group_id={props.selected_group_id}
       />

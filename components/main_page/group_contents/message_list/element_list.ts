@@ -20,7 +20,7 @@ interface Props {
   selected_group_id: string,
   // selected_group_idのメッセージが来たときに呼ばれる
   onMessage?: (element: Element[]) => void;
-  // selected_group_idが更新されたときに呼ばれる
+  // メッセージが読み込まれたときに呼ばれる
   onUpdate?: (element: Element[]) => void; 
 }
 
