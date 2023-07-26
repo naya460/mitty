@@ -16,7 +16,7 @@ export default function MessageList(props: Props) {
   const [displayMessages, setDisplayMessages] = useState(null);
   const ref_messages_div = useRef<HTMLDivElement>(null);
 
-  useElementList({
+  const [loadNext] = useElementList({
     selected_group_id: props.selected_group_id,
     onMessage: (elements) => {
       // メッセージの表示を更新
@@ -29,8 +29,7 @@ export default function MessageList(props: Props) {
       // メッセージの表示を更新
       setDisplayMessages(createDisplay(elements));
 
-      // 最新のメッセージまでスクロール
-      ref_messages_div.current.scrollTo(0, 0);
+      loadNext();
     }
   });
 

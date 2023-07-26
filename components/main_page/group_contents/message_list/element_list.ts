@@ -4,6 +4,7 @@ import CreatePostRequest from 'components/common/create_post_request'
 import useWebSocket from 'components/common/useWebSocket'
 
 export type MessageElement = {
+  message_id: string,
   message_text: string,
   author: { user_name: string },
   time: Date,
@@ -23,10 +24,11 @@ interface Props {
   onUpdate?: (element: Element[]) => void; 
 }
 
-export default function useElementList(props: Props): void {
+export default function useElementList(props: Props): [ () => void ] {
   const element_list = useRef(new Map<String, Element[]>());
   const selected_group_id = useRef<string>(null);
   const onMessage = useRef<(element: Element[]) => void>(null);
+  const ref_getMessages = useRef(null);
 
   selected_group_id.current = props.selected_group_id;
   onMessage.current = props.onMessage;
@@ -109,10 +111,11 @@ export default function useElementList(props: Props): void {
       addMessageElement(props.selected_group_id, messages[i], true);
     }
 
+    
     if (messages.length == 0) {
       return { length: messages.length };
     }
-
+    
     return { length: messages.length, id: messages[messages.length - 1].message_id };
   }
 
@@ -126,10 +129,7 @@ export default function useElementList(props: Props): void {
 
       // まだ読み込んでいないselected_group_idのとき、メッセージを取得する
       if (!element_list.current.has(props.selected_group_id)) {
-        let last_message = await getMessages();
-        while (last_message.length != 0) {
-          last_message = await getMessages(last_message.id);
-        }
+        await getMessages();
       }
 
       // コールバック関数を呼ぶ
@@ -138,4 +138,21 @@ export default function useElementList(props: Props): void {
       }
     })();    
   }, [props.selected_group_id]);
+
+
+  ref_getMessages.current = getMessages;
+
+  return [
+    () => {
+      // 最後のメッセージを取得する
+      const length = element_list.current.get(props.selected_group_id).length;
+      const last_message = element_list.current.get(props.selected_group_id)[length - 1] as MessageElement;
+      // メッセージを取得して、画面を更新する
+      (async () => {
+        if ((await ref_getMessages.current(last_message.message_id)).length != 0) {
+          props.onUpdate(element_list.current.get(props.selected_group_id));
+        }
+      })();
+    }
+  ]
 }

@@ -48,7 +48,7 @@ async function UserRoute(req: NextApiRequest, res: NextApiResponse) {
     orderBy: {
       message_id: "desc",
     },
-    take: 500,
+    take: 100,
   });
 
   const endTime = performance.now();
