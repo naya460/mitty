@@ -37,6 +37,9 @@ export default function Message(props: Props) {
       <div className={`
         ${styles.message_box}
         ${(props.mine)? styles.message_box_mine : styles.message_box_member}
+        ${(!props.status) &&
+          ((props.mine)? styles.message_box_mine_related : styles.message_box_member_related)
+        }
       `}>
         {props.children}
       </div>

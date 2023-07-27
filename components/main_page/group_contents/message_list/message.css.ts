@@ -5,7 +5,7 @@ export default {
     width: "fit-content",
     maxWidth: "70%",
     minWidth: "1rem",
-    marginTop: "0.5rem",
+    marginTop: "2px",
   }),
   top_mine: style({
     marginLeft: "auto",
@@ -13,7 +13,8 @@ export default {
   status: style({
     display: "flex",
     flexDirection: "row",
-    alignItems: "flex-end"
+    alignItems: "flex-end",
+    marginTop: "0.25rem",
   }),
   status_mine: style({
     justifyContent: "right",
@@ -45,8 +46,14 @@ export default {
     backgroundColor: "#cfe0cf",
     borderBottomRightRadius: "0",
   }),
+  message_box_mine_related: style({
+    borderTopRightRadius: "0",
+  }),
   message_box_member: style({
     backgroundColor: "#ededed",
     borderBottomLeftRadius: "0",
   }),
+  message_box_member_related: style({
+    borderTopLeftRadius: "0",
+  })
 };
