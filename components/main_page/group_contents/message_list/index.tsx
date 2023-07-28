@@ -64,7 +64,17 @@ export default function MessageList(props: Props) {
             );
             ++count;
           }
-        }        
+        } else {
+          // 表示を追加
+          tmp.unshift(
+            <div key={count} className={styles.date}>
+              <div className={styles.date_hline} />
+              <div className={styles.date_text}>{new Date(value.time).toLocaleDateString()}</div>
+              <div className={styles.date_hline} />
+            </div>
+          );
+          ++count;
+        }
 
         // 名前と時刻の表示を切り替え
         // 時間差が5分以内で、ユーザーが同じとき、非表示
