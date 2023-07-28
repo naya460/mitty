@@ -16,23 +16,25 @@ export default function MessageList(props: Props) {
   const [displayMessages, setDisplayMessages] = useState(null);
   const ref_messages_div = useRef<HTMLDivElement>(null);
   const scroll_pos = useRef(new Map<string, number>());
+  const last_group = useRef(null);
 
   const [loadNext] = useElementList({
     selected_group_id: props.selected_group_id,
     onMessage: (elements) => {
       // メッセージの表示を更新
-      setDisplayMessages(createDisplay(elements));
-
-      // 最新のメッセージまでスクロール
-      ref_messages_div.current.scrollTo(0, 0);
+      setDisplayMessages(() => createDisplay(elements));
     },
     onUpdate: (elements) => {
-      // メッセージの表示を更新
-      setDisplayMessages(createDisplay(elements));
-      
-      if (!scroll_pos.current.has(props.selected_group_id)) {
-        scroll_pos.current.set(props.selected_group_id, 0);
+      // スクロールバーの位置を保存
+      if (last_group.current != null) {
+        scroll_pos.current.set(last_group.current, ref_messages_div.current.scrollTop);
       }
+      last_group.current = props.selected_group_id;
+
+      // メッセージの表示を更2新
+      setDisplayMessages(() => createDisplay(elements));
+      
+      // スクロールバーの位置を設定
       ref_messages_div.current.scrollTo(0, scroll_pos.current.get(props.selected_group_id));
     }
   });
@@ -110,17 +112,11 @@ export default function MessageList(props: Props) {
     return tmp;
   }
 
-  // スクロール時の処理
-  const onScroll = (event) => {
-    scroll_pos.current.set(props.selected_group_id, ref_messages_div.current.scrollTop);
-  }
-
   return (
     <div className={styles.top}>
       <div
         className={styles.messages}
         ref={ref_messages_div}
-        onScroll={onScroll}
       >{displayMessages}</div>
       <MessageInput
         selected_group_id={props.selected_group_id}

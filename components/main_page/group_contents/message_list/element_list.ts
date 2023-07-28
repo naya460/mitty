@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useLayoutEffect, useRef } from "react"
 
 import CreatePostRequest from 'components/common/create_post_request'
 import useWebSocket from 'components/common/useWebSocket'
@@ -120,7 +120,7 @@ export default function useElementList(props: Props): [ () => void ] {
   }
 
   // selected_group_idが更新されたとき
-  useEffect(() => {
+  useLayoutEffect(() => {
     (async () => {
       // グループが選択されていないとき無視
       if (props.selected_group_id == null) {
