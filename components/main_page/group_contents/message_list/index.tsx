@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { DateTime } from 'luxon'
 
 import Message from './message'
@@ -13,29 +13,29 @@ interface Props {
 }
 
 export default function MessageList(props: Props) {
-  const [displayMessages, setDisplayMessages] = useState(null);
-  const ref_messages_div = useRef<HTMLDivElement>(null);
-  const scroll_pos = useRef(new Map<string, number>());
-  const last_group = useRef(null);
+  const [displayMessages, setDisplayMessages] = useState(new Map<string, JSX.Element[]>());
 
   const [loadNext] = useElementList({
     selected_group_id: props.selected_group_id,
     onMessage: (elements) => {
       // メッセージの表示を更新
-      setDisplayMessages(() => createDisplay(elements));
+      setDisplayMessages((prev) => {
+        prev.set(
+          props.selected_group_id,
+          createDisplay(elements)
+        );
+        return new Map(prev);
+      });
     },
     onUpdate: (elements) => {
-      // スクロールバーの位置を保存
-      if (last_group.current != null) {
-        scroll_pos.current.set(last_group.current, ref_messages_div.current.scrollTop);
-      }
-      last_group.current = props.selected_group_id;
-
-      // メッセージの表示を更2新
-      setDisplayMessages(() => createDisplay(elements));
-      
-      // スクロールバーの位置を設定
-      ref_messages_div.current.scrollTo(0, scroll_pos.current.get(props.selected_group_id));
+      // メッセージの表示を更新
+      setDisplayMessages((prev) => {
+        prev.set(
+          props.selected_group_id,
+          createDisplay(elements)
+        );
+        return new Map(prev);
+      });
     }
   });
 
@@ -114,10 +114,17 @@ export default function MessageList(props: Props) {
 
   return (
     <div className={styles.top}>
-      <div
-        className={styles.messages}
-        ref={ref_messages_div}
-      >{displayMessages}</div>
+      <div className={styles.message_list}>
+        {Array.from(displayMessages).map(value => {
+          return (
+            <div
+              key={value[0]}
+              className={`${styles.messages} ${(props.selected_group_id != value[0]) && styles.messages_hidden}`}
+            >{value[1]}</div>
+          );
+        })}
+        </div>
+      
       <MessageInput
         selected_group_id={props.selected_group_id}
       />
