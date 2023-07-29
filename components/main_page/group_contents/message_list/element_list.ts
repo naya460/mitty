@@ -24,7 +24,7 @@ interface Props {
   onUpdate?: (element: Element[]) => void; 
 }
 
-export default function useElementList(props: Props): [ () => void ] {
+export default function useElementList(props: Props): [ () => Promise<boolean> ] {
   const element_list = useRef(new Map<String, Element[]>());
   const selected_group_id = useRef<string>(null);
   const onMessage = useRef<(element: Element[]) => void>(null);
@@ -110,7 +110,6 @@ export default function useElementList(props: Props): [ () => void ] {
       // メッセージ要素を追加
       addMessageElement(props.selected_group_id, messages[i], true);
     }
-
     
     if (messages.length == 0) {
       return { length: messages.length };
@@ -143,16 +142,16 @@ export default function useElementList(props: Props): [ () => void ] {
   ref_getMessages.current = getMessages;
 
   return [
-    () => {
+    async () => {
       // 最後のメッセージを取得する
       const length = element_list.current.get(props.selected_group_id).length;
       const last_message = element_list.current.get(props.selected_group_id)[length - 1] as MessageElement;
       // メッセージを取得して、画面を更新する
-      (async () => {
-        if ((await ref_getMessages.current(last_message.message_id)).length != 0) {
-          props.onUpdate(element_list.current.get(props.selected_group_id));
-        }
-      })();
+      if ((await ref_getMessages.current(last_message.message_id)).length != 0) {
+        props.onUpdate(element_list.current.get(props.selected_group_id));
+        return false;
+      }
+      return true;
     }
   ]
 }
