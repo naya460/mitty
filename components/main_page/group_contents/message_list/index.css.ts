@@ -10,14 +10,14 @@ export default {
     flexBasis: "1",
     flexGrow: "1",
   }),
-  message_list: style({
+  group_list: style({
     position: "relative",
     display: "flex",
     height: "100%",
     flexBasis: "0",
     flexGrow: "1",
   }),
-  messages: style({
+  message_list: style({
     position: "absolute",
     display: "flex",
     height: "100%",
@@ -29,8 +29,21 @@ export default {
     overflowY: "scroll",
     padding: "0.1rem 1rem",
   }),
-  messages_hidden: style({
+  message_list_hidden: style({
     visibility: "hidden",
+  }),
+  messages_center: style({
+    position: "relative",
+    display: "flex",
+    justifyContent: "center"
+  }),
+  messages: style({
+    position: "absolute",
+    width: "min(90%, 60rem)",
+    display: "flex",
+    flexDirection: "column",
+    overflowY: "visible",
+    bottom: "0"
   }),
   date: style({
     display: "flex",

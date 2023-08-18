@@ -140,30 +140,18 @@ export default function MessageList(props: Props) {
 
   return (
     <div className={styles.top}>
-      <div className={styles.message_list}>
+      <div className={styles.group_list}>
         {Array.from(displayMessages).map(value => {
           return (
             <div
               key={value[0]}
-              className={`${styles.messages} ${(props.selected_group_id != value[0]) && styles.messages_hidden}`}
+              className={`${styles.message_list} ${(props.selected_group_id != value[0]) && styles.message_list_hidden}`}
               onScroll={(event) => handle_scroll(event, value[0])}
             >
-              <div
-                style={{
-                  position: "relative",
-                  height: "1000px",
-                }}
-              >
+              <div className={styles.messages_center}>
                 <div
                   ref={message_divs.current.get(value[0])}
-                  style={{
-                    position: "absolute",
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    overflowY: "visible",
-                    bottom: "0"
-                  }}
+                  className={styles.messages}
                 >
                   {value[1]}
                 </div>
@@ -171,7 +159,7 @@ export default function MessageList(props: Props) {
             </div>
           );
         })}
-        </div>
+      </div>
       
       <MessageInput
         selected_group_id={props.selected_group_id}
