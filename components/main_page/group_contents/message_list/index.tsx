@@ -1,4 +1,4 @@
-import { useState, useRef, RefObject, createRef } from 'react'
+import React, { useState, useRef, RefObject, createRef } from 'react'
 import { DateTime } from 'luxon'
 
 import Message from './message'
@@ -64,7 +64,7 @@ export default function MessageList(props: Props) {
         if (last_message != null) {
           if (new Date(last_message.time).toLocaleDateString() != new Date(value.time).toLocaleDateString()) {
             // 表示を追加
-            tmp.unshift(
+            tmp.push(
               <div key={count} className={styles.date}>
                 <div className={styles.date_hline} />
                 <div className={styles.date_text}>{new Date(value.time).toLocaleDateString()}</div>
@@ -75,7 +75,7 @@ export default function MessageList(props: Props) {
           }
         } else {
           // 表示を追加
-          tmp.unshift(
+          tmp.push(
             <div key={count} className={styles.date}>
               <div className={styles.date_hline} />
               <div className={styles.date_text}>{new Date(value.time).toLocaleDateString()}</div>
@@ -101,7 +101,7 @@ export default function MessageList(props: Props) {
         last_message = value;
 
         // 表示を追加
-        tmp.unshift(
+        tmp.push(
           <Message
             key={count}
             user_name={value.author.user_name}
@@ -119,16 +119,16 @@ export default function MessageList(props: Props) {
     return tmp;
   }
 
-  const handle_scroll = async (group_id: string) => {
+  const handle_scroll = async (event: React.UIEvent<HTMLDivElement, UIEvent>, group_id: string) => {
     // メッセージの参照を入手
-    const ref = message_divs.current.get(group_id).current;
-    if (ref == null) return;
+    const target = event.currentTarget;
 
     // 上の方にいるかを計算
-    const will_load = (ref.scrollHeight + ref.scrollTop) < 10 * ref.clientHeight;
+    const will_load = target.scrollHeight - target.clientHeight * 2 <= -target.scrollTop;
 
     // 上の方で、最後まで読み込まれておらず、現在読み込み中でないとき、読み込む
     if (will_load && loading.current.get(group_id) != null && loading.current.get(group_id) == false) {
+      console.log("load")
       loading.current.set(group_id, true);  // 読み込み開始にする
       if (await loadNext()) {
         loading.current.set(group_id, null);  // 読み込み完了にする
@@ -144,11 +144,31 @@ export default function MessageList(props: Props) {
         {Array.from(displayMessages).map(value => {
           return (
             <div
-              ref={message_divs.current.get(value[0])}
               key={value[0]}
               className={`${styles.messages} ${(props.selected_group_id != value[0]) && styles.messages_hidden}`}
-              onScroll={() => handle_scroll(value[0])}
-            >{value[1]}</div>
+              onScroll={(event) => handle_scroll(event, value[0])}
+            >
+              <div
+                style={{
+                  position: "relative",
+                  height: "1000px",
+                }}
+              >
+                <div
+                  ref={message_divs.current.get(value[0])}
+                  style={{
+                    position: "absolute",
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    overflowY: "visible",
+                    bottom: "0"
+                  }}
+                >
+                  {value[1]}
+                </div>
+              </div>
+            </div>
           );
         })}
         </div>
