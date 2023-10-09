@@ -1,9 +1,11 @@
 import { WebSocketServer } from 'ws';
 import { PrismaClient } from '@prisma/client';
-import { DateTime } from 'luxon';
+import Redis from 'ioredis';
 const prisma = new PrismaClient();
 
 const clients = new Map();
+const send_redis = new Redis();
+const get_redis = new Redis();
 
 export function CreateWebSocketServer() {
   const wss = new WebSocketServer({
@@ -64,6 +66,14 @@ export function CreateWebSocketServer() {
       }
 
       // メッセージを追加
+      send_redis.publish(
+        "send_message_ws",
+        JSON.stringify({
+          message_text: message_text,
+          author_id: user[0].user_id,
+          group_id: group_id
+        })
+      );
       await prisma.message.create({
         data: {
           message_text: message_text,
@@ -104,6 +114,18 @@ export function CreateWebSocketServer() {
       })
     });
   });
+
+  get_redis.subscribe("send_message_ws", (error, count) => {
+    if (error) {
+      console.log("Failed to subscribe: $s", error.message);
+    } else {
+      console.log(`Subscribed succesfully! This client is currently subscribed to ${count} channels.`);
+    }
+  });
+
+  get_redis.on("message", (channel, message) => {
+    console.log(`Received ${message} from ${channel}`);
+  })
 
   return wss;
 }
