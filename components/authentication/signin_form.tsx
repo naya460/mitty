@@ -25,14 +25,8 @@ export default function SingInForm() {
     if (resJson.success) {
       router.reload();
     } else {
-      if (!resJson.user) {
-        user_name_form.current.value = '';
-        password_form.current.value = '';
-        alert('The user does not exist.');
-      } else if(!resJson.password) {
-        password_form.current.value = '';
-        alert('The password is incorrect.');
-      }
+      alert('The user does not exist, or the password is incorrect.');
+      password_form.current.value = '';
     }
   }
 

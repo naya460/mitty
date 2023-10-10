@@ -15,8 +15,8 @@ async function SignInRoute(req, res) {
     where: { user_name: req.body.user_name }
   });
   if (!check_user) {
-    // ユーザーが存在しないことを返却
-    res.status(500).json({ success: false, user: false });
+    // 失敗したことを返却
+    res.status(500).json({ success: false });
     return;
   }
 
@@ -36,8 +36,8 @@ async function SignInRoute(req, res) {
       // 成功したことを返却
       res.status(200).json({ success: true });
     } else {
-      // パスワードが間違っていることを返却
-      res.status(400).send({ success: false, user: true, password: false});
+      // 失敗したことを返却
+      res.status(400).send({ success: false });
     }
   });
 }
