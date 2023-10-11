@@ -2,6 +2,8 @@ import prisma from 'lib/prisma'
 import { withUserRoute } from 'lib/withSession'
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import isBelongGroup from 'database/group/is_belong';
+
 // サインインしているときで、POSTリクエストのときのみ実行
 export default withUserRoute(UserAddRoute, 'POST');
 
@@ -17,15 +19,8 @@ async function UserAddRoute(req: NextApiRequest, res: NextApiResponse) {
   }
 
   // 依頼したユーザーがグループに参加しているか検索
-  const r_joined = await prisma.groupsOnUsers.findMany({
-    where: {
-      user: {
-        user_name: user_name
-      },
-      group_id: group_id
-    }
-  });
-  if (r_joined.length == 0) {
+  const r_joined = await isBelongGroup(user_name, group_id);
+  if (!r_joined) {
     res.status(400).send('You have not joined the group.')
     return;
   }
@@ -49,15 +44,8 @@ async function UserAddRoute(req: NextApiRequest, res: NextApiResponse) {
   }
   
   // 追加されるユーザーがグループに参加していないか確認
-  const a_joined = await prisma.groupsOnUsers.findMany({
-    where: {
-      user: {
-        user_name: a_user_name
-      },
-      group_id: group_id
-    }
-  });
-  if (a_joined.length != 0) {
+  const a_joined = await isBelongGroup(a_user_name, group_id);
+  if (a_joined) {
     res.status(400).send('The add_user has already joined the group.');
     return;
   }

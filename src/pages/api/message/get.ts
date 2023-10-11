@@ -2,7 +2,7 @@ import prisma from 'lib/prisma'
 import { withUserRoute } from 'lib/withSession'
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import isBelongGroup from 'components/api/is_belong_group';
+import isBelongGroup from 'database/group/is_belong';
 
 // サインインしているときで、POSTリクエストのときのみ実行
 // group_idを指定して読み込むため、POSTになっている

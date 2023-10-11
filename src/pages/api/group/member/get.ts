@@ -1,4 +1,4 @@
-import isBelongGroup from 'components/api/is_belong_group';
+import isBelongGroup from 'database/group/is_belong';
 import prisma from 'lib/prisma'
 import { withUserRoute } from 'lib/withSession'
 import { NextApiRequest, NextApiResponse } from 'next';
