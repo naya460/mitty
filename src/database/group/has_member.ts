@@ -1,7 +1,7 @@
 import prisma from 'lib/prisma'
 
 // ユーザーがグループに属しているか確認
-export default async function isBelongGroup(user_name: string, group_id: string): Promise<boolean> {
+export default async function hasMember(user_name: string, group_id: string): Promise<boolean> {
   // ユーザーIDを取得
   const user = await prisma.user.findUnique({
     select: {

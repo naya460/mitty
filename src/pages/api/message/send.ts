@@ -1,4 +1,4 @@
-import isBelongGroup from 'database/group/is_belong';
+import hasMember from 'database/group/has_member';
 import prisma from 'lib/prisma'
 import { withUserRoute } from 'lib/withSession'
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -31,7 +31,7 @@ async function SendRoute(req: NextApiRequest, res: NextApiResponse) {
   }
 
   // グループに所属しているか確認
-  const is_belong = await isBelongGroup(user_name, group_id);
+  const is_belong = await hasMember(user_name, group_id);
   if (!is_belong) {
     res.status(400).send('You do not belong to the group.');
     return;

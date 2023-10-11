@@ -2,7 +2,7 @@ import prisma from 'lib/prisma'
 import { withUserRoute } from 'lib/withSession'
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import isBelongGroup from 'database/group/is_belong';
+import hasMember from 'database/group/has_member';
 
 // サインインしているときで、POSTリクエストのときのみ実行
 // group_idを指定して読み込むため、POSTになっている
@@ -16,7 +16,7 @@ async function UserRoute(req: NextApiRequest, res: NextApiResponse) {
   }
 
   // グループに所属しているか確認
-  const is_belong = await isBelongGroup(req.session.user.user_name, req.body.group_id);
+  const is_belong = await hasMember(req.session.user.user_name, req.body.group_id);
   if (!is_belong) {
     res.status(400).send('You do not belong to the group.');
     return;

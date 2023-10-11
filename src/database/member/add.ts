@@ -1,4 +1,4 @@
-import isBelongGroup from 'database/group/is_belong';
+import hasMember from 'database/group/has_member';
 import prisma from 'lib/prisma'
 
 export default async function addGroupMember(
@@ -12,12 +12,12 @@ export default async function addGroupMember(
   }
 
   // 依頼ユーザーがグループに所属しているか調べる
-  if (!(await isBelongGroup(requesting_user_name, group_id))) {
+  if (!(await hasMember(requesting_user_name, group_id))) {
     return false;
   }
 
   // 追加されるユーザーが所属していないことを調べる
-  if (await isBelongGroup(additional_user_name, group_id)) {
+  if (await hasMember(additional_user_name, group_id)) {
     return false;
   }
 
