@@ -26,7 +26,7 @@ export default function MemberList(props: Props) {
 
       // メンバーを取得
       const res = await fetch('api/group/member/get', options);
-      const json = await res.json();
+      const json = JSON.parse(await res.json());
 
       // メンバー名のリストを作成
       let list = [];

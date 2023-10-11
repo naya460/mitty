@@ -1,5 +1,6 @@
+import prisma from 'lib/prisma';
+
 import hasMember from 'database/group/has_member';
-import prisma from 'lib/prisma'
 
 export default async function addGroupMember(
   requesting_user_name: string,
