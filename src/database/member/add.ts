@@ -1,6 +1,32 @@
 import prisma from 'lib/prisma';
 
+import groupExists from 'database/group/exists';
 import hasMember from 'database/group/has_member';
+
+// # addGroupMember
+//   グループにメンバー(ユーザー)を追加する
+//
+// ## 引数
+//   - requesting_user_name : string
+//     追加を依頼したユーザー名
+//   - additional_user_name : string
+//     追加するユーザー名
+//   - group_id : string
+//     ユーザーを追加するグループ名
+//
+// ## 返り値
+//   - Promise<boolean>
+//     - 追加に成功した場合 : true
+//     - 追加に失敗した場合 : false
+//
+// ### 条件
+//   - グループが存在しない場合、失敗する
+//   - 依頼したユーザーがグループに存在しない場合、失敗する
+//   - 追加ユーザーが既に参加している場合、失敗する
+//
+// ## 注意
+//   - 依頼ユーザーは正確である必要がある
+//     - APIから認証を済ませておくこと
 
 export default async function addGroupMember(
   requesting_user_name: string,
@@ -8,7 +34,7 @@ export default async function addGroupMember(
   group_id: string,
 ): Promise<boolean> {
   // グループが存在するか調べる
-  if (await prisma.group.findUnique({ where: { group_id } }) == null) {
+  if (!(await groupExists(group_id))) {
     return false;
   }
 
