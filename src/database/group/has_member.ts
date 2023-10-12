@@ -1,18 +1,34 @@
-import prisma from 'lib/prisma'
+import prisma from 'lib/prisma';
 
-// ユーザーがグループに属しているか確認
-export default async function hasMember(user_name: string, group_id: string): Promise<boolean> {
+import getUserId from 'database/user/get_user_id';
+
+// # hasMember
+//   ユーザーがグループに属しているか確認する
+//
+// ## 引数
+//   - user_name : string
+//     確認するユーザー名
+//   - group_id : string
+//     確認するグループID
+//
+// ## 返り値
+//   - Promise<boolean>
+//     - 存在しない場合 : false
+//     - 存在する場合 : true
+//
+// ## 注意
+//   - APIから必要なときに呼び出すこと
+//   - ユーザーから直接呼び出してはいけない
+
+export default async function hasMember(
+  user_name: string,
+  group_id: string
+): Promise<boolean> {
   // ユーザーIDを取得
-  const user = await prisma.user.findUnique({
-    select: {
-      user_id: true,
-    },
-    where: {
-      user_name: user_name
-    }
-  });
-  if (!user) return false;
-  const user_id = user.user_id;
+  const user_id = await getUserId(user_name);
+  if (!user_id) {
+    return false;
+  }
 
   return (await prisma.groupsOnUsers.findUnique({
     where: {
