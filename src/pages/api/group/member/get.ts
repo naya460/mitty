@@ -2,7 +2,7 @@ import prisma from 'lib/prisma';
 import { withUserRoute } from 'lib/withSession';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import getGroupMember from 'database/member/get';
+import getGroupMember from 'database/group/member/get';
 
 // サインインしているときで、GETリクエストのときのみ実行
 // group_idを指定して読み込むため、POSTになっている

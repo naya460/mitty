@@ -1,7 +1,7 @@
 import { withUserRoute } from 'lib/withSession';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import addGroupMember from 'database/member/add';
+import addGroupMember from 'database/group/member/add';
 
 // サインインしているときで、POSTリクエストのときのみ実行
 export default withUserRoute(UserAddRoute, 'POST');
