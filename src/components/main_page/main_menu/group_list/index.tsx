@@ -59,7 +59,7 @@ export default function GroupList(props: Props) {
     (async () => {
       // グループを取得
       const res = await fetch('api/group/get');
-      const groups = await res.json();
+      const groups = JSON.parse(await res.json());
       // グループの表示を作成
       let group_list = [];
       let display_groups = [];

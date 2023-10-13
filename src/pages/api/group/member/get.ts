@@ -1,4 +1,3 @@
-import prisma from 'lib/prisma';
 import { withUserRoute } from 'lib/withSession';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -21,12 +20,10 @@ async function GetMemberRoute(req: NextApiRequest, res: NextApiResponse) {
 
   // メンバー取得
   const ret = await getGroupMember(user_name, group_id);
-
   if (ret == undefined) {
     res.status(400).end();
     return;
-  } else {
-    res.status(200).json(ret);
-    return;
   }
+  res.status(200).json(ret);
+  return;
 }
