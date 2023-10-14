@@ -74,13 +74,6 @@ export function CreateWebSocketServer() {
           group_id: group_id
         })
       );
-      await prisma.message.create({
-        data: {
-          message_text: message_text,
-          author_id: user[0].user_id,
-          group_id: group_id
-        }
-      });
 
       // グループのメンバーのクッキーを取得
       const member_cookie = await prisma.groupsOnUsers.findMany({
@@ -124,8 +117,17 @@ export function CreateWebSocketServer() {
   });
 
   get_redis.on("message", (channel, message) => {
-    console.log(`Received ${message} from ${channel}`);
-  })
+    const json_message = JSON.parse(message);
+    ( async function() {
+      await prisma.message.create({
+        data: {
+          message_text: json_message.message_text,
+          author_id: json_message.author_id,
+          group_id: json_message.group_id,
+        },
+      });
+    })();
+  });
 
   return wss;
 }

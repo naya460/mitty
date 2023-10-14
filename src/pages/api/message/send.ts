@@ -1,4 +1,3 @@
-import hasMember from 'database/group/has_member';
 import prisma from 'lib/prisma'
 import { withUserRoute } from 'lib/withSession'
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -26,21 +25,14 @@ async function SendRoute(req: NextApiRequest, res: NextApiResponse) {
   // グループIDを取得
   const group_id: string = req.body.group_id;
   if (group_id === null) {
-    res.status(400).send('The group_id did not exist in the request.');
-    return;
-  }
-
-  // グループに所属しているか確認
-  const is_belong = await hasMember(user_name, group_id);
-  if (!is_belong) {
-    res.status(400).send('You do not belong to the group.');
+    res.status(400).end();
     return;
   }
 
   // メッセージを取り出す
   const message_text: string = req.body.message;
   if (message_text == null) {
-    res.status(400).send('The message did not exist in the request.')
+    res.status(400).end();
     return;
   }
 
@@ -54,5 +46,5 @@ async function SendRoute(req: NextApiRequest, res: NextApiResponse) {
     })
   );
 
-  res.status(201).send('Sending message was success.')
+  res.status(201).end();
 }
