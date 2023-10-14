@@ -99,11 +99,9 @@ export default function useElementList(props: Props): [ () => Promise<boolean> ]
     // メッセージを取得する
     const res = await fetch('api/message/get', options);
     if (!res.ok) {
-      const resText = await res.text();
-      console.log(resText);
       return;
     }
-    const messages = await res.json();
+    const messages = JSON.parse(await res.json());
 
     // メッセージの表示を作成
     for (let i in messages) {
