@@ -1,8 +1,26 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import prisma from 'lib/prisma';
 
 import getUserId from "database/user/get_user_id";
 import hasMember from "database/group/has_member";
+
+// # addMessage
+//   メッセージを追加する
+//
+// ## 引数
+//   - user_name : string
+//     投稿したユーザー名
+//   - group_id : string
+//     投稿するグループID
+//   - message_test : string
+//     メッセージの内容
+//
+// ## 返り値
+//   - Promise<boolean>
+//     - 取得に失敗した場合 : false
+//     - 取得に成功した場合 : true
+//
+// ## 注意
+//   - APIから認証を済ませておくこと
 
 export default async function addMessage(
   user_name: string,

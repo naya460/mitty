@@ -1,32 +1,42 @@
-import prisma from 'lib/prisma'
 import { withSessionRoute } from 'lib/withSession'
+import { NextApiRequest, NextApiResponse } from 'next';
+
+import getUserId from 'database/user/get_user_id';
+import getUserHash from 'database/user/get_hash';
 
 export default withSessionRoute(SignInRoute);
 
-async function SignInRoute(req, res) {
+async function SignInRoute(req: NextApiRequest, res: NextApiResponse) {
   // POST以外のとき失敗
   if (req.method !== 'POST') {
-    res.status(400).send('Message is not POST');
+    res.status(400).end();
+    return;
+  }
+
+  // ユーザー名を入手
+  const user_name: string = req.body.user_name;
+  if (!user_name) {
+    res.status(400).end();
     return;
   }
 
   // ユーザーが存在することを確認
-  const check_user = await prisma.user.findUnique({
-    where: { user_name: req.body.user_name }
-  });
-  if (!check_user) {
-    // 失敗したことを返却
-    res.status(500).json({ success: false });
+  const user_id = await getUserId(user_name);
+  if (!user_id) {
+    res.status(400).end();
     return;
   }
 
+  // パスワードを取得
+  const password = req.body.password;
+  if (!password) {
+    res.status(400).end();
+  }
+
   // ユーザーを認証する
-  const hash = await prisma.user.findUnique({
-    select: { hash: true },
-    where: { user_name: req.body.user_name }
-  });
+  const hash = await getUserHash(user_name);
   const bcrypt = require('bcrypt');
-  bcrypt.compare(req.body.password, hash.hash, async function(err, result) {
+  bcrypt.compare(password, hash, async function(err, result) {
     if (result) {
       // セッションを保存
       req.session.user = {
