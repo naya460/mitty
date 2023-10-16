@@ -15,7 +15,7 @@ async function SignUpRoute(req: NextApiRequest, res: NextApiResponse) {
 
   // 作成するユーザー名を取得
   const user_name: string = req.body.user_name;
-  if (user_name) {
+  if (!user_name) {
     res.status(400).end();
     return;
   }

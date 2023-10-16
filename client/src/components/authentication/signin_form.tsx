@@ -20,9 +20,8 @@ export default function SingInForm() {
     });
 
     const response = await fetch('api/user/signin', options);
-    const resJson = await response.json();
-
-    if (resJson.success) {
+    
+    if (response.ok) {
       router.reload();
     } else {
       alert('The user does not exist, or the password is incorrect.');

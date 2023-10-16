@@ -22,21 +22,11 @@ export default function SignUpForm() {
     });
 
     const response = await fetch('api/user/signup', options);
-    const resJson = await response.json();
 
-    if (resJson.success) {
+    if (response.ok) {
       router.reload();
     } else {
-      if (resJson.user) {
-        user_name_form.current.value = '';
-        password_form.current.value = '';
-        confirm_password_form.current.value = '';
-        alert('This user already exists.');
-      } else if (!resJson.password) {
-        password_form.current.value = '';
-        confirm_password_form.current.value = '';
-        alert('The passwords do not match.');
-      }
+      alert('The user already exists, or the passwords do not match.');
     }    
   }
 

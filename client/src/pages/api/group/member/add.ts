@@ -27,6 +27,7 @@ async function UserAddRoute(req: NextApiRequest, res: NextApiResponse) {
   // ユーザーを追加
   if (!(await addGroupMember(user_name, a_user_name, group_id))) {
     res.status(400).end();
+    return;
   }
 
   res.status(200).end();
