@@ -1,4 +1,5 @@
 import fastify from 'fastify';
+import { v4 as uuid_v4 } from 'uuid';
 
 const server = fastify({
   logger: true,
@@ -6,7 +7,7 @@ const server = fastify({
 
 server.get('/', async (request, reply) => {
   reply.type('application/json').code(200);
-  return { test: 'ok' };
+  return { uuid: uuid_v4() };
 });
 
 server.listen({ port: 9090, host: '0.0.0.0' }, (err, address) => {
