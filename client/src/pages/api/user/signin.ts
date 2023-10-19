@@ -36,6 +36,13 @@ async function SignInRoute(req: NextApiRequest, res: NextApiResponse) {
   // ユーザーを認証する
   const hash = await getUserHash(user_name);
   const bcrypt = require('bcrypt');
+  fetch('http://localhost:9090/user/signin', {
+    method: 'POST',
+    headers: {
+        'Content-Type': "application/json"
+    },
+    body: JSON.stringify({ user_name: req.body.user_name })
+  });
   bcrypt.compare(password, hash, async function(err, result) {
     if (result) {
       // セッションを保存
