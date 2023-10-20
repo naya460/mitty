@@ -41,6 +41,7 @@ declare module 'iron-session' {
   interface IronSessionData {
     user?: {
       user_name: string;
+      session_id?: string;
     }
   }
 }

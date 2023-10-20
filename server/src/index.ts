@@ -33,13 +33,24 @@ server.post<{ Body: { user_name: string } }>(
     const session_id = uuid_v4();
     
     // session id と user_name を保存する
-    redis.hset('session', session_id, user_name);
+    await redis.hset('session', session_id, user_name);
 
     console.log(await redis.hgetall('session'));
 
     // session id を返す
-    res.type('application/json').code(200);
+    res.type('application/json').code(201);
     return { session_id };
+  }
+);
+
+server.post<{ Body: { session_id: string} }>(
+  '/user/signout',
+  async (req, res) => {
+    const session_id = (await JSON.parse(req.body.session_id)).session_id;
+    console.log(session_id);
+    await redis.hdel('session', session_id);
+    console.log(await redis.hgetall('session'));
+    res.code(200);
   }
 );
 

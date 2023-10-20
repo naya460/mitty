@@ -36,7 +36,7 @@ async function SignInRoute(req: NextApiRequest, res: NextApiResponse) {
   // ユーザーを認証する
   const hash = await getUserHash(user_name);
   const bcrypt = require('bcrypt');
-  fetch('http://localhost:9090/user/signin', {
+  const session_id = await fetch('http://localhost:9090/user/signin', {
     method: 'POST',
     headers: {
         'Content-Type': "application/json"
@@ -47,7 +47,8 @@ async function SignInRoute(req: NextApiRequest, res: NextApiResponse) {
     if (result) {
       // セッションを保存
       req.session.user = {
-        user_name: req.body.user_name
+        user_name: req.body.user_name,
+        session_id: JSON.stringify(await session_id.json()),
       }
       await req.session.save();
       // 成功したことを返却
