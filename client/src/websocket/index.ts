@@ -8,25 +8,10 @@ const send_redis = new Redis();
 const get_redis = new Redis();
 
 export function CreateWebSocketServer() {
-  const wss = new WebSocketServer({
-    port: 8080,
-    verifyClient: async (info, cb) => {
-      const c = await prisma.user.findMany({
-        select: {
-          cookie: true
-        },
-        where: {
-          cookie: info.req.headers.cookie.split('=')[1]
-        }
-      });
-      cb(c.length != 0);
-    }
-  });
+  const wss = new WebSocketServer({port: 8080});
   
   wss.on('connection', (ws, socket) => {
     console.log('websocket: connection to', socket.socket.remoteAddress);
-
-    clients.set(socket.headers.cookie.split('=')[1], ws);
 
     ws.on('message', async (data) => {
       const json_message = JSON.parse(data.toString());
@@ -39,6 +24,10 @@ export function CreateWebSocketServer() {
         }
       });
       if (user.length != 1) return;
+
+      if (!clients.get(cookie)) {
+        clients.set(cookie, ws);
+      }
 
       // グループIDを取得
       const group_id: string = json_message.group_id;

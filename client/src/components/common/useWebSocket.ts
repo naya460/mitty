@@ -4,7 +4,7 @@ let socket: WebSocket = null;
 let cookie: String = null;
 let callbacks = [];
 
-export default function useWebSocket(callback? : (message) => void): [(message) => void, String] {
+export default function useWebSocket(callback? : (message) => void): [(message) => void] {
   useEffect(() => {
     // コールバック関数を追加
     if (callback) {
@@ -30,8 +30,8 @@ export default function useWebSocket(callback? : (message) => void): [(message) 
   return [
     (message: Object): void => {
       if (socket.OPEN) {
-        socket.send(JSON.stringify(message));
+        socket.send(JSON.stringify({...message, cookie}));
       }
-    }, cookie
+    }
   ];
 }

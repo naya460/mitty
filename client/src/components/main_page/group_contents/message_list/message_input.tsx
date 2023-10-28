@@ -12,12 +12,11 @@ export default function MessageInput(props: Props) {
   const [text, setText] = useState('');
   const [lineCount, setLineCount] = useState(1);
 
-  const [socketSend, cookie] = useWebSocket();
+  const [socketSend] = useWebSocket();
 
   const sendMessage = () => {
     // 送信するリクエストを作成
     const message = {
-      cookie: cookie,
       message: text,
       group_id: props.selected_group_id
     };

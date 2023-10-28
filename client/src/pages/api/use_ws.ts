@@ -15,14 +15,14 @@ async function UseWsRoute(req: NextApiRequest, res: NextApiResponse) {
     }
 
     // cookieを取得
-    const cookie = Object.values(req.cookies)[0];
-    if (!cookie) {
+    const session_id = Object.values(await JSON.parse(req.session.user.session_id))[0] as string;
+    if (!session_id) {
         res.status(400).end();
     }
 
     // クッキーを保存
-    await setUserCookie(user_name, cookie);
+    await setUserCookie(user_name, session_id);
 
-    res.status(200).send(Object.values(req.cookies)[0]);
+    res.status(200).send(session_id);
     res.end();
 }
