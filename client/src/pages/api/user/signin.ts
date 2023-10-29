@@ -1,5 +1,6 @@
 import { withSessionRoute } from 'lib/withSession'
 import { NextApiRequest, NextApiResponse } from 'next';
+import { setCookie } from 'cookies-next'
 
 import getUserId from 'database/user/get_user_id';
 import getUserHash from 'database/user/get_hash';
@@ -36,21 +37,23 @@ async function SignInRoute(req: NextApiRequest, res: NextApiResponse) {
   // ユーザーを認証する
   const hash = await getUserHash(user_name);
   const bcrypt = require('bcrypt');
-  const session_id = await fetch('http://localhost:9090/user/signin', {
+  const session_id_res = await fetch('http://localhost:9090/user/signin', {
     method: 'POST',
     headers: {
         'Content-Type': "application/json"
     },
     body: JSON.stringify({ user_name: req.body.user_name })
   });
+  const session_id = JSON.stringify(await session_id_res.json());
   bcrypt.compare(password, hash, async function(err, result) {
     if (result) {
       // セッションを保存
       req.session.user = {
         user_name: req.body.user_name,
-        session_id: JSON.stringify(await session_id.json()),
+        session_id: session_id,
       }
       await req.session.save();
+      setCookie('new-session-cookie', Object.values(await JSON.parse(session_id))[0], { req, res });
       // 成功したことを返却
       res.status(200).json({ success: true });
     } else {

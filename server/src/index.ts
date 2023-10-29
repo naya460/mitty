@@ -47,9 +47,7 @@ server.post<{ Body: { session_id: string} }>(
   '/user/signout',
   async (req, res) => {
     const session_id = (await JSON.parse(req.body.session_id)).session_id;
-    console.log(session_id);
     await redis.hdel('session', session_id);
-    console.log(await redis.hgetall('session'));
     res.code(200);
   }
 );
