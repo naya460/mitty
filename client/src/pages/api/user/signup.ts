@@ -57,7 +57,7 @@ export default async function SignUpRoute(req: NextApiRequest, res: NextApiRespo
     body: JSON.stringify({ user_name: req.body.user_name })
   });
   const session_id = JSON.stringify(await session_id_res.json());
-  setCookie('new-session-cookie', Object.values(await JSON.parse(session_id))[0], { req, res });
+  setCookie('session-id', Object.values(await JSON.parse(session_id))[0], { req, res });
   
   res.status(201).end();
 }

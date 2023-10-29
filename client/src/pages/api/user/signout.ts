@@ -22,8 +22,8 @@ export default async function SignOutRoute(req: NextApiRequest, res: NextApiResp
     headers: {
         'Content-Type': "application/json"
     },
-    body: JSON.stringify({ session_id: getCookie('new-session-cookie', { req, res }) })
+    body: JSON.stringify({ session_id: getCookie('session-id', { req, res }) })
   });
-  deleteCookie('new-session-cookie', { req, res });
+  deleteCookie('session-id', { req, res });
   res.status(200).send('Successful logout');
 }

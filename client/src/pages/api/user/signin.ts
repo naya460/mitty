@@ -45,7 +45,7 @@ export default async function SignInRoute(req: NextApiRequest, res: NextApiRespo
   bcrypt.compare(password, hash, async function(err, result) {
     if (result) {
       // セッションを保存
-      setCookie('new-session-cookie', Object.values(await JSON.parse(session_id))[0], { req, res });
+      setCookie('session-id', Object.values(await JSON.parse(session_id))[0], { req, res });
       // 成功したことを返却
       res.status(200).json({ success: true });
     } else {
