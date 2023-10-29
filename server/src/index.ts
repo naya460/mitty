@@ -2,6 +2,9 @@ import fastify from 'fastify';
 import { v4 as uuid_v4 } from 'uuid';
 import fastifyCookie from '@fastify/cookie';
 import { Redis } from 'ioredis';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 const server = fastify({
   logger: true,
@@ -14,6 +17,7 @@ server.register(fastifyCookie, {
 });
 
 server.get('/', async (request, reply) => {
+  console.log(await prisma.user.findMany({select: {user_name: true}}));
   reply
     .setCookie('session-id', uuid_v4(), {
       httpOnly: true,
