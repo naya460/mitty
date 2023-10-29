@@ -1,14 +1,21 @@
-import { withUserRoute } from 'lib/withSession';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import addGroupMember from 'database/group/member/add';
+import authNewSession from 'lib/withNewSession';
 
-// サインインしているときで、POSTリクエストのときのみ実行
-export default withUserRoute(UserAddRoute, 'POST');
+export default async function UserAddRoute(req: NextApiRequest, res: NextApiResponse) {
+  // POST以外のとき失敗
+  if (req.method !== 'POST') {
+    res.status(400).end();
+    return;
+  }
 
-async function UserAddRoute(req: NextApiRequest, res: NextApiResponse) {
   // 依頼したユーザー名を入手
-  const user_name = req.session.user.user_name;
+  const user_name = await authNewSession(req, res);
+	if (!user_name) {
+		res.status(400).end();
+		return;
+	}
 
   // グループIDがリクエストにあるか調べる
   const group_id = req.body.group_id;

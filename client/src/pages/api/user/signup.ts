@@ -1,12 +1,10 @@
-import { withSessionRoute } from 'lib/withSession'
 import { NextApiRequest, NextApiResponse } from 'next';
+import { setCookie } from 'cookies-next';
 
 import createUser from 'database/user/create';
 import getUserId from 'database/user/get_user_id';
 
-export default withSessionRoute(SignUpRoute);
-
-async function SignUpRoute(req: NextApiRequest, res: NextApiResponse) {
+export default async function SignUpRoute(req: NextApiRequest, res: NextApiResponse) {
   // POST以外のとき失敗
   if (req.method !== 'POST') {
     res.status(400).send('Message is not POST');
@@ -51,10 +49,15 @@ async function SignUpRoute(req: NextApiRequest, res: NextApiResponse) {
   });
   
   // セッションを保存
-  req.session.user = {
-    user_name: req.body.user_name
-  }
-  await req.session.save();
+  const session_id_res = await fetch('http://localhost:9090/user/signin', {
+    method: 'POST',
+    headers: {
+        'Content-Type': "application/json"
+    },
+    body: JSON.stringify({ user_name: req.body.user_name })
+  });
+  const session_id = JSON.stringify(await session_id_res.json());
+  setCookie('new-session-cookie', Object.values(await JSON.parse(session_id))[0], { req, res });
   
   res.status(201).end();
 }

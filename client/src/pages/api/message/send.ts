@@ -1,17 +1,24 @@
-import { withUserRoute } from 'lib/withSession'
 import { NextApiRequest, NextApiResponse } from 'next';
 import Redis from 'ioredis';
 
 import getUserId from 'database/user/get_user_id';
-
-// サインインしているときで、POSTリクエストのときのみ実行
-export default withUserRoute(SendRoute, 'POST');
+import authNewSession from 'lib/withNewSession';
 
 const redis = new Redis(6379);
 
-async function SendRoute(req: NextApiRequest, res: NextApiResponse) {
+export default async function SendRoute(req: NextApiRequest, res: NextApiResponse) {
+  // POST以外のとき失敗
+  if (req.method !== 'POST') {
+    res.status(400).end();
+    return;
+  }
+
   // ユーザー名を入手
-  const user_name: string = req.session.user.user_name;
+  const user_name = await authNewSession(req, res);
+	if (!user_name) {
+		res.status(400).end();
+		return;
+	}
   
   // ユーザーIDを取得
   const user_id = await getUserId(user_name);

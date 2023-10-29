@@ -1,13 +1,10 @@
-import { withSessionRoute } from 'lib/withSession'
 import { NextApiRequest, NextApiResponse } from 'next';
 import { setCookie } from 'cookies-next'
 
 import getUserId from 'database/user/get_user_id';
 import getUserHash from 'database/user/get_hash';
 
-export default withSessionRoute(SignInRoute);
-
-async function SignInRoute(req: NextApiRequest, res: NextApiResponse) {
+export default async function SignInRoute(req: NextApiRequest, res: NextApiResponse) {
   // POST以外のとき失敗
   if (req.method !== 'POST') {
     res.status(400).end();
@@ -48,11 +45,6 @@ async function SignInRoute(req: NextApiRequest, res: NextApiResponse) {
   bcrypt.compare(password, hash, async function(err, result) {
     if (result) {
       // セッションを保存
-      req.session.user = {
-        user_name: req.body.user_name,
-        session_id: session_id,
-      }
-      await req.session.save();
       setCookie('new-session-cookie', Object.values(await JSON.parse(session_id))[0], { req, res });
       // 成功したことを返却
       res.status(200).json({ success: true });

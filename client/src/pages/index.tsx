@@ -11,7 +11,7 @@ export default function IndexPage() {
     (async () => {
       // ユーザー情報を取得
       const user = await fetch('/api/user/user');
-      const tmp = await user.json();
+      const tmp = JSON.parse(await user.json());
       // サインインしていないときのページを設定
       if (tmp === null) {
         setPage(<AuthenticationPage />);

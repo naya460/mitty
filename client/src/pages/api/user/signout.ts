@@ -1,20 +1,29 @@
-import { withUserRoute } from 'lib/withSession'
 import { NextApiRequest, NextApiResponse } from 'next';
-import { deleteCookie } from 'cookies-next';
+import { getCookie, deleteCookie } from 'cookies-next';
+import authNewSession from 'lib/withNewSession';
 
-// サインインしているときで、GETリクエストのときのみ実行
-export default withUserRoute(SignOutRoute, 'GET');
+export default async function SignOutRoute(req: NextApiRequest, res: NextApiResponse) {
+  // GET以外のとき失敗
+  if (req.method !== 'GET') {
+    res.status(400).end();
+    return;
+  }
 
-async function SignOutRoute(req: NextApiRequest, res: NextApiResponse) {
+  // 認証する
+  const user_name = await authNewSession(req, res);
+  if (!user_name) {
+    res.status(400).end();
+    return;
+  }
+
   // セッションを削除
   await fetch('http://localhost:9090/user/signout', {
     method: 'POST',
     headers: {
         'Content-Type': "application/json"
     },
-    body: JSON.stringify({ session_id: req.session.user.session_id })
+    body: JSON.stringify({ session_id: getCookie('new-session-cookie', { req, res }) })
   });
-  req.session.destroy();
   deleteCookie('new-session-cookie', { req, res });
   res.status(200).send('Successful logout');
 }
