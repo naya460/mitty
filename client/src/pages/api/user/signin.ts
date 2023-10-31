@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { setCookie } from 'cookies-next'
 
 import getUserId from 'database/user/get_user_id';
-import getUserHash from 'database/user/get_hash';
 
 export default async function SignInRoute(req: NextApiRequest, res: NextApiResponse) {
   // POST以外のとき失敗
@@ -32,7 +31,14 @@ export default async function SignInRoute(req: NextApiRequest, res: NextApiRespo
   }
 
   // ユーザーを認証する
-  const hash = await getUserHash(user_name);
+  const get_hash_res = await fetch('http://localhost:9090/database/user/get_hash', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user_name: req.body.user_name }),
+  });
+  const hash = (await get_hash_res.json()).hash;
   const bcrypt = require('bcrypt');
   const session_id_res = await fetch('http://localhost:9090/user/signin', {
     method: 'POST',

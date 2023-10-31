@@ -5,6 +5,7 @@ import { Redis } from 'ioredis';
 import { PrismaClient } from '@prisma/client';
 
 import createUser from './database/user/create';
+import getUserHash from './database/user/get_hash';
 
 const prisma = new PrismaClient();
 
@@ -62,6 +63,15 @@ server.post<{ Body: { user_name: string, hash: string }}>(
   '/database/user/create',
   async (req, res) => {
     await createUser(req.body.user_name, req.body.hash);
+  }
+);
+
+server.post<{ Body: { user_name: string } }>(
+  '/database/user/get_hash',
+  async (req, res) => {
+    const hash = await getUserHash(req.body.user_name);
+    res.type('application/json');
+    return { hash };
   }
 )
 

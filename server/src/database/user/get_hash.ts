@@ -1,4 +1,6 @@
-import prisma from 'lib/prisma';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 // # getUserHash
 //   ユーザーのハッシュを取得する
@@ -8,7 +10,7 @@ import prisma from 'lib/prisma';
 //     対象のユーザー名
 //
 // ## 返り値
-//   - Promise<string>
+//   - Promise<string | undefined>
 //     ユーザーのhash値
 //
 // ## 注意
@@ -17,9 +19,10 @@ import prisma from 'lib/prisma';
 
 export default async function getUserHash(
   user_name: string,
-): Promise<string> {
-  return (await prisma.user.findUnique({
+): Promise<string | undefined> {
+  const hash = await prisma.user.findUnique({
     select: { hash: true },
     where: { user_name: user_name }
-  })).hash;
+  });
+  return hash?.hash;
 }
