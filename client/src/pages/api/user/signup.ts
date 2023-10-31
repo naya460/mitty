@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { setCookie } from 'cookies-next';
 
-import createUser from 'database/user/create';
 import getUserId from 'database/user/get_user_id';
 
 export default async function SignUpRoute(req: NextApiRequest, res: NextApiResponse) {
@@ -45,7 +44,13 @@ export default async function SignUpRoute(req: NextApiRequest, res: NextApiRespo
   // ユーザーを作成
   const bcrypt = require('bcrypt');
   bcrypt.hash(req.body.password, 10, async function(err, hash) {
-    await createUser(req.body.user_name, hash);
+    await fetch('http://localhost:9090/database/user/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ user_name, hash }),
+    });
   });
   
   // セッションを保存

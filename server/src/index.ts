@@ -4,6 +4,8 @@ import fastifyCookie from '@fastify/cookie';
 import { Redis } from 'ioredis';
 import { PrismaClient } from '@prisma/client';
 
+import createUser from './database/user/create';
+
 const prisma = new PrismaClient();
 
 const server = fastify({
@@ -55,6 +57,13 @@ server.post<{ Body: { session_id: string} }>(
     res.code(200);
   }
 );
+
+server.post<{ Body: { user_name: string, hash: string }}>(
+  '/database/user/create',
+  async (req, res) => {
+    await createUser(req.body.user_name, req.body.hash);
+  }
+)
 
 server.listen({ port: 9090, host: '127.0.0.1' }, (err, address) => {
   if (err) throw err;
