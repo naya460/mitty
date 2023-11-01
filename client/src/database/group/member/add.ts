@@ -2,7 +2,6 @@ import prisma from 'lib/prisma';
 
 import groupExists from 'database/group/exists';
 import hasMember from 'database/group/has_member';
-import getUserId from 'database/user/get_user_id';
 
 // # addGroupMember
 //   グループにメンバー(ユーザー)を追加する
@@ -50,7 +49,14 @@ export default async function addGroupMember(
   }
 
   // 追加ユーザーのIDを取得
-  const additional_user_id = await getUserId(additional_user_name);
+  const additional_user_id_res = await fetch('http://localhost:9090/database/user/get_user_id', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user_name: additional_user_name }),
+  });
+  const additional_user_id = (await additional_user_id_res.json()).user_id;
   if (!additional_user_id) {
     return false;
   }

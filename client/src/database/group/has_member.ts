@@ -1,7 +1,5 @@
 import prisma from 'lib/prisma';
 
-import getUserId from 'database/user/get_user_id';
-
 // # hasMember
 //   ユーザーがグループに属しているか確認する
 //
@@ -25,7 +23,14 @@ export default async function hasMember(
   group_id: string
 ): Promise<boolean> {
   // ユーザーIDを取得
-  const user_id = await getUserId(user_name);
+  const user_id_res = await fetch('http://localhost:9090/database/user/get_user_id', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user_name }),
+  });
+  const user_id = (await user_id_res.json()).user_id;
   if (!user_id) {
     return false;
   }

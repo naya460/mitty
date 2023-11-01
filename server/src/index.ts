@@ -6,6 +6,7 @@ import { PrismaClient } from '@prisma/client';
 
 import createUser from './database/user/create';
 import getUserHash from './database/user/get_hash';
+import getUserId from './database/user/get_user_id';
 
 const prisma = new PrismaClient();
 
@@ -73,7 +74,16 @@ server.post<{ Body: { user_name: string } }>(
     res.type('application/json');
     return { hash };
   }
-)
+);
+
+server.post<{ Body: { user_name: string } }>(
+  '/database/user/get_user_id',
+  async (req, res) => {
+    const user_id = await getUserId(req.body.user_name);
+    res.type('application/json');
+    return { user_id };
+  }
+);
 
 server.listen({ port: 9090, host: '127.0.0.1' }, (err, address) => {
   if (err) throw err;

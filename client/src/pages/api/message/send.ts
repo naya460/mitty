@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Redis from 'ioredis';
 
-import getUserId from 'database/user/get_user_id';
 import authNewSession from 'lib/withNewSession';
 
 const redis = new Redis(6379);
@@ -21,7 +20,14 @@ export default async function SendRoute(req: NextApiRequest, res: NextApiRespons
 	}
   
   // ユーザーIDを取得
-  const user_id = await getUserId(user_name);
+  const user_id_res = await fetch('http://localhost:9090/database/user/get_user_id', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user_name: req.body.user_name }),
+  });
+  const user_id = (await user_id_res.json()).user_id;
   if (!user_id) {
     res.status(500).end();
     return;

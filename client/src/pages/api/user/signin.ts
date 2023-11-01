@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { setCookie } from 'cookies-next'
 
-import getUserId from 'database/user/get_user_id';
-
 export default async function SignInRoute(req: NextApiRequest, res: NextApiResponse) {
   // POST以外のとき失敗
   if (req.method !== 'POST') {
@@ -18,7 +16,14 @@ export default async function SignInRoute(req: NextApiRequest, res: NextApiRespo
   }
 
   // ユーザーが存在することを確認
-  const user_id = await getUserId(user_name);
+  const user_id_res = await fetch('http://localhost:9090/database/user/get_user_id', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user_name: req.body.user_name }),
+  });
+  const user_id = (await user_id_res.json()).user_id;
   if (!user_id) {
     res.status(400).end();
     return;
