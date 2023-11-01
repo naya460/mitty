@@ -7,6 +7,7 @@ import { PrismaClient } from '@prisma/client';
 import createUser from './database/user/create';
 import getUserHash from './database/user/get_hash';
 import getUserId from './database/user/get_user_id';
+import setUserCookie from './database/user/set_cookie';
 
 const prisma = new PrismaClient();
 
@@ -82,6 +83,13 @@ server.post<{ Body: { user_name: string } }>(
     const user_id = await getUserId(req.body.user_name);
     res.type('application/json');
     return { user_id };
+  }
+);
+
+server.post<{ Body: { user_name: string, cookie: string } }>(
+  '/database/user/set_cookie',
+  async (req, res) => {
+    await setUserCookie(req.body.user_name, req.body.cookie)
   }
 );
 

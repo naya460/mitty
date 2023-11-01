@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getCookie } from 'cookies-next';
 
-import setUserCookie from 'database/user/set_cookie';
 import authNewSession from 'lib/withNewSession';
 
 export default async function UseWsRoute(req: NextApiRequest, res: NextApiResponse) {
@@ -25,7 +24,13 @@ export default async function UseWsRoute(req: NextApiRequest, res: NextApiRespon
 	}
 
 	// クッキーを保存
-	await setUserCookie(user_name, session_id);
+	await fetch('http://localhost:9090/database/user/set_cookie', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user_name, cookie: session_id }),
+  });
 
 	res.status(200).send(session_id);
 	res.end();
