@@ -23,7 +23,8 @@ server.register(fastifyCookie, {
 });
 
 server.register(cors, {
-  origin: '*'
+  origin: 'http://localhost:3000',
+  credentials: true,
 });
 
 server.get('/', async (request, reply) => {
@@ -102,6 +103,7 @@ server.get(
   '/tmp',
   async (req, res) => {
     res.type('application/json');
+    res.setCookie('tmp', 'ok');
     return { tmp: 'ok!' };
   }
 );
