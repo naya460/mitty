@@ -3,6 +3,7 @@ import { v4 as uuid_v4 } from 'uuid';
 import fastifyCookie from '@fastify/cookie';
 import { Redis } from 'ioredis';
 import { PrismaClient } from '@prisma/client';
+import cors from '@fastify/cors'
 
 import createUser from './database/user/create';
 import getUserHash from './database/user/get_hash';
@@ -19,6 +20,10 @@ const redis = new Redis();
 
 server.register(fastifyCookie, {
   secret: 'z8Cpj2nNv9VPdsxZxostDu5ufXxme2V0',
+});
+
+server.register(cors, {
+  origin: '*'
 });
 
 server.get('/', async (request, reply) => {
@@ -90,6 +95,14 @@ server.post<{ Body: { user_name: string, cookie: string } }>(
   '/database/user/set_cookie',
   async (req, res) => {
     await setUserCookie(req.body.user_name, req.body.cookie)
+  }
+);
+
+server.get(
+  '/tmp',
+  async (req, res) => {
+    res.type('application/json');
+    return { tmp: 'ok!' };
   }
 );
 

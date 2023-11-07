@@ -13,6 +13,9 @@ export default function SingInForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const tmp = await fetch('http://localhost:9090/tmp');
+    console.log(await tmp.json());
+
     // 送信するリクエストを作成
     const options = CreatePostRequest({
       user_name: event.target.user_name.value,
