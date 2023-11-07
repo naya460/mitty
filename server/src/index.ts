@@ -23,7 +23,7 @@ server.register(fastifyCookie, {
 });
 
 server.register(cors, {
-  origin: 'http://localhost:3000',
+  origin: true,
   credentials: true,
 });
 
@@ -108,7 +108,7 @@ server.get(
   }
 );
 
-server.listen({ port: 9090, host: '127.0.0.1' }, (err, address) => {
+server.listen({ port: 9090, host: '0.0.0.0' }, (err, address) => {
   if (err) throw err;
   server.log.info(`server listening on ${address}`);
 });

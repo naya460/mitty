@@ -13,7 +13,7 @@ export default function SingInForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const tmp = await fetch('http://localhost:9090/tmp',{
+    const tmp = await fetch(`http://${location.hostname}:9090/tmp`,{
       credentials: 'include'
     });
     console.log(await tmp.json());
