@@ -5,10 +5,7 @@ import { Redis } from 'ioredis';
 import { PrismaClient } from '@prisma/client';
 import cors from '@fastify/cors'
 
-import createUser from './database/user/create';
-import getUserHash from './database/user/get_hash';
-import getUserId from './database/user/get_user_id';
-import setUserCookie from './database/user/set_cookie';
+import databaseRoutes from './database';
 
 const prisma = new PrismaClient();
 
@@ -26,6 +23,8 @@ server.register(cors, {
   origin: true,
   credentials: true,
 });
+
+server.register(databaseRoutes, { prefix: '/database' });
 
 server.get('/', async (request, reply) => {
   console.log(await prisma.user.findMany({select: {user_name: true}}));
@@ -64,38 +63,6 @@ server.post<{ Body: { session_id: string} }>(
     const session_id = (await JSON.parse(req.body.session_id)).session_id;
     await redis.hdel('session', session_id);
     res.code(200);
-  }
-);
-
-server.post<{ Body: { user_name: string, hash: string }}>(
-  '/database/user/create',
-  async (req, res) => {
-    await createUser(req.body.user_name, req.body.hash);
-  }
-);
-
-server.post<{ Body: { user_name: string } }>(
-  '/database/user/get_hash',
-  async (req, res) => {
-    const hash = await getUserHash(req.body.user_name);
-    res.type('application/json');
-    return { hash };
-  }
-);
-
-server.post<{ Body: { user_name: string } }>(
-  '/database/user/get_user_id',
-  async (req, res) => {
-    const user_id = await getUserId(req.body.user_name);
-    res.type('application/json');
-    return { user_id };
-  }
-);
-
-server.post<{ Body: { user_name: string, cookie: string } }>(
-  '/database/user/set_cookie',
-  async (req, res) => {
-    await setUserCookie(req.body.user_name, req.body.cookie)
   }
 );
 
