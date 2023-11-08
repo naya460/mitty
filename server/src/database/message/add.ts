@@ -1,4 +1,8 @@
-import prisma from 'lib/prisma';
+import { PrismaClient } from '@prisma/client';
+import getUserId from '../user/get_user_id';
+import hasMember from '../group/has_member';
+
+const prisma = new PrismaClient();
 
 // # addMessage
 //   メッセージを追加する
@@ -25,27 +29,13 @@ export default async function addMessage(
   message_text: string,
 ): Promise<boolean> {
   // ユーザーIDを取得
-  const user_id_res = await fetch('http://localhost:9090/database/user/get_user_id', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ user_name }),
-  });
-  const user_id = (await user_id_res.json()).user_id;
+  const user_id = await getUserId(user_name);
   if (!user_id) {
     return false;
   }
 
   // 投稿ユーザーがグループに所属しているか調べる
-  const has_user_res = await fetch('http://localhost:9090/database/group/has_member', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({user_name, group_id}),
-  });
-  if (!(await has_user_res.json()).exists) {
+  if (!(await hasMember(user_name, group_id))) {
     return false;
   }
 
@@ -57,4 +47,6 @@ export default async function addMessage(
       group_id: group_id,
     },
   });
+
+  return true;
 }
