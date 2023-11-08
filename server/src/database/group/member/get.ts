@@ -1,4 +1,8 @@
-import prisma from 'lib/prisma';
+import { PrismaClient } from '@prisma/client';
+import groupExists from '../exists';
+import hasMember from '../has_member';
+
+const prisma = new PrismaClient();
 
 // # getGroupMember
 //   グループに参加しているメンバー全員を取得する
@@ -26,26 +30,12 @@ export default async function getGroupMember(
   group_id: string,
 ): Promise<undefined | string> {
   // グループが存在するか調べる
-  const groupExists = await fetch('http://localhost:9090/database/group/exists', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ group_id }),
-  });
-  if (!(await groupExists.json()).exists) {
+  if (!(await groupExists(group_id))) {
     return undefined;
   }
 
   // 依頼ユーザーがグループに所属しているか調べる
-  const has_user_res = await fetch('http://localhost:9090/database/group/has_member', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({user_name, group_id}),
-  });
-  if (!(await has_user_res.json()).exists) {
+  if (!(await hasMember(user_name, group_id))) {
     return undefined;
   }
 

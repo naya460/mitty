@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import getGroupMember from 'database/group/member/get';
 import authNewSession from 'lib/withNewSession';
 
 export default async function GetMemberRoute(req: NextApiRequest, res: NextApiResponse) {
@@ -25,7 +24,14 @@ export default async function GetMemberRoute(req: NextApiRequest, res: NextApiRe
   }
 
   // メンバー取得
-  const ret = await getGroupMember(user_name, group_id);
+  const members = await fetch('http://localhost:9090/database/group/member/get', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user_name, group_id }),
+  });
+  const ret = (await members.json()).members;
   if (ret == undefined) {
     res.status(400).end();
     return;
