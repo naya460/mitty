@@ -1,7 +1,6 @@
 import prisma from 'lib/prisma';
 
 import groupExists from 'database/group/exists';
-import hasMember from 'database/group/has_member';
 
 // # addGroupMember
 //   グループにメンバー(ユーザー)を追加する
@@ -39,12 +38,26 @@ export default async function addGroupMember(
   }
 
   // 依頼ユーザーがグループに所属しているか調べる
-  if (!(await hasMember(requesting_user_name, group_id))) {
+  const has_requesting_user_res = await fetch('http://localhost:9090/database/group/has_member', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({requesting_user_name, group_id}),
+  });
+  if (!(await has_requesting_user_res.json()).exists) {
     return false;
   }
 
   // 追加されるユーザーが所属していないことを調べる
-  if (await hasMember(additional_user_name, group_id)) {
+  const has_additinal_user_res = await fetch('http://localhost:9090/database/group/has_member', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({requesting_user_name, group_id}),
+  });
+  if ((await has_requesting_user_res.json()).exists) {
     return false;
   }
 

@@ -1,7 +1,5 @@
 import prisma from 'lib/prisma';
 
-import hasMember from "database/group/has_member";
-
 // # addMessage
 //   メッセージを追加する
 //
@@ -40,7 +38,14 @@ export default async function addMessage(
   }
 
   // 投稿ユーザーがグループに所属しているか調べる
-  if (!(await hasMember(user_name, group_id))) {
+  const has_user_res = await fetch('http://localhost:9090/database/group/has_member', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({user_name, group_id}),
+  });
+  if (!(await has_user_res.json()).exists) {
     return false;
   }
 

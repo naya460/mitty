@@ -4,6 +4,7 @@ import createUser from './user/create';
 import getUserHash from './user/get_hash';
 import getUserId from './user/get_user_id';
 import setUserCookie from './user/set_cookie';
+import hasMember from './group/has_member';
 
 export default function databaseRoutes(
   server: FastifyInstance,
@@ -38,7 +39,16 @@ export default function databaseRoutes(
   server.post<{ Body: { user_name: string, cookie: string } }>(
     '/user/set_cookie',
     async (req, res) => {
-      await setUserCookie(req.body.user_name, req.body.cookie)
+      await setUserCookie(req.body.user_name, req.body.cookie);
+    }
+  );
+
+  server.post<{ Body: { user_name: string, group_id: string } }>(
+    '/group/has_member',
+    async (req, res) => {
+      const exists = await hasMember(req.body.user_name, req.body.group_id);
+      res.type('application/json');
+      return { exists };
     }
   );
 
