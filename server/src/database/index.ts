@@ -6,6 +6,7 @@ import getUserId from './user/get_user_id';
 import setUserCookie from './user/set_cookie';
 import hasMember from './group/has_member';
 import getGroup from './group/get';
+import createGroup from './group/create';
 
 export default function databaseRoutes(
   server: FastifyInstance,
@@ -61,6 +62,14 @@ export default function databaseRoutes(
       return { groups };
     }
   );
+
+  server.post<{ Body: { user_name: string, group_name: string} }>(
+    '/group/create',
+    async (req, res) => {
+      const ok = await createGroup(req.body.user_name, req.body.group_name);
+      if (ok) res.status(201); else res.status(400);
+    }
+  )
 
   done();
 }

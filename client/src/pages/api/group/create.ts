@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import createGroup from 'database/group/create';
 import authNewSession from 'lib/withNewSession';
 
 export default async function CreateRoute(req: NextApiRequest, res: NextApiResponse) {
@@ -24,7 +23,14 @@ export default async function CreateRoute(req: NextApiRequest, res: NextApiRespo
   }
 
   // グループを追加
-  if (!(await createGroup(user_name, group_name))) {
+  const createRes = await fetch('http://localhost:9090/database/group/create', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user_name, group_name }),
+  });
+  if (!createRes.ok) {
     res.status(400).end();
   }
 }
