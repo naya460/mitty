@@ -1,4 +1,9 @@
-import prisma from 'lib/prisma';
+import { PrismaClient } from '@prisma/client';
+import groupExists from '../exists';
+import hasMember from '../has_member';
+import getUserId from '../../user/get_user_id';
+
+const prisma = new PrismaClient();
 
 // # addGroupMember
 //   グループにメンバー(ユーザー)を追加する
@@ -30,51 +35,22 @@ export default async function addGroupMember(
   additional_user_name: string,
   group_id: string,
 ): Promise<boolean> {
-  // グループが存在するか調べる
-  const groupExists = await fetch('http://localhost:9090/database/group/exists', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ group_id }),
-  });
-  if (!(await groupExists.json()).exists) {
+  if (!(await groupExists(group_id))) {
     return false;
   }
 
   // 依頼ユーザーがグループに所属しているか調べる
-  const has_requesting_user_res = await fetch('http://localhost:9090/database/group/has_member', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({requesting_user_name, group_id}),
-  });
-  if (!(await has_requesting_user_res.json()).exists) {
+  if (!(await hasMember(requesting_user_name, group_id))) {
     return false;
   }
 
   // 追加されるユーザーが所属していないことを調べる
-  const has_additinal_user_res = await fetch('http://localhost:9090/database/group/has_member', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({requesting_user_name, group_id}),
-  });
-  if ((await has_requesting_user_res.json()).exists) {
+  if ((await hasMember(additional_user_name, group_id))) {
     return false;
   }
 
   // 追加ユーザーのIDを取得
-  const additional_user_id_res = await fetch('http://localhost:9090/database/user/get_user_id', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ user_name: additional_user_name }),
-  });
-  const additional_user_id = (await additional_user_id_res.json()).user_id;
+  const additional_user_id = (await getUserId(additional_user_name));
   if (!additional_user_id) {
     return false;
   }

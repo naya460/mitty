@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import addGroupMember from 'database/group/member/add';
 import authNewSession from 'lib/withNewSession';
 
 export default async function UserAddRoute(req: NextApiRequest, res: NextApiResponse) {
@@ -32,7 +31,14 @@ export default async function UserAddRoute(req: NextApiRequest, res: NextApiResp
   }
 
   // ユーザーを追加
-  if (!(await addGroupMember(user_name, a_user_name, group_id))) {
+  const add_res = await fetch('http://localhost:9090/database/group/member/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ requesting_user_name: user_name, additional_user_name: a_user_name, group_id }),
+  });
+  if (!add_res.ok) {
     res.status(400).end();
     return;
   }
