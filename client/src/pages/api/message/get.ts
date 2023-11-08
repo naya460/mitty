@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import getMessage from 'database/message/get';
 import authNewSession from 'lib/withNewSession';
 
 export default async function UserRoute(req: NextApiRequest, res: NextApiResponse) {
@@ -28,7 +27,14 @@ export default async function UserRoute(req: NextApiRequest, res: NextApiRespons
   const last_message_id = await req.body.last_message_id;
 
   // メッセージを取得
-  const messages = await getMessage(user_name, group_id, last_message_id);
+  const message_res = await fetch('http://localhost:9090/database/message/get', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user_name, group_id, last_message_id }),
+  });
+  const messages = (await message_res.json()).messages;
   if (messages == undefined) {
     res.status(400).end();
   }

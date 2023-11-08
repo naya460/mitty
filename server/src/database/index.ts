@@ -10,6 +10,7 @@ import createGroup from './group/create';
 import groupExists from './group/exists';
 import getGroupMember from './group/member/get';
 import addGroupMember from './group/member/add';
+import getMessage from './message/get';
 
 export default function databaseRoutes(
   server: FastifyInstance,
@@ -97,6 +98,15 @@ export default function databaseRoutes(
     async (req, res) => {
       const ok = await addGroupMember(req.body.requesting_user_name, req.body.additional_user_name, req.body.group_id);
       if (ok) res.status(201); else res.status(400);
+    }
+  );
+
+  server.post<{ Body: { user_name: string, group_id: string, last_message_id?: string} }>(
+    '/message/get',
+    async (req, res) => {
+      const messages = await getMessage(req.body.user_name, req.body.group_id, req.body.last_message_id);
+      res.type('application/json');
+      return { messages };
     }
   );
 

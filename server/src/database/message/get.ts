@@ -1,4 +1,7 @@
-import prisma from 'lib/prisma';
+import { PrismaClient } from '@prisma/client';
+import hasMember from '../group/has_member';
+
+const prisma = new PrismaClient();
 
 // # getMessage
 //   指定したグループのメッセージを取得する。
@@ -27,14 +30,7 @@ export default async function getMessage(
   last_message_id?: string,
 ): Promise<undefined | string> {
   // 依頼ユーザーがグループに所属しているか調べる
-  const has_user_res = await fetch('http://localhost:9090/database/group/has_member', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({user_name, group_id}),
-  });
-  if (!(await has_user_res.json()).exists) {
+  if (!(await hasMember(user_name, group_id))) {
     return undefined;
   }
 
