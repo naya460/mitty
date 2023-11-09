@@ -5,7 +5,7 @@ import { Redis } from 'ioredis';
 import { PrismaClient } from '@prisma/client';
 import cors from '@fastify/cors'
 
-import databaseRoutes from './database';
+import databaseRoutes from 'database';
 
 const prisma = new PrismaClient();
 

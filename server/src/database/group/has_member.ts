@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-import getUserId from '../user/get_user_id';
+import getUserId from 'database/user/get_user_id';
 
 // # hasMember
 //   ユーザーがグループに属しているか確認する

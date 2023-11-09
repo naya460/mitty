@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import groupExists from '../exists';
-import hasMember from '../has_member';
+import groupExists from 'database/group/exists';
+import hasMember from 'database/group/has_member';
 
 const prisma = new PrismaClient();
 
