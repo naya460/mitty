@@ -13,18 +13,16 @@ export default function SingInForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const tmp = await fetch(`http://${location.hostname}:9090/tmp`,{
-      credentials: 'include'
-    });
-    console.log(await tmp.json());
-
     // 送信するリクエストを作成
     const options = CreatePostRequest({
       user_name: event.target.user_name.value,
       password: event.target.password.value,
     });
 
-    const response = await fetch('api/user/signin', options);
+    const response = await fetch(
+      `http://${location.hostname}:9090/user/signin`,
+      { ...options, credentials: 'include' }
+    );
     
     if (response.ok) {
       router.reload();

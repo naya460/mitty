@@ -6,6 +6,7 @@ import { PrismaClient } from '@prisma/client';
 import cors from '@fastify/cors'
 
 import databaseRoutes from 'database';
+import signinRoute, { signinBodySchema } from 'api/user/signin';
 
 const prisma = new PrismaClient();
 
@@ -37,24 +38,10 @@ server.get('/', async (request, reply) => {
     .send({ test: 'ok' });
 });
 
-server.post<{ Body: { user_name: string } }>(
+server.post(
   '/user/signin',
-  async (req, res) => {
-    // ユーザー名を取得
-    const user_name = req.body.user_name;
-
-    // uuid v4 を生成
-    const session_id = uuid_v4();
-    
-    // session id と user_name を保存する
-    await redis.hset('session', session_id, user_name);
-
-    console.log(await redis.hgetall('session'));
-
-    // session id を返す
-    res.type('application/json').code(201);
-    return { session_id };
-  }
+  { schema: { body: signinBodySchema } },
+  signinRoute
 );
 
 server.post<{ Body: { session_id: string} }>(
