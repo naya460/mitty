@@ -7,6 +7,7 @@ import cors from '@fastify/cors'
 
 import databaseRoutes from 'database';
 import signinRoute, { signinBodySchema } from 'api/user/signin';
+import signoutRoute from 'api/user/signout';
 
 const prisma = new PrismaClient();
 
@@ -44,13 +45,9 @@ server.post(
   signinRoute
 );
 
-server.post<{ Body: { session_id: string} }>(
+server.get(
   '/user/signout',
-  async (req, res) => {
-    const session_id = (await JSON.parse(req.body.session_id)).session_id;
-    await redis.hdel('session', session_id);
-    res.code(200);
-  }
+  signoutRoute
 );
 
 server.get(

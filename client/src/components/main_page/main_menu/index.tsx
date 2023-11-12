@@ -17,7 +17,10 @@ export default function MainMenu(props: Props) {
 
   // サインアウト処理
   const handleSignOut = async () => {
-    await fetch('/api/user/signout');
+    await fetch(
+      `http://${location.hostname}:9090/user/signout`,
+      { mode: 'cors', credentials: 'include' }
+    );
     router.reload();
   }
 
