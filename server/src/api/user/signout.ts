@@ -25,6 +25,7 @@ export default async function signoutRoute(
 
   // セッションを削除
   res.clearCookie('session_id');
+  redis.hdel('session', session_id);
 
   return;
 }
