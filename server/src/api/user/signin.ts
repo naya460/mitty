@@ -47,7 +47,7 @@ export default async function signinRoute(
     const session_id = uuid_v4();
 
     // cookieを設定
-    res.setCookie('session_id', session_id, { path: '/' });
+    res.setCookie('session_id', session_id, { path: '/', httpOnly: true });
 
     // session_idを保存
     await setUserCookie(req.body.user_name, session_id);

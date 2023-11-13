@@ -18,7 +18,7 @@ export default async function UseWsRoute(req: NextApiRequest, res: NextApiRespon
 	}
 
 	// cookieを取得
-	const session_id = getCookie('session-id', { req, res });
+	const session_id = getCookie('session_id', { req, res });
 	if (!session_id) {
 		res.status(400).end();
 	}
