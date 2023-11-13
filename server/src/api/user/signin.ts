@@ -1,19 +1,12 @@
-import { FastifyReply, FastifyRequest } from "fastify";
 import { v4 as uuid_v4 } from 'uuid';
 import bcrypt from "bcrypt";
 import { Redis } from 'ioredis'
 
 import getUserHash from "database/user/get_hash";
 import setUserCookie from "database/user/set_cookie";
+import { UseRouteHandlerMethod } from "common/use_route_handler";
 
 const redis = new Redis();
-
-type signinBody = {
-  Body: {
-    user_name: string,
-    password: string,
-  }
-};
 
 export const signinBodySchema = {
   type: 'object',
@@ -27,10 +20,12 @@ export const signinBodySchema = {
   ],
 };
 
-export default async function signinRoute(
-  req: FastifyRequest<signinBody>,
-  res: FastifyReply
-) {
+export const signinRoute: UseRouteHandlerMethod<{
+  Body: {
+    user_name: string,
+    password: string,
+  }
+}> = async (req, res) => {
   // ハッシュを取得
   const hash = await getUserHash(req.body.user_name);
   if (!hash) {

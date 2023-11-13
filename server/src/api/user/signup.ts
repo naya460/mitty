@@ -1,4 +1,3 @@
-import { FastifyReply, FastifyRequest } from "fastify";
 import bcrypt from "bcrypt";
 import { v4 as uuid_v4 } from 'uuid';
 import { Redis } from "ioredis";
@@ -6,16 +5,9 @@ import { Redis } from "ioredis";
 import getUserId from "database/user/get_user_id";
 import createUser from "database/user/create";
 import setUserCookie from "database/user/set_cookie";
+import { UseRouteHandlerMethod } from "common/use_route_handler";
 
 const redis = new Redis();
-
-type signupBody = {
-  Body: {
-    user_name: string,
-    password: string,
-    confirm_password: string
-  }
-};
 
 export const signupBodySchema = {
   type: 'object',
@@ -31,11 +23,13 @@ export const signupBodySchema = {
   ],
 };
 
-export default async function signupRoute(
-  req: FastifyRequest<signupBody>,
-  res: FastifyReply
-) {
-  console.log("ok")
+export const signupRoute: UseRouteHandlerMethod<{
+  Body: {
+    user_name: string,
+    password: string,
+    confirm_password: string
+  }
+}> = async (req, res) => {
   // ユーザーが存在しないことを確認
   const user_id = await getUserId(req.body.user_name);
   if (user_id) {

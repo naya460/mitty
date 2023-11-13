@@ -6,9 +6,9 @@ import { PrismaClient } from '@prisma/client';
 import cors from '@fastify/cors'
 
 import databaseRoutes from 'database';
-import signinRoute, { signinBodySchema } from 'api/user/signin';
-import signoutRoute from 'api/user/signout';
-import signupRoute, { signupBodySchema } from 'api/user/signup';
+import { signinRoute, signinBodySchema } from 'api/user/signin';
+import { signoutRoute } from 'api/user/signout';
+import { signupRoute, signupBodySchema } from 'api/user/signup';
 
 const prisma = new PrismaClient();
 

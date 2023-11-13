@@ -1,14 +1,12 @@
-import { FastifyReply, FastifyRequest } from "fastify";
 import { Redis } from "ioredis";
 
-import "@fastify/cookie";
+import { UseRouteHandlerMethod } from "common/use_route_handler";
 
 const redis = new Redis();
 
-export default async function signoutRoute(
-  req: FastifyRequest,
-  res: FastifyReply
-) {
+export const signoutRoute: UseRouteHandlerMethod<
+  {}
+> = async (req, res) => {
   // cookieを取得
   const session_id = req.cookies.session_id;
   if (!session_id) {
