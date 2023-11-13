@@ -31,7 +31,6 @@ export default async function signinRoute(
   req: FastifyRequest<signinBody>,
   res: FastifyReply
 ) {
-  
   // ハッシュを取得
   const hash = await getUserHash(req.body.user_name);
   if (!hash) {

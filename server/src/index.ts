@@ -8,6 +8,7 @@ import cors from '@fastify/cors'
 import databaseRoutes from 'database';
 import signinRoute, { signinBodySchema } from 'api/user/signin';
 import signoutRoute from 'api/user/signout';
+import signupRoute, { signupBodySchema } from 'api/user/signup';
 
 const prisma = new PrismaClient();
 
@@ -48,6 +49,12 @@ server.post(
 server.get(
   '/user/signout',
   signoutRoute
+);
+
+server.post(
+  '/user/signup',
+  { schema: { body: signupBodySchema } },
+  signupRoute
 );
 
 server.get(

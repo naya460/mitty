@@ -21,7 +21,10 @@ export default function SignUpForm() {
       confirm_password: event.target.confirm_password.value,
     });
 
-    const response = await fetch('api/user/signup', options);
+    const response = await fetch(
+      `http://${location.hostname}:9090/user/signup`,
+      { ...options, mode: 'cors', credentials: 'include' }
+    );
 
     if (response.ok) {
       router.reload();
