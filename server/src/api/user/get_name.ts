@@ -3,9 +3,7 @@ import { Redis } from "ioredis";
 
 const redis = new Redis();
 
-export const getUserNameRoute: UseRouteHandlerMethod<
-  {}
-> = async (req, res) => {
+export const getUserNameRoute: UseRouteHandlerMethod = async (req, res) => {
   // cookieを取得
   const session_id = req.cookies.session_id;
   if (!session_id) {

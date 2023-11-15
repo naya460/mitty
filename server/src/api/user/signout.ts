@@ -4,9 +4,7 @@ import { UseRouteHandlerMethod } from "common/use_route_handler";
 
 const redis = new Redis();
 
-export const signoutRoute: UseRouteHandlerMethod<
-  {}
-> = async (req, res) => {
+export const signoutRoute: UseRouteHandlerMethod = async (req, res) => {
   // cookieを取得
   const session_id = req.cookies.session_id;
   if (!session_id) {

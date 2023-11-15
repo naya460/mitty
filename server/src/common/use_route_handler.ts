@@ -8,7 +8,7 @@ import {
 import "@fastify/cookie";
 
 export type UseRouteHandlerMethod<
-  RouteGeneric extends RouteGenericInterface
+  RouteGeneric extends RouteGenericInterface = {}
 > = RouteHandlerMethod<
   RawServerDefault,
   RawRequestDefaultExpression,
