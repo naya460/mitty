@@ -10,8 +10,11 @@ export default function IndexPage() {
   useEffect(() => {
     (async () => {
       // ユーザー情報を取得
-      const user = await fetch('/api/user/user');
-      const tmp = JSON.parse(await user.json());
+      const user = await fetch(
+        `http://${location.hostname}:9090/user/get_name`,
+        { mode: 'cors', credentials: 'include' }
+      );
+      const tmp = await user.json();
       // サインインしていないときのページを設定
       if (tmp === null) {
         setPage(<AuthenticationPage />);

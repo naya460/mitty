@@ -3,6 +3,7 @@ import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import { signinRoute, signinBodySchema } from './signin';
 import { signoutRoute } from './signout';
 import { signupRoute, signupBodySchema } from './signup';
+import { getUserNameRoute } from "./get_name";
 
 export default function apiUserRoutes(
   server: FastifyInstance,
@@ -24,6 +25,11 @@ export default function apiUserRoutes(
     '/signup',
     { schema: { body: signupBodySchema } },
     signupRoute
+  );
+
+  server.get(
+    '/get_name',
+    getUserNameRoute
   );
 
   done();
