@@ -1,27 +1,18 @@
 import { Redis } from "ioredis";
 
 import { UseRouteHandlerMethod } from "common/use_route_handler";
+import authUser from "common/auth_user";
 
 const redis = new Redis();
 
 export const signoutRoute: UseRouteHandlerMethod = async (req, res) => {
-  // cookieを取得
-  const session_id = req.cookies.session_id;
-  if (!session_id) {
-    res.status(400);
-    return;
-  }
-
-  // 認証する
-  const user_name = await redis.hget('session', session_id);
-  if (!user_name) {
-    res.status(400);
-    return;
-  }
+  // ユーザーを認証
+  const auth = await authUser(req, res);
+  if (auth === null) return;
 
   // セッションを削除
   res.clearCookie('session_id');
-  redis.hdel('session', session_id);
+  redis.hdel('session', auth.session_id);
 
   return;
 }
