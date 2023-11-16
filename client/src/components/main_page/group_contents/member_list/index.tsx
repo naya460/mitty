@@ -25,8 +25,11 @@ export default function MemberList(props: Props) {
       });
 
       // メンバーを取得
-      const res = await fetch('api/group/member/get', options);
-      const json = JSON.parse(await res.json());
+      const res = await fetch(
+        `http://${location.hostname}:9090/group/member/get`,
+        { ...options, mode: 'cors', credentials: 'include' }
+      );
+      const json = await res.json();
 
       // メンバー名のリストを作成
       let list = [];
