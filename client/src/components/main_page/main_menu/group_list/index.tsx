@@ -58,8 +58,11 @@ export default function GroupList(props: Props) {
   useEffect(() => {
     (async () => {
       // グループを取得
-      const res = await fetch('api/group/get');
-      const groups = JSON.parse(await res.json());
+      const res = await fetch(
+        `http://${location.hostname}:9090/group/get`,
+        { mode: 'cors', credentials: 'include' }
+      );
+      const groups = await res.json();
       // グループの表示を作成
       let group_list = [];
       let display_groups = [];
