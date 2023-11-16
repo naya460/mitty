@@ -24,7 +24,10 @@ export default function GroupList(props: Props) {
       group_name: event.target.group_name.value
     });
 
-    await fetch('api/group/create', options);
+    await fetch(
+      `http://${location.hostname}:9090/group/create`,
+      { ...options, mode: 'cors', credentials: 'include' }
+    );
     router.reload();
   }
 
