@@ -97,11 +97,14 @@ export default function useElementList(props: Props): [ () => Promise<boolean> ]
     });
 
     // メッセージを取得する
-    const res = await fetch('api/message/get', options);
+    const res = await fetch(
+      `http://${location.hostname}:9090/message/get`,
+      { ...options, mode: 'cors', credentials: 'include' }
+    );
     if (!res.ok) {
       return;
     }
-    const messages = JSON.parse(await res.json());
+    const messages = await res.json();
 
     // メッセージの表示を作成
     for (let i in messages) {
