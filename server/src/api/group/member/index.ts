@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import { getGroupMemberBodySchema, getGroupMemberRoute } from "./get";
+import { addGroupMemberBodySchema, addGroupMemberRoute } from "./add";
 
 export default function apiGroupMemberRoutes(
   server: FastifyInstance,
@@ -10,6 +11,12 @@ export default function apiGroupMemberRoutes(
     '/get',
     { schema: { body: getGroupMemberBodySchema } },
     getGroupMemberRoute
+  );
+
+  server.post(
+    '/add',
+    { schema: { body: addGroupMemberBodySchema } },
+    addGroupMemberRoute
   );
 
   done();

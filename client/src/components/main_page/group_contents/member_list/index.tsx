@@ -51,7 +51,10 @@ export default function MemberList(props: Props) {
       group_id: props.selected_group_id,
       add_user_name: event.target.user_name.value
     });
-    const res = await fetch('api/group/member/add', option);
+    const res = await fetch(
+      `http://${location.hostname}:9090/group/member/add`,
+      { ...option, mode: 'cors', credentials: 'include' }
+    );
     const message = await res.text();
   }
 
