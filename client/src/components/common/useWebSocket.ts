@@ -14,8 +14,11 @@ export default function useWebSocket(callback? : (message) => void): [(message) 
     // WebSocketが用意されていないとき、作成
     if (socket != null) return;
     (async () => {
-      const a = await fetch('api/use_ws');
-      cookie = await a.text();
+      const a = await fetch(
+        `http://${location.hostname}:9090/use_ws`,
+        { mode: 'cors', credentials: 'include' }
+      );
+      cookie = (await a.json()).session_id;
     })();
     socket = new WebSocket(`ws://${location.hostname}:8080/`);
 
