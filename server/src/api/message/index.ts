@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import { getMessageBodySchema, getMessageRoute } from "./get";
+import { sendMessageBodySchema, sendMessageRoute } from "./send";
 
 export default function apiMessageRoutes(
   server: FastifyInstance,
@@ -10,6 +11,12 @@ export default function apiMessageRoutes(
     '/get',
     { schema: { body: getMessageBodySchema } },
     getMessageRoute
+  );
+
+  server.post(
+    'send',
+    { schema: { body: sendMessageBodySchema } },
+    sendMessageRoute
   );
 
   done();
