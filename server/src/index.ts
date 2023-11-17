@@ -6,6 +6,7 @@ import databaseRoutes from 'database';
 import apiRoutes from 'api';
 
 import 'redis/index'
+import { createWebSocketServer } from 'websocket';
 
 const server = fastify({
   logger: true,
@@ -29,17 +30,4 @@ server.listen({ port: 9090, host: '0.0.0.0' }, (err, address) => {
   server.log.info(`server listening on ${address}`);
 });
 
-
-import { WebSocketServer } from 'ws';
-
-const wss = new WebSocketServer(server);
-
-wss.on('connection', (ws) => {
-  ws.on('error', console.error);
-
-  ws.on('message', (data) => {
-    console.log('data');
-  });
-
-  ws.send('something');
-});
+createWebSocketServer(server);
