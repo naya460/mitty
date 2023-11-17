@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --loader ts-node/esm src/server.ts",
+    "dev": "next dev",
     "build": "next build",
-    "start": "NODE_ENV=production node --loader ts-node/esm src/server.ts",
+    "start": "NODE_ENV=production next start",
     "migrate": "prisma migrate dev",
     "generate": "prisma generate"
   },
