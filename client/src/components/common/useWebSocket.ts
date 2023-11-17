@@ -28,6 +28,11 @@ export default function useWebSocket(callback? : (message) => void): [(message) 
         f(data);
       })
     }
+
+    const tmp = new WebSocket(`ws:/${location.hostname}:9090/`);
+    tmp.onmessage = (event) => {
+      console.log(event.data);
+    }
   }, []);
 
   return [
