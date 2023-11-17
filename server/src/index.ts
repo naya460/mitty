@@ -2,7 +2,6 @@ import fastify from 'fastify';
 import fastifyCookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 
-import databaseRoutes from 'database';
 import apiRoutes from 'api';
 
 import 'redis/index'
@@ -22,8 +21,6 @@ server.register(cors, {
 });
 
 server.register(apiRoutes);
-
-server.register(databaseRoutes, { prefix: '/database' });
 
 server.listen({ port: 9090, host: '0.0.0.0' }, (err, address) => {
   if (err) throw err;
