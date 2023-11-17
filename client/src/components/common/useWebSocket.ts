@@ -20,18 +20,13 @@ export default function useWebSocket(callback? : (message) => void): [(message) 
       );
       cookie = (await a.json()).session_id;
     })();
-    socket = new WebSocket(`ws://${location.hostname}:8080/`);
+    socket = new WebSocket(`ws://${location.hostname}:9090/`);
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       callbacks.forEach(f => {
         f(data);
       })
-    }
-
-    const tmp = new WebSocket(`ws:/${location.hostname}:9090/`);
-    tmp.onmessage = (event) => {
-      console.log(event.data);
     }
   }, []);
 
