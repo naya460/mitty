@@ -4,8 +4,8 @@
   "description": "",
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
-    "migrate": "prisma migrate dev",
-    "generate": "prisma generate"
+    "migrate": "npx prisma migrate dev",
+    "generate": "npx prisma generate"
   },
   "keywords": [],
   "author": "naya460",
