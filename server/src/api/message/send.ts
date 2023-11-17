@@ -1,10 +1,7 @@
-import { Redis } from "ioredis";
-
 import authUser from "common/auth_user";
 import { UseRouteHandlerMethod } from "common/use_route_handler";
 import getUserId from "database/user/get_user_id";
-
-const redis = new Redis();
+import addMessage from "database/message/add";
 
 export const sendMessageBodySchema = {
   type: 'object',
@@ -36,13 +33,10 @@ export const sendMessageRoute: UseRouteHandlerMethod<{
   }
 
   // メッセージを追加
-  redis.publish(
-    "send_message",
-    JSON.stringify({
-      message_text: req.body.message_text,
-      author_id: user_id,
-      group_id: req.body.group_id
-    })
+  await addMessage(
+    auth.user_name,
+    req.body.group_id,
+    req.body.message_text
   );
 
   res.status(201);

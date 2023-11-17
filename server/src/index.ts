@@ -4,7 +4,6 @@ import cors from '@fastify/cors';
 
 import apiRoutes from 'api';
 
-import 'redis/index'
 import { createWebSocketServer } from 'websocket';
 
 const server = fastify({
