@@ -5,6 +5,8 @@ import cors from '@fastify/cors';
 import databaseRoutes from 'database';
 import apiRoutes from 'api';
 
+import 'redis/index'
+
 const server = fastify({
   logger: true,
 });

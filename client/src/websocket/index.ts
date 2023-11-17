@@ -59,7 +59,7 @@ export function CreateWebSocketServer() {
         "send_message_ws",
         JSON.stringify({
           message_text: message_text,
-          author_id: user[0].user_id,
+          author_name: user[0].user_name,
           group_id: group_id
         })
       );
@@ -95,27 +95,6 @@ export function CreateWebSocketServer() {
         }
       })
     });
-  });
-
-  get_redis.subscribe("send_message_ws", (error, count) => {
-    if (error) {
-      console.log("Failed to subscribe: $s", error.message);
-    } else {
-      console.log(`Subscribed succesfully! This client is currently subscribed to ${count} channels.`);
-    }
-  });
-
-  get_redis.on("message", (channel, message) => {
-    const json_message = JSON.parse(message);
-    ( async function() {
-      await prisma.message.create({
-        data: {
-          message_text: json_message.message_text,
-          author_id: json_message.author_id,
-          group_id: json_message.group_id,
-        },
-      });
-    })();
   });
 
   return wss;
