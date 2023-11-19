@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from 'lib/prisma';
+
 import groupExists from 'database/group/exists';
 import hasMember from 'database/group/has_member';
-
-const prisma = new PrismaClient();
 
 // # getGroupMember
 //   グループに参加しているメンバー全員を取得する

@@ -1,4 +1,4 @@
-import { UseRouteHandlerMethod } from "common/use_route_handler";
+import { UseRouteHandlerMethod } from "lib/use_route_handler";
 
 import authUser from "common/auth_user";
 

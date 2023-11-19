@@ -1,5 +1,5 @@
 import authUser from "common/auth_user";
-import { UseRouteHandlerMethod } from "common/use_route_handler";
+import { UseRouteHandlerMethod } from "lib/use_route_handler";
 import setUserCookie from "database/user/set_cookie";
 
 export const useWsRoute: UseRouteHandlerMethod = async (req, res) => {

@@ -1,5 +1,5 @@
 import authUser from "common/auth_user";
-import { UseRouteHandlerMethod } from "common/use_route_handler";
+import { UseRouteHandlerMethod } from "lib/use_route_handler";
 import getGroupMember from "database/group/member/get";
 
 export const getGroupMemberBodySchema = {

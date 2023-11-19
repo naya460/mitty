@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from 'lib/prisma';
 
 import getUserId from 'database/user/get_user_id';
 

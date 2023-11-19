@@ -5,7 +5,7 @@ import { Redis } from "ioredis";
 import getUserId from "database/user/get_user_id";
 import createUser from "database/user/create";
 import setUserCookie from "database/user/set_cookie";
-import { UseRouteHandlerMethod } from "common/use_route_handler";
+import { UseRouteHandlerMethod } from "lib/use_route_handler";
 
 const redis = new Redis();
 

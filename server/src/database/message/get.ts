@@ -1,7 +1,6 @@
-import { PrismaClient } from '@prisma/client';
-import hasMember from 'database/group/has_member';
+import prisma from 'lib/prisma';
 
-const prisma = new PrismaClient();
+import hasMember from 'database/group/has_member';
 
 // # getMessage
 //   指定したグループのメッセージを取得する。

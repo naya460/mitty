@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from 'lib/prisma';
+
 import getUserId from 'database/user/get_user_id';
 import hasMember from 'database/group/has_member';
-
-const prisma = new PrismaClient();
 
 // # addMessage
 //   メッセージを追加する

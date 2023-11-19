@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from 'lib/prisma';
 
 // # getUserId
 //   ユーザー名からユーザーIDを取得する

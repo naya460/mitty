@@ -1,7 +1,6 @@
-import { PrismaClient } from '@prisma/client';
-import getUserId from 'database/user/get_user_id';
+import prisma from 'lib/prisma';
 
-const prisma = new PrismaClient();
+import getUserId from 'database/user/get_user_id';
 
 // # createGroup
 //   グループを作成する
