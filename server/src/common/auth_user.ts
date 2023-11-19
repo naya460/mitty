@@ -1,7 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { Redis } from "ioredis";
-
-const redis = new Redis();
+import redis from "lib/redis";
 
 export default async function authUser(
   req: FastifyRequest,

@@ -1,11 +1,9 @@
 import { FastifyInstance } from "fastify";
 import { WebSocketServer } from 'ws';
-import { Redis } from "ioredis";
+import redis from "lib/redis";
 import prisma from 'lib/prisma';
 
 import addMessage from "database/message/add";
-
-const redis = new Redis();
 
 const clients = new Map();
 

@@ -1,12 +1,10 @@
 import { v4 as uuid_v4 } from 'uuid';
 import bcrypt from "bcrypt";
-import { Redis } from 'ioredis'
+import redis from 'lib/redis';
 
 import getUserHash from "database/user/get_hash";
 import setUserCookie from "database/user/set_cookie";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
-
-const redis = new Redis();
 
 export const signinBodySchema = {
   type: 'object',

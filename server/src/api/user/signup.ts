@@ -1,13 +1,11 @@
 import bcrypt from "bcrypt";
 import { v4 as uuid_v4 } from 'uuid';
-import { Redis } from "ioredis";
+import redis from "lib/redis";
 
 import getUserId from "database/user/get_user_id";
 import createUser from "database/user/create";
 import setUserCookie from "database/user/set_cookie";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
-
-const redis = new Redis();
 
 export const signupBodySchema = {
   type: 'object',
