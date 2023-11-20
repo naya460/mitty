@@ -1,15 +1,19 @@
 import authUser from "common/auth_user";
+import redis from "lib/redis";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
-import setUserCookie from "database/user/set_cookie";
+import { v4 as uuid_v4 } from "uuid";
 
 export const useWsRoute: UseRouteHandlerMethod = async (req, res) => {
   // ユーザーを認証
   const auth = await authUser(req, res);
   if (auth === null) return;
 
-  // session_idを保存
-  await setUserCookie(auth.user_name, auth.session_id);
+  // ws_idを生成
+  const ws_id = uuid_v4();
+
+  // ws_idを保存
+  await redis.hset('ws', ws_id, auth.session_id);
 
   res.status(200).type('application/json');
-  return { session_id: auth.session_id };
+  return { ws_id };
 }

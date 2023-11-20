@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 let socket: WebSocket = null;
-let cookie: String = null;
+let ws_id: String = null;
 let callbacks = [];
 
 export default function useWebSocket(callback? : (message) => void): [(message) => void] {
@@ -18,7 +18,7 @@ export default function useWebSocket(callback? : (message) => void): [(message) 
         `http://${location.hostname}:9090/use_ws`,
         { mode: 'cors', credentials: 'include' }
       );
-      cookie = (await a.json()).session_id;
+      ws_id = (await a.json()).ws_id;
     })();
     socket = new WebSocket(`ws://${location.hostname}:9090/`);
 
@@ -33,7 +33,7 @@ export default function useWebSocket(callback? : (message) => void): [(message) 
   return [
     (message: Object): void => {
       if (socket.OPEN) {
-        socket.send(JSON.stringify({...message, cookie}));
+        socket.send(JSON.stringify({...message, ws_id}));
       }
     }
   ];

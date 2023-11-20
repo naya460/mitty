@@ -1,11 +1,11 @@
 import { FastifyInstance } from "fastify";
-import { WebSocketServer } from 'ws';
+import { WebSocket, WebSocketServer } from 'ws';
 import redis from "lib/redis";
 import prisma from 'lib/prisma';
 
 import addMessage from "database/message/add";
 
-const clients = new Map();
+const clients = new Map<string, {ws_id: string, ws: WebSocket}[]>();
 
 export function createWebSocketServer(server: FastifyInstance) {
   const wss = new WebSocketServer(server);
@@ -17,11 +17,22 @@ export function createWebSocketServer(server: FastifyInstance) {
       const json_message = await JSON.parse(data.toString());
 
       // ユーザーを認証
-      const user_name = await redis.hget('session', json_message.cookie);
+      const ws_id = await redis.hget('ws', json_message.ws_id);
+      if (ws_id === null) return;
+
+      // ユーザー名を取得
+      const user_name = await redis.hget('session', ws_id);
       if (user_name === null) return;
 
-      if (clients.get(json_message.cookie) === undefined) {
-        clients.set(json_message.cookie, ws);
+      // 配信先として登録
+      if (clients.get(user_name)?.find((data) => data.ws_id === ws_id) === undefined) {
+        const tmp = clients.get(user_name);
+        if (tmp === undefined) {
+          clients.set(user_name, [ { ws_id, ws } ]);
+        } else {
+          tmp.push({ ws_id, ws });
+          clients.set(user_name, tmp);
+        }
       }
 
       // グループIDがあるか確認
@@ -44,7 +55,6 @@ export function createWebSocketServer(server: FastifyInstance) {
           user: {
             select: {
               user_name: true,
-              cookie: true
             }
           }
         },
@@ -55,9 +65,14 @@ export function createWebSocketServer(server: FastifyInstance) {
 
       // メッセージをメンバーに送信
       member_cookie.forEach((data) => {
-        const ws = clients.get(data.user.cookie);
-        if (ws) {
-          ws.send(JSON.stringify({
+        // ユーザーのwsの一覧を取得
+        const ws_list = clients.get(data.user.user_name);
+        // wsが無いとき次のユーザーへ
+        if (ws_list === undefined) return;
+
+        // 全てのwsに配信する
+        ws_list.forEach((local_ws) => {
+          local_ws.ws.send(JSON.stringify({
             message_text: message_text,
             author: {
               user_name: user_name,
@@ -65,7 +80,7 @@ export function createWebSocketServer(server: FastifyInstance) {
             group_id: group_id,
             time: new Date()
           }));
-        }
+        });
       });
     });
   });
