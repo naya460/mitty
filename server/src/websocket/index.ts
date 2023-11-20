@@ -4,11 +4,36 @@ import redis from "lib/redis";
 import prisma from 'lib/prisma';
 
 import addMessage from "database/message/add";
+import { authUserSession } from "common/auth_user";
 
 const clients = new Map<string, {ws_id: string, ws: WebSocket}[]>();
 
 export function createWebSocketServer(server: FastifyInstance) {
   const wss = new WebSocketServer(server);
+
+  server.server.on('upgrade', async (req, socket) => {
+    // クッキーを取得
+    const cookies = req.headers.cookie?.split('; ');
+    
+    // session_idを取り出す
+    const session_id = (() => {
+      let session_id = '';
+      cookies?.forEach((value) => {
+        const values = value.split('=');
+        if (values[0] === 'session_id') {
+          session_id = values[1];
+        }
+      });
+      return session_id;
+    })();
+
+    // 認証する
+    const user_name = await authUserSession(session_id);
+    if (user_name === null) {
+      socket.end();
+      return;
+    }
+  });
 
   wss.on('connection', (ws) => {
     ws.on('error', console.error);

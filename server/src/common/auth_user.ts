@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import "@fastify/cookie"
 import redis from "lib/redis";
 
 export default async function authUser(
@@ -15,11 +16,17 @@ export default async function authUser(
   }
 
   // 認証する
-  const user_name = await redis.hget('session', session_id);
+  const user_name = await authUserSession(session_id);
   if (!user_name) {
     res.status(400);
     return null;
   }
 
   return { session_id, user_name };
+}
+
+export async function authUserSession(
+  session_id: string
+): Promise<string | null> {
+  return await redis.hget('session', session_id);
 }
