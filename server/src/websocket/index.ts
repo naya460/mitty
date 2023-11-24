@@ -4,6 +4,7 @@ import redis from "lib/redis";
 
 import { authUserSession } from "common/auth_user";
 import wsSendMessageRoute from "./message/send";
+import wsSubscribeRoute from "./subscribe";
 
 const clients = new Map<string, {ws_id: string, ws: WebSocket}[]>();
 
@@ -48,18 +49,12 @@ export function createWebSocketServer(server: FastifyInstance) {
       const user_name = await redis.hget('session', ws_id);
       if (user_name === null) return;
 
-      // 配信先として登録
-      if (clients.get(user_name)?.find((data) => {data.ws_id === ws_id}) === undefined) {
-        const tmp = clients.get(user_name);
-        if (tmp === undefined) {
-          clients.set(user_name, [ { ws_id, ws } ]);
-        } else {
-          tmp.push({ ws_id, ws });
-          clients.set(user_name, tmp);
-        }
+      // ルーティング
+      if (json_message.type === 'subscribe') {
+        wsSubscribeRoute(user_name, ws_id, ws, clients);
+        return;
       }
 
-      // ルーティング
       if (json_message.type === 'message/send') {
         wsSendMessageRoute(json_message, user_name, clients);
         return;
