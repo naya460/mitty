@@ -1,10 +1,12 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 let socket: WebSocket = null;
-let ws_id: String = null;
+let ws_id: string = null;
 let callbacks = [];
 
 export default function useWebSocket(callback? : (message) => void): [(message) => void] {
+  const ws_id_ref = useRef('');
+
   useEffect(() => {
     // コールバック関数を追加
     if (callback) {
@@ -19,6 +21,7 @@ export default function useWebSocket(callback? : (message) => void): [(message) 
         { mode: 'cors', credentials: 'include' }
       );
       ws_id = (await a.json()).ws_id;
+      ws_id_ref.current = ws_id;
     })();
     socket = new WebSocket(`ws://${location.hostname}:9090/`);
 
@@ -27,6 +30,19 @@ export default function useWebSocket(callback? : (message) => void): [(message) 
       callbacks.forEach(f => {
         f(data);
       })
+    }
+
+    socket.onopen = (event) => {
+      (async () => {
+        while (!ws_id_ref.current) {
+          await new Promise((resolve) => setTimeout(resolve, 10));
+        }
+        socket.send(JSON.stringify({type: 'subscribe', ws_id: ws_id_ref.current}));
+      })();
+    }
+
+    return () => {
+      socket.close();
     }
   }, []);
 

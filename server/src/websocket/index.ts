@@ -49,7 +49,7 @@ export function createWebSocketServer(server: FastifyInstance) {
       if (user_name === null) return;
 
       // 配信先として登録
-      if (clients.get(user_name)?.find((data) => data.ws_id === ws_id) === undefined) {
+      if (clients.get(user_name)?.find((data) => {data.ws_id === ws_id}) === undefined) {
         const tmp = clients.get(user_name);
         if (tmp === undefined) {
           clients.set(user_name, [ { ws_id, ws } ]);
