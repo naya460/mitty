@@ -8,10 +8,10 @@ import prisma from 'lib/prisma';
 //     検索するユーザー名
 //
 // ## 返り値
-//   - Promise<undefined | number>
+//   - Promise<undefined | string>
 //     - ユーザーが存在しない場合 : undefine
-//     - ユーザーが存在する場合 : number
-//       - ユーザーIDをnumberで返す
+//     - ユーザーが存在する場合 : string
+//       - ユーザーIDをstringで返す
 //
 // ## 注意
 //   - APIから必要なときに呼びだすこと
@@ -19,7 +19,7 @@ import prisma from 'lib/prisma';
 
 export default async function getUserId(
   user_name: string,
-): Promise<undefined | number> {
+): Promise<undefined | string> {
   const user = await prisma.user.findUnique({
     select: {
       user_id: true,

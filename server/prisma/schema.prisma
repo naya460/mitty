@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-    user_id   Int     @id @default(autoincrement())
+    user_id   String  @id @default(cuid())
     user_name String  @unique
     hash      String
     messages  Message[]
@@ -24,7 +24,7 @@ model Group {
 
 model GroupsOnUsers {
     user     User   @relation(fields: [user_id], references: [user_id])
-    user_id  Int
+    user_id  String
     group    Group  @relation(fields: [group_id], references: [group_id])
     group_id String
 
@@ -35,7 +35,7 @@ model Message {
     message_id   String   @id @default(cuid())
     message_text String
     author       User     @relation(fields: [author_id], references: [user_id])
-    author_id    Int
+    author_id    String
     group        Group    @relation(fields: [group_id], references: [group_id])   
     group_id     String
     time         DateTime @default(now())
