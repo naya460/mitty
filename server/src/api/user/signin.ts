@@ -24,6 +24,12 @@ export const signinRoute: UseRouteHandlerMethod<{
     password: string,
   }
 }> = async (req, res) => {
+  // ログインに制限が掛かっているとき無視
+  if (await redis.exists(`stop_signin_:_${req.body.user_name}`) === 1) {
+    res.status(400);
+    return;
+  }
+
   // ハッシュを取得
   const hash = await getUserHash(req.body.user_name);
   if (!hash) {
@@ -45,8 +51,21 @@ export const signinRoute: UseRouteHandlerMethod<{
     await setUserCookie(req.body.user_name, session_id);
     await redis.hset('session', session_id, req.body.user_name);
 
+    // サインインの試行回数をリセット
+    redis.hdel('try_signin', req.body.user_name);
+
     res.status(200);
   } else {
+    // このユーザーのサインイン試行回数を増やす
+    const num = await redis.hincrby('try_signin', req.body.user_name, 1);
+
+    // 10回間違えたとき、1時間の時間制限を掛ける
+    if (num >= 10) {
+      await redis.set(`stop_signin_:_${req.body.user_name}`, 1);
+      await redis.expire(`stop_signin_:_${req.body.user_name}`, 3600);
+      await redis.hdel('try_signin', req.body.user_name);
+    }
+
     res.status(400);
   }
 
