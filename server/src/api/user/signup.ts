@@ -4,7 +4,6 @@ import redis from "lib/redis";
 
 import getUserId from "database/user/get_user_id";
 import createUser from "database/user/create";
-import setUserCookie from "database/user/set_cookie";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
 
 export const signupBodySchema = {
@@ -52,7 +51,6 @@ export const signupRoute: UseRouteHandlerMethod<{
   res.setCookie('session_id', session_id, { path: '/', httpOnly: true });
 
   // session_idを保存
-  await setUserCookie(req.body.user_name, session_id);
   await redis.hset('session', session_id, req.body.user_name);
 
   res.status(201);

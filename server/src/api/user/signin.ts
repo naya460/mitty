@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 import redis from 'lib/redis';
 
 import getUserHash from "database/user/get_hash";
-import setUserCookie from "database/user/set_cookie";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
 
 export const signinBodySchema = {
@@ -48,7 +47,6 @@ export const signinRoute: UseRouteHandlerMethod<{
     res.setCookie('session_id', session_id, { path: '/', httpOnly: true });
 
     // session_idを保存
-    await setUserCookie(req.body.user_name, session_id);
     await redis.hset('session', session_id, req.body.user_name);
 
     // サインインの試行回数をリセット
