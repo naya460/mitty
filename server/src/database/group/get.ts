@@ -21,14 +21,8 @@ import getUserId from '../user/get_user_id';
 //   - APIから認証を済ませておくこと
 
 export default async function getGroup(
-  user_name: string,
+  user_id: string,
 ): Promise<undefined | string> {
-  // ユーザーIDを取得
-  const user_id = await getUserId(user_name);
-  if (!user_id) {
-    return undefined;
-  }
-
   // 参加しているグループの一覧を取得
   const groups = await prisma.group.findMany({
     select: {

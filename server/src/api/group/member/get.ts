@@ -22,7 +22,7 @@ export const getGroupMemberRoute: UseRouteHandlerMethod<{
   if (auth === null) return;
 
   // メンバーを取得
-  const members = await getGroupMember(auth.user_name, req.body.group_id);
+  const members = await getGroupMember(auth.user_id, req.body.group_id);
   if (members === undefined) {
     res.status(400);
     return;

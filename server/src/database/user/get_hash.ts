@@ -16,11 +16,11 @@ import prisma from 'lib/prisma';
 //   - APIから認証を済ませておくこと
 
 export default async function getUserHash(
-  user_name: string,
+  user_id: string,
 ): Promise<string | undefined> {
   const hash = await prisma.user.findUnique({
     select: { hash: true },
-    where: { user_name: user_name }
+    where: { user_id }
   });
   return hash?.hash;
 }

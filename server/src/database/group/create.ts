@@ -23,14 +23,9 @@ import getUserId from 'database/user/get_user_id';
 //   - APIから認証を済ませておくこと
 
 export default async function createGroup(
-  user_name: string,
+  user_id: string,
   group_name: string,
 ): Promise<boolean> {
-  // ユーザーIDを取得
-  const user_id = await getUserId(user_name);
-  if (!user_id) {
-    return false;
-  }
 
   // グループを追加
   await prisma.group.create({

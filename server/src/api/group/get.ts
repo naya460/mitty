@@ -8,7 +8,7 @@ export const getGroupRoute: UseRouteHandlerMethod = async (req, res) => {
   if (auth === null) return;
 
   // グループの一覧を取得する
-  const groups = await getGroup(auth.user_name);
+  const groups = await getGroup(auth.user_id);
   if (groups === undefined) {
     res.status(400);
     return;

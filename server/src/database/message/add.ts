@@ -23,18 +23,12 @@ import hasMember from 'database/group/has_member';
 //   - APIから認証を済ませておくこと
 
 export default async function addMessage(
-  user_name: string,
+  user_id: string,
   group_id: string,
   message_text: string,
 ): Promise<boolean> {
-  // ユーザーIDを取得
-  const user_id = await getUserId(user_name);
-  if (!user_id) {
-    return false;
-  }
-
   // 投稿ユーザーがグループに所属しているか調べる
-  if (!(await hasMember(user_name, group_id))) {
+  if (!(await hasMember(user_id, group_id))) {
     return false;
   }
 

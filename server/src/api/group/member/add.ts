@@ -1,6 +1,7 @@
 import authUser from "common/auth_user";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
 import addGroupMember from "database/group/member/add";
+import getUserId from "database/user/get_user_id";
 
 export const addGroupMemberBodySchema = {
   type: 'object',
@@ -24,10 +25,17 @@ export const addGroupMemberRoute: UseRouteHandlerMethod<{
   const auth = await authUser(req, res);
   if (auth === null) return;
 
+  // 追加されるユーザーIDを取得
+  const add_user_id = await getUserId(req.body.add_user_name);
+  if (add_user_id === undefined) {
+    res.status(400);
+    return;
+  }
+
   // ユーザーを追加
   const is_success = await addGroupMember(
-    auth.user_name,
-    req.body.add_user_name,
+    auth.user_id,
+    add_user_id,
     req.body.group_id
   );
   if (is_success === false) {

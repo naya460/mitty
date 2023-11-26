@@ -4,6 +4,7 @@ import redis from 'lib/redis';
 
 import getUserHash from "database/user/get_hash";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
+import prisma from 'lib/prisma';
 
 export const signinBodySchema = {
   type: 'object',
@@ -29,8 +30,22 @@ export const signinRoute: UseRouteHandlerMethod<{
     return;
   }
 
+  // ユーザーIDを取得
+  const user_id = (await prisma.user.findUnique({
+    select: {
+      user_id: true,
+    },
+    where: {
+      user_name: req.body.user_name,
+    },
+  }))?.user_id;
+  if (user_id === undefined) {
+    res.status(400);
+    return;
+  }
+
   // ハッシュを取得
-  const hash = await getUserHash(req.body.user_name);
+  const hash = await getUserHash(user_id);
   if (!hash) {
     res.status(400);
     return;
@@ -47,7 +62,7 @@ export const signinRoute: UseRouteHandlerMethod<{
     res.setCookie('session_id', session_id, { path: '/', httpOnly: true });
 
     // session_idを保存
-    await redis.hset('session', session_id, req.body.user_name);
+    await redis.hset('session', session_id, user_id);
 
     // サインインの試行回数をリセット
     redis.hdel('try_signin', req.body.user_name);

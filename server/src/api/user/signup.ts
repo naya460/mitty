@@ -5,6 +5,7 @@ import redis from "lib/redis";
 import getUserId from "database/user/get_user_id";
 import createUser from "database/user/create";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
+import prisma from "lib/prisma";
 
 export const signupBodySchema = {
   type: 'object',
@@ -50,8 +51,15 @@ export const signupRoute: UseRouteHandlerMethod<{
   // cookieを設定
   res.setCookie('session_id', session_id, { path: '/', httpOnly: true });
 
+  // ユーザーIDを取得
+  const new_user_id = await getUserId(req.body.user_name);
+  if (new_user_id === undefined) {
+    res.status(400);
+    return;
+  }
+
   // session_idを保存
-  await redis.hset('session', session_id, req.body.user_name);
+  await redis.hset('session', session_id, new_user_id);
 
   res.status(201);
 }

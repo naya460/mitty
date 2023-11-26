@@ -25,16 +25,9 @@ export const sendMessageRoute: UseRouteHandlerMethod<{
   const auth = await authUser(req, res);
   if (auth === null) return;
 
-  // ユーザーIDを取得
-  const user_id = await getUserId(auth.user_name);
-  if (user_id === undefined) {
-    res.status(500);
-    return;
-  }
-
   // メッセージを追加
   await addMessage(
-    auth.user_name,
+    auth.user_id,
     req.body.group_id,
     req.body.message_text
   );

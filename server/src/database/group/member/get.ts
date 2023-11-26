@@ -25,7 +25,7 @@ import hasMember from 'database/group/has_member';
 //     - APIから認証を済ませておくこと
 
 export default async function getGroupMember(
-  user_name: string,
+  user_id: string,
   group_id: string,
 ): Promise<undefined | string> {
   // グループが存在するか調べる
@@ -34,7 +34,7 @@ export default async function getGroupMember(
   }
 
   // 依頼ユーザーがグループに所属しているか調べる
-  if (!(await hasMember(user_name, group_id))) {
+  if (!(await hasMember(user_id, group_id))) {
     return undefined;
   }
 

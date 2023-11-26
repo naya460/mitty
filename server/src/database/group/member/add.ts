@@ -30,8 +30,8 @@ import getUserId from 'database//user/get_user_id';
 //     - APIから認証を済ませておくこと
 
 export default async function addGroupMember(
-  requesting_user_name: string,
-  additional_user_name: string,
+  requesting_user_id: string,
+  additional_user_id: string,
   group_id: string,
 ): Promise<boolean> {
   if (!(await groupExists(group_id))) {
@@ -39,18 +39,12 @@ export default async function addGroupMember(
   }
 
   // 依頼ユーザーがグループに所属しているか調べる
-  if (!(await hasMember(requesting_user_name, group_id))) {
+  if (!(await hasMember(requesting_user_id, group_id))) {
     return false;
   }
 
   // 追加されるユーザーが所属していないことを調べる
-  if ((await hasMember(additional_user_name, group_id))) {
-    return false;
-  }
-
-  // 追加ユーザーのIDを取得
-  const additional_user_id = (await getUserId(additional_user_name));
-  if (!additional_user_id) {
+  if ((await hasMember(additional_user_id, group_id))) {
     return false;
   }
 

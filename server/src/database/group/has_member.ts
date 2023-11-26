@@ -21,15 +21,9 @@ import getUserId from 'database/user/get_user_id';
 //   - ユーザーから直接呼び出してはいけない
 
 export default async function hasMember(
-  user_name: string,
+  user_id: string,
   group_id: string
 ): Promise<boolean> {
-  // ユーザーIDを取得
-  const user_id = await getUserId(user_name);
-  if (!user_id) {
-    return false;
-  }
-
   return (await prisma.groupsOnUsers.findUnique({
     where: {
       user_id_group_id: {

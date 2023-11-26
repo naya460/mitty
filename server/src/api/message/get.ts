@@ -25,7 +25,7 @@ export const getMessageRoute: UseRouteHandlerMethod<{
 
   // メッセージを取得
   const messages = await getMessage(
-    auth.user_name,
+    auth.user_id,
     req.body.group_id,
     req.body.last_message_id
   );
