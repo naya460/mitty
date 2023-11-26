@@ -22,6 +22,7 @@ export default function IndexPage() {
       // jsonが異なるとき更新
       if (json !== tmp) {
         setJson(tmp);
+        console.log(tmp);
         // サインインしているときのページを設定
         if (tmp !== null) {
           setPage(<MainPage user_name={tmp.user_name} />);
