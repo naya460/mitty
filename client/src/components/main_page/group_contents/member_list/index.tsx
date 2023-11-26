@@ -34,7 +34,7 @@ export default function MemberList(props: Props) {
       // メンバー名のリストを作成
       let list = [];
       for (let i in json) {
-        list.push(json[i].user.user_name);
+        list.push(json[i].user.display_name);
       }
 
       // メンバー一覧を更新

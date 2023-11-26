@@ -22,6 +22,7 @@ export default async function createUser(
   await prisma.user.create({
     data: {
       user_name: user_name,
+      display_name: user_name,
       hash: hash,
     }
   });

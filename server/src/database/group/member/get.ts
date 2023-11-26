@@ -43,7 +43,7 @@ export default async function getGroupMember(
     select: {
       user: {
         select: {
-          user_name: true,
+          display_name: true,
         },
       },
     },

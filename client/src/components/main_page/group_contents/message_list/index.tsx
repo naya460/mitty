@@ -94,7 +94,7 @@ export default function MessageList(props: Props) {
 
           const time_diff = value_time.diff(last_time).as("minutes");
           
-          if (time_diff <= 5 && last_message.author.user_name === value.author.user_name) {
+          if (time_diff <= 5 && last_message.author.display_name === value.author.display_name) {
             status = false;
           }
         }
@@ -104,8 +104,8 @@ export default function MessageList(props: Props) {
         tmp.push(
           <Message
             key={count}
-            user_name={value.author.user_name}
-            mine={props.user_name == value.author.user_name}
+            display_name={value.author.display_name}
+            mine={props.user_name == value.author.display_name}
             time={value.time}
             status={status}
           >

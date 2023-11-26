@@ -6,7 +6,7 @@ import useWebSocket from 'components/common/useWebSocket'
 export type MessageElement = {
   message_id: string,
   message_text: string,
-  author: { user_name: string },
+  author: { display_name: string },
   time: Date,
 }
 

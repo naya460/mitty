@@ -8,11 +8,12 @@ datasource db {
 }
 
 model User {
-    user_id   String  @id @default(cuid())
-    user_name String  @unique
-    hash      String
-    messages  Message[]
-    groups    GroupsOnUsers[]
+    user_id      String  @id @default(cuid())
+    user_name    String  @unique
+    display_name String
+    hash         String
+    messages     Message[]
+    groups       GroupsOnUsers[]
 }
 
 model Group {

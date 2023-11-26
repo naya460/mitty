@@ -1,8 +1,7 @@
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
 
 import authUser from "common/auth_user";
-import getUserId from "database/user/get_user_id";
-import prisma from "lib/prisma";
+import getUserDisplayName from "database/user/get_display_name";
 
 export const getUserNameRoute: UseRouteHandlerMethod = async (req, res) => {
   // ユーザーを認証
@@ -13,16 +12,9 @@ export const getUserNameRoute: UseRouteHandlerMethod = async (req, res) => {
   };
 
   // ユーザー名を取得
-  const user_name = (await prisma.user.findUnique({
-    select: {
-      user_name: true,
-    },
-    where: {
-      user_id: auth.user_id,
-    },
-  }))?.user_name;
+  const display_name = await getUserDisplayName(auth.user_id);
 
   // ログイン中のユーザー名を返す
   res.status(200).type('application/json');
-  return { user_name: user_name, user_id: auth.user_id }
+  return { display_name }
 }

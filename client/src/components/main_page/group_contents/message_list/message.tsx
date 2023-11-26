@@ -4,7 +4,7 @@ import {DateTime} from 'luxon'
 import styles from './message.css'
 
 interface Props {
-  user_name: string,
+  display_name: string,
   mine: boolean,
   time: Date,
   status?: boolean,
@@ -27,7 +27,7 @@ export default function Message(props: Props) {
           // 表示が有効のとき
           return (
             <div className={`${styles.status} ${props.mine && styles.status_mine}`}>
-              <div className={`${styles.name} ${props.mine && styles.name_mine}`}>{props.user_name}</div>
+              <div className={`${styles.name} ${props.mine && styles.name_mine}`}>{props.display_name}</div>
               <div className={styles.time}>{time.toFormat("HH:mm")}</div>
             </div>
           )
