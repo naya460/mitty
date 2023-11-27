@@ -28,8 +28,8 @@ export function createWebSocketServer(server: FastifyInstance) {
     })();
 
     // 認証する
-    const user_name = await authUserSession(session_id);
-    if (user_name === null) {
+    const user_id = await authUserSession(session_id);
+    if (user_id === null) {
       socket.end();
       return;
     }
@@ -45,18 +45,18 @@ export function createWebSocketServer(server: FastifyInstance) {
       const ws_id = await redis.hget('ws', json_message.ws_id);
       if (ws_id === null) return;
 
-      // ユーザー名を取得
-      const user_name = await redis.hget('session', ws_id);
-      if (user_name === null) return;
+      // ユーザーIDを取得
+      const user_id = await redis.hget('session', ws_id);
+      if (user_id === null) return;
 
       // ルーティング
       if (json_message.type === 'subscribe') {
-        wsSubscribeRoute(user_name, ws_id, ws, clients);
+        wsSubscribeRoute(user_id, ws_id, ws, clients);
         return;
       }
 
       if (json_message.type === 'message/send') {
-        wsSendMessageRoute(json_message, user_name, clients);
+        wsSendMessageRoute(json_message, user_id, clients);
         return;
       }
     });
