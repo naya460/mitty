@@ -2,15 +2,18 @@ import { useEffect, useRef } from 'react'
 
 let socket: WebSocket = null;
 let ws_id: string = null;
-let callbacks = [];
+let callbacks: {callback: (message) => void, route?: string}[] = [];
 
-export default function useWebSocket(callback? : (message) => void): [(message) => void] {
+export default function useWebSocket(
+  callback? : (message) => void,
+  route?: string,
+): [(message) => void] {
   const ws_id_ref = useRef('');
 
   useEffect(() => {
     // コールバック関数を追加
     if (callback) {
-      callbacks.push(callback);
+      callbacks.push({callback, route});
     }
 
     // WebSocketが用意されていないとき、作成
@@ -28,7 +31,9 @@ export default function useWebSocket(callback? : (message) => void): [(message) 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       callbacks.forEach(f => {
-        f(data);
+        if (f.route === undefined || f.route === data.route) {
+          f.callback(data);
+        }
       })
     }
 

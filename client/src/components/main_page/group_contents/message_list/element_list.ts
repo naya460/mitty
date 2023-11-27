@@ -84,7 +84,7 @@ export default function useElementList(props: Props): [ () => Promise<boolean> ]
         onMessage.current(element_list.current.get(selected_group_id.current));
       }
     }
-  });
+  }, 'message/send');
 
   // メッセージを取得する
   const getMessages = async (last_message_id?: string) => {

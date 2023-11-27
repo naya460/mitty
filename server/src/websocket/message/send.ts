@@ -50,6 +50,7 @@ export default async function wsSendMessageRoute(
     // 全てのwsに配信する
     ws_list.forEach((local_ws) => {
       local_ws.ws.send(JSON.stringify({
+        route: 'message/send',
         message_text: message_text,
         author: {
           user_id: user_id,
