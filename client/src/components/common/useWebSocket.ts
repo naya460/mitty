@@ -37,7 +37,7 @@ export default function useWebSocket(callback? : (message) => void): [(message) 
         while (!ws_id_ref.current) {
           await new Promise((resolve) => setTimeout(resolve, 10));
         }
-        socket.send(JSON.stringify({type: 'subscribe', ws_id: ws_id_ref.current}));
+        socket.send(JSON.stringify({route: 'subscribe', ws_id: ws_id_ref.current}));
       })();
     }
 

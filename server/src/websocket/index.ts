@@ -50,12 +50,12 @@ export function createWebSocketServer(server: FastifyInstance) {
       if (user_id === null) return;
 
       // ルーティング
-      if (json_message.type === 'subscribe') {
+      if (json_message.route === 'subscribe') {
         wsSubscribeRoute(user_id, ws_id, ws, clients);
         return;
       }
 
-      if (json_message.type === 'message/send') {
+      if (json_message.route === 'message/send') {
         wsSendMessageRoute(json_message, user_id, clients);
         return;
       }

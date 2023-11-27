@@ -17,7 +17,7 @@ export default function MessageInput(props: Props) {
   const sendMessage = () => {
     // 送信するリクエストを作成
     const message = {
-      type: 'message/send',
+      route: 'message/send',
       message: text,
       group_id: props.selected_group_id
     };
