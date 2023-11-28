@@ -11,6 +11,7 @@ export default {
     borderStyle: "solid",
     borderColor: "#bbbbbb",
     userSelect: "none",
+    cursor: "pointer",
     "@media": {
       "screen and (hover: hover)": {
         ":hover": {

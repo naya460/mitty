@@ -22,14 +22,15 @@ export default {
   popup: style({
     position: "absolute",
     borderRadius: "0.5rem",
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#ffffff",
     left: 0,
     right: 0,
     height: "auto",
-    boxShadow: "2px 2px 2px 0px rgba(0, 0, 0, 0.5)",
+    boxShadow: "0 2px 10px 2px rgba(0, 0, 0, 0.2)",
     padding: "1rem",
     boxSizing: "border-box",
     zIndex: "20",
+    transition: "opacity 0.1s",
   }),
   popup_hidden: style({
     opacity: "0",
