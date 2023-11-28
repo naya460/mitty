@@ -1,8 +1,7 @@
-import { useRouter } from 'next/router'
-
 import styles from './index.css'
 
 import GroupList from './group_list'
+import UserCard from './user_card';
 
 interface Props {
   // main menu
@@ -13,24 +12,12 @@ interface Props {
 }
 
 export default function MainMenu(props: Props) {
-  const router = useRouter();
-
-  // サインアウト処理
-  const handleSignOut = async () => {
-    await fetch(
-      `http://${location.hostname}:9090/user/signout`,
-      { mode: 'cors', credentials: 'include' }
-    );
-    router.reload();
-  }
-
   return (
     <div className={`
       ${styles.top}
       ${(props.selected_group_id != null) && styles.top_selected}
     `}>
-      <div className={styles.user_name}>User : {props.user_name}</div>
-      <a href='/' onClick={handleSignOut}>Sign Out</a>
+      <UserCard user_name={props.user_name} />
       <GroupList
         setSelectedGroupData={props.setSelectedGroupData}
         selected_group_id={props.selected_group_id}

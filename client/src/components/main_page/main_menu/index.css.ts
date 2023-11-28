@@ -36,9 +36,4 @@ export default {
       }
     }
   }),
-  user_name: style({
-    fontSize: "1rem",
-    fontFamily: "sans-serif",
-    color: "blacK",
-  }),
 };
