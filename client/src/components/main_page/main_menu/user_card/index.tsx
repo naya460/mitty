@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import styles from './index.css';
-import Popup from 'components/common/popup';
+import PopupMenu from 'components/common/popup_menu';
 
 interface Props {
   user_name: string,
@@ -23,21 +23,22 @@ export default function UserCard(props: Props) {
   }
 
   return (
-    <>
+    <div className={styles.top}>
+      { /* button */ }
       <div
-        className={styles.top}
+        className={styles.button}
         onClick={() => setDisplayPopup(true)}
       >
         <div className={styles.user_name}>{props.user_name}</div>
       </div>
       { /* popup  */ }
-      <Popup
+      <PopupMenu
         display={displayPopup}
         setHidden={() => setDisplayPopup(false)}
       >
         <div>{props.user_name}</div>
         <a href='/' onClick={handleSignOut}>Sign Out</a>
-      </Popup>
-    </>
+      </PopupMenu>
+    </div>
   );
 }
