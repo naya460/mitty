@@ -16,7 +16,7 @@ export default function Popup(props: Props) {
         className={styles.background}
         onClick={props.setHidden}
       />
-      <div className={styles.popup}>
+      <div className={styles.popup} tabIndex={1}>
         {props.children}
       </div>
     </div>

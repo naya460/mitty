@@ -2,7 +2,8 @@ import { style } from "@vanilla-extract/css";
 
 export default {
   hidden: style({
-    visibility: "hidden",
+    opacity: "0",
+    pointerEvents: "none",
   }),
   top: style({
     position: "fixed",
@@ -14,6 +15,7 @@ export default {
     alignItems: "center",
     justifyContent: "center",
     zIndex: "10",
+    transition: "opacity 0.1s"
   }),
   background: style({
     position: "absolute",
