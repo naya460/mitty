@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
-import styles from "./index.css";
+import styles from './index.css';
 
 interface Props {
   user_name: string,
@@ -8,6 +9,8 @@ interface Props {
 
 export default function UserCard(props: Props) {
   const router = useRouter();
+
+  const [displayPopup, setDisplayPopup] = useState(false);
 
   // サインアウト処理
   const handleSignOut = async () => {
@@ -19,9 +22,27 @@ export default function UserCard(props: Props) {
   }
 
   return (
-    <div className={styles.top}>
-      <div className={styles.user_name}>User : {props.user_name}</div>
-      <a href='/' onClick={handleSignOut}>Sign Out</a>
-    </div>
+    <>
+      <div
+        className={styles.top}
+        onClick={() => setDisplayPopup(true)}
+      >
+        <div className={styles.user_name}>{props.user_name}</div>
+      </div>
+      { /* popup  */ }
+      <div className={`
+        ${styles.popup}
+        ${(!displayPopup) && styles.popup_hidden}
+      `}>
+        <div
+          className={styles.popup_background}
+          onClick={() => setDisplayPopup(false)}
+        />
+        <div className={styles.popup_contents}>
+          <div>{props.user_name}</div>
+          <a href='/' onClick={handleSignOut}>Sign Out</a>
+        </div>
+      </div>
+    </>
   );
 }
