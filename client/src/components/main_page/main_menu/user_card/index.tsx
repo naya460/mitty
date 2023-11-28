@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import styles from './index.css';
+import Popup from 'components/common/popup';
 
 interface Props {
   user_name: string,
@@ -30,19 +31,13 @@ export default function UserCard(props: Props) {
         <div className={styles.user_name}>{props.user_name}</div>
       </div>
       { /* popup  */ }
-      <div className={`
-        ${styles.popup}
-        ${(!displayPopup) && styles.popup_hidden}
-      `}>
-        <div
-          className={styles.popup_background}
-          onClick={() => setDisplayPopup(false)}
-        />
-        <div className={styles.popup_contents}>
-          <div>{props.user_name}</div>
-          <a href='/' onClick={handleSignOut}>Sign Out</a>
-        </div>
-      </div>
+      <Popup
+        display={displayPopup}
+        setHidden={() => setDisplayPopup(false)}
+      >
+        <div>{props.user_name}</div>
+        <a href='/' onClick={handleSignOut}>Sign Out</a>
+      </Popup>
     </>
   );
 }
