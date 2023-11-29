@@ -18,7 +18,7 @@ export default function GroupContents(props: Props) {
   return (
     <div className={`
       ${styles.top}
-      ${(props.selected_group_id == null) && styles.top_null}
+      ${(props.selected_group_id === null) && styles.top_null}
     `}>
       <div className={styles.header}>
         <button

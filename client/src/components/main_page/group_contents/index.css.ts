@@ -6,10 +6,13 @@ export default {
     flexDirection: "column",
     width: "100%",
     overflowX: "hidden",
+    transition: "opacity 0.1s",
   }),
   top_null: style({
+    opacity: "0",
     "@media": {
       "screen and (max-width: 40rem)": {
+        opacity: "1",
         width: "0",
         scale: "0",
       },
