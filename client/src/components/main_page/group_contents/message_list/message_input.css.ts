@@ -4,8 +4,8 @@ import { gvars } from "components/common/global_vars.css";
 export default {
   top: style({
     width: "100%",
-    marginTop: "0.5rem",
-    marginBottom: "1rem",
+    padding: "0.1rem 0",
+    paddingBottom: "0.3rem",
     flexBasis: "0",
   }),
   form: style({
@@ -18,7 +18,7 @@ export default {
     width: "100%",
     height: "1.5rem",
     resize: "none",
-    border: "2px",
+    border: "1px",
     borderStyle: "solid",
     borderColor: gvars.color.main._3,
     borderRadius: "0.5rem",
@@ -39,9 +39,13 @@ export default {
     backgroundColor: gvars.color.main._3,
     margin: "0.2rem 0",
     marginRight: "0.5rem",
-    ":hover": {
-      backgroundColor: gvars.color.main._2,
-    },
+    "@media": {
+      "(hover: hover)": {
+        ":hover": {
+          backgroundColor: gvars.color.main._2,
+        },
+      },
+    },    
     ":active": {
       backgroundColor: gvars.color.main._3,
     },

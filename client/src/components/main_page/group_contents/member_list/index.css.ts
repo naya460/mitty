@@ -12,7 +12,7 @@ export default {
     top: "0",
     bottom: "0",
     padding: "0.5rem 1rem",
-    backgroundColor: gvars.color.base._1,
+    backgroundColor: gvars.color.base._0,
     zIndex: "5",
     transform: "translate(calc(100% + 5px), 0)",
     transition: "transform 0.25s 50ms",

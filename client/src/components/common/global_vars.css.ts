@@ -12,8 +12,8 @@ export const gvars = createGlobalTheme(":root", {
     main: {
       _0: "#dff0df",
       _1: "#cfe0cf",
-      _2: "#b0e0b0",
-      _3: "#8fbf8f",
+      _2: "#c0f0c0",
+      _3: "#afdfaf",
     }
   },
 });
