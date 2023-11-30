@@ -25,8 +25,8 @@ export default {
     flexBasis: "0",
     flexGrow: "0",
     padding: "0.5rem",
-    backgroundColor: gvars.color.base._1,
-    boxShadow: "0 0 5px 1px rgba(0, 0, 0, 50%)",
+    backgroundColor: gvars.color.base._0,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 40%)",
     zIndex: "10",
   }),
   back_button: style({
