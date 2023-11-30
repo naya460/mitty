@@ -1,4 +1,5 @@
-import { style } from "@vanilla-extract/css"
+import { style } from "@vanilla-extract/css";
+import { gvars } from "components/common/global_vars.css";
 
 export default {
   top: style({
@@ -7,7 +8,7 @@ export default {
     height: "auto",
     minWidth: "15rem",
     maxWidth: "15rem",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: gvars.color.base._1,
     zIndex: "20",
     boxShadow: "0 0 2px 0 rgba(0, 0, 0, 50%)",
     padding: "0.5rem 0.2rem",

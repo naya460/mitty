@@ -1,4 +1,5 @@
-import { style } from "@vanilla-extract/css"
+import { style } from "@vanilla-extract/css";
+import { gvars } from "components/common/global_vars.css";
 
 export default {
   top: style({
@@ -11,7 +12,7 @@ export default {
     top: "0",
     bottom: "0",
     padding: "0.5rem 1rem",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: gvars.color.base._1,
     zIndex: "5",
     transform: "translate(calc(100% + 5px), 0)",
     transition: "transform 0.25s 50ms",
@@ -30,7 +31,7 @@ export default {
     right: "0",
     zIndex: "4",
     pointerEvents: "none",
-    backgroundColor: "#000000",
+    backgroundColor: gvars.color.base._4,
     opacity: "0%",
     transition: "opacity 0.3s",
   }),

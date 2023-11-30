@@ -1,4 +1,5 @@
-import { style } from "@vanilla-extract/css"
+import { style } from "@vanilla-extract/css";
+import { gvars } from "components/common/global_vars.css";
 
 export default {
 	top: style({
@@ -18,25 +19,25 @@ export default {
 		color: "black",
 	}),
 	top_not_selected: style({
-		backgroundColor: "#f0f0f0",
+		backgroundColor: gvars.color.base._1,
 		"@media" : {
 			"screen and (hover: hover)": {
 				":hover": {
-					backgroundColor: "#dff0df",
+					backgroundColor: gvars.color.main._0,
 				},
 			},
 		},
 	}),
 	top_selected: style({
-		backgroundColor: "#cfe0cf",
+		backgroundColor: gvars.color.main._1,
 		":hover": {
-			backgroundColor: "#cfe0cf",
+			backgroundColor: gvars.color.main._1,
 		},
 		"@media": {
 			"screen and (max-width: 40rem)": {
-				backgroundColor: "#f0f0f0",
+				backgroundColor: gvars.color.base._1,
 				":hover": {
-					backgroundColor: "#f0f0f0",
+					backgroundColor: gvars.color.base._1,
 				},
 			},
 		},

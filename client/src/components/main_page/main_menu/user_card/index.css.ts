@@ -1,4 +1,5 @@
 import { style } from "@vanilla-extract/css";
+import { gvars } from "components/common/global_vars.css";
 
 export default {
   top: style({
@@ -9,13 +10,13 @@ export default {
     borderRadius: "0.2rem",
     border: "0.1rem",
     borderStyle: "solid",
-    borderColor: "#bbbbbb",
+    borderColor: gvars.color.base._2,
     userSelect: "none",
     cursor: "pointer",
     "@media": {
       "screen and (hover: hover)": {
         ":hover": {
-          backgroundColor: "#dff0df",
+          backgroundColor: gvars.color.main._0,
         },
       },
     },

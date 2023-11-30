@@ -1,4 +1,5 @@
-import { style } from "@vanilla-extract/css";
+import { createVar, style } from "@vanilla-extract/css";
+import { gvars } from "components/common/global_vars.css";
 
 export default {
   top: style({
@@ -22,7 +23,7 @@ export default {
   popup: style({
     position: "absolute",
     borderRadius: "0.5rem",
-    backgroundColor: "#ffffff",
+    backgroundColor: gvars.color.base._0,
     left: 0,
     right: 0,
     height: "auto",

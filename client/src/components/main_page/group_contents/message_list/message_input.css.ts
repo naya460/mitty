@@ -1,4 +1,5 @@
-import { style } from "@vanilla-extract/css"
+import { style } from "@vanilla-extract/css";
+import { gvars } from "components/common/global_vars.css";
 
 export default {
   top: style({
@@ -19,9 +20,9 @@ export default {
     resize: "none",
     border: "2px",
     borderStyle: "solid",
-    borderColor: "#8fbf8f",
+    borderColor: gvars.color.main._3,
     borderRadius: "0.5rem",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: gvars.color.base._1,
     margin: "0.2rem 0.5rem",
     fontFamily: "sans-serif",
     fontSize: "1rem",
@@ -35,14 +36,14 @@ export default {
   send_button: style({
     border: "0",
     borderRadius: "0.5rem",
-    backgroundColor: "#a0d0a0",
+    backgroundColor: gvars.color.main._3,
     margin: "0.2rem 0",
     marginRight: "0.5rem",
     ":hover": {
-      backgroundColor: "#b0e0b0",
+      backgroundColor: gvars.color.main._2,
     },
     ":active": {
-      backgroundColor: "#8fbf8f",
+      backgroundColor: gvars.color.main._3,
     },
   }),
 };

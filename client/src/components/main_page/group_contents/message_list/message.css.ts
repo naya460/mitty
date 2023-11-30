@@ -1,4 +1,5 @@
-import { style } from "@vanilla-extract/css"
+import { style } from "@vanilla-extract/css";
+import { gvars } from "components/common/global_vars.css";
 
 export default {
   top: style({
@@ -31,7 +32,7 @@ export default {
   }),
   time: style({
     fontFamily: "sans-serif",
-    color: "#999999",
+    color: gvars.color.base._3,
     fontSize: "0.8rem",
   }),
   message_box: style({
@@ -43,14 +44,14 @@ export default {
     color: "black",
   }),
   message_box_mine: style({
-    backgroundColor: "#cfe0cf",
+    backgroundColor: gvars.color.main._1,
     borderBottomRightRadius: "0",
   }),
   message_box_mine_related: style({
     borderTopRightRadius: "0",
   }),
   message_box_member: style({
-    backgroundColor: "#ededed",
+    backgroundColor: gvars.color.base._1,
     borderBottomLeftRadius: "0",
   }),
   message_box_member_related: style({

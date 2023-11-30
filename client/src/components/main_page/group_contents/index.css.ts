@@ -1,4 +1,5 @@
-import { style } from "@vanilla-extract/css"
+import { style } from "@vanilla-extract/css";
+import { gvars } from "components/common/global_vars.css";
 
 export default {
   top: style({
@@ -24,7 +25,7 @@ export default {
     flexBasis: "0",
     flexGrow: "0",
     padding: "0.5rem",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: gvars.color.base._1,
     boxShadow: "0 0 5px 1px rgba(0, 0, 0, 50%)",
     zIndex: "10",
   }),
@@ -37,7 +38,7 @@ export default {
         width: "auto",
         scale: "1",
         aspectRatio: "1",
-        backgroundColor: "#8fbf8f",
+        backgroundColor: gvars.color.main._3,
         borderStyle: "solid",
         borderRadius: "0.5rem",
         fontSize: "auto",
@@ -46,7 +47,7 @@ export default {
       },
       "screen and (max-width: 40rem) and (hover: hover)": {
         ":hover": {
-          backgroundColor: "#dff0df",
+          backgroundColor: gvars.color.main._0,
         },
       },
     },
@@ -62,8 +63,8 @@ export default {
     flexGrow: "1",
   }),
   member_button: style({
-    backgroundColor: "#f0f0f0",
-    borderColor: "#8fbf8f",
+    backgroundColor: gvars.color.base._1,
+    borderColor: gvars.color.main._3,
     borderStyle: "solid",
     borderRadius: "0.5rem",
     fontSize: "auto",
@@ -72,7 +73,7 @@ export default {
     "@media": {
       "screen and (hover: hover)": {
         ":hover": {
-          backgroundColor: "#dff0df",
+          backgroundColor: gvars.color.main._0,
         },
       },
     },

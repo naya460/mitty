@@ -1,4 +1,5 @@
 import { style } from "@vanilla-extract/css"
+import { gvars } from "components/common/global_vars.css";
 
 export default {
   top: style({
@@ -56,7 +57,7 @@ export default {
   date_hline: style({
     height: "1px",
     width: "100%",
-    backgroundColor: "#bbbbbb",
+    backgroundColor: gvars.color.base._2,
   }),
   date_text: style({
     fontFamily: "sans-serif",
