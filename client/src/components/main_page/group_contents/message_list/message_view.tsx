@@ -22,14 +22,14 @@ export default function MessageView(props: Props) {
     selected_group_id: props.selected_group_id,
     onMessage: (elements) => {
       try {
-        setDisplayMessages([...displayMessages, ...createDisplay(elements)]);
+        setDisplayMessages([...createDisplay(elements)]);
       } catch {
         console.log("oh")
       }
     },
     onUpdate: (elements) => {
       try {
-        setDisplayMessages([...displayMessages, ...createDisplay(elements)]);
+        setDisplayMessages([...createDisplay(elements)]);
       } catch {
         console.log("oh")
       }
