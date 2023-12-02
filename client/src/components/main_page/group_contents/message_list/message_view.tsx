@@ -1,4 +1,4 @@
-import React, { useState, useRef, RefObject, createRef } from 'react'
+import React, { useState, useRef, RefObject, createRef, useEffect } from 'react'
 import { DateTime } from 'luxon'
 
 import Message from './message'
@@ -14,9 +14,9 @@ interface Props {
 
 export default function MessageView(props: Props) {
   const [displayMessages, setDisplayMessages] = useState<React.ReactElement[]>([]);
-  const message_divs = useRef<RefObject<HTMLDivElement>>();
-  const loading = useRef(false);
   const count = useRef(0);
+  const obs_ref = useRef();
+  const [reachEnd, setReachEnd] = useState(false);
 
   const [loadNext] = useElementList({
     selected_group_id: props.selected_group_id,
@@ -108,32 +108,45 @@ export default function MessageView(props: Props) {
     return tmp;
   }
 
-  const handle_scroll = async (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
-    // メッセージの参照を入手
-    const target = event.currentTarget;
-
-    // 上の方にいるかを計算
-    const will_load = target.scrollHeight - target.clientHeight * 2 <= -target.scrollTop;
-
-    // 上の方で、最後まで読み込まれておらず、現在読み込み中でないとき、読み込む
-    if (will_load && loading.current != null && loading.current == false) {
-      console.log("load")
-      loading.current = true;  // 読み込み開始にする
-      if (await loadNext()) {
-        loading.current = null;  // 読み込み完了にする
-      } else {
-        loading.current = false; // 読み込み可能にする
+  useEffect(() => {
+    // observerを作成
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        (async () => {
+          setReachEnd(await loadNext());
+        })();
       }
+    });
+
+    // ターゲットを登録
+    if (obs_ref.current == undefined) return;
+    observer.observe(obs_ref.current);
+
+    return () => {
+      if (obs_ref.current == undefined) return;
+      observer.unobserve(obs_ref.current)
     }
-  }
+  }, [obs_ref.current]);
 
   return (
-    <div
-      className={styles.message_list}
-      onScroll={(event) => handle_scroll(event)}
-    >
+    <div className={styles.message_list}>
       <div className={styles.messages_center}>
-        <div ref={message_divs.current} className={styles.messages}>
+        <div className={styles.messages}>
+          <div
+            ref={obs_ref}
+            style={{
+              height: "10rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >{(() => {
+            if (reachEnd) {
+              return "メッセージの最後です";
+            } else {
+              return "…… 読み込み中 ……";
+            }
+          })()}</div>
           {displayMessages}
         </div>
       </div>

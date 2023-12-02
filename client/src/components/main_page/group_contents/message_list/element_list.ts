@@ -145,7 +145,8 @@ export default function useElementList(props: Props): [ () => Promise<boolean> ]
   return [
     async () => {
       // 最後のメッセージを取得する
-      const length = element_list.current.get(props.selected_group_id).length;
+      const length = element_list.current.get(props.selected_group_id)?.length;
+      if (length == undefined) return;
       const last_message = element_list.current.get(props.selected_group_id)[length - 1] as MessageElement;
       // メッセージを取得して、画面を更新する
       if ((await ref_getMessages.current(last_message.message_id)).length != 0) {
