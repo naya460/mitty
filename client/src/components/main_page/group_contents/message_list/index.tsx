@@ -1,12 +1,9 @@
-import React, { useState, useRef, RefObject, createRef, useEffect } from 'react'
-import { DateTime } from 'luxon'
+import React, { useState } from 'react';
 
-import Message from './message'
-import MessageInput from './message_input'
-import useElementList, { MessageElement, DateElement, Element } from './element_list'
+import MessageInput from './message_input';
 
-import styles from './index.css'
-import MessageView from './message_view'
+import styles from './index.css';
+import MessageView from './message_view';
 
 interface Props {
   user_name: string,
@@ -29,13 +26,12 @@ export default function MessageList(props: Props) {
       <div className={styles.group_list}>
         {Array.from(messageViews).map(value => {
           return (
-            <div key={value[0]} className={`${(props.selected_group_id !== value[0]) && styles.message_list_hidden}`}>
+            <div key={value[0]} className={`${(props.selected_group_id !== value[0]) && styles.view_hidden}`}>
               {value[1]}
             </div>
           )
         })}
       </div>
-      
       <MessageInput
         selected_group_id={props.selected_group_id}
       />

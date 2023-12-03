@@ -1,11 +1,10 @@
-import React, { useState, useRef, RefObject, createRef, useEffect } from 'react'
-import { DateTime } from 'luxon'
+import React, { useState, useRef, useEffect } from 'react';
+import { DateTime } from 'luxon';
 
-import Message from './message'
-import MessageInput from './message_input'
-import useElementList, { MessageElement, DateElement, Element } from './element_list'
+import Message from './message';
+import useElementList, { MessageElement, Element } from './element_list';
 
-import styles from './index.css'
+import styles from './message_view.css';
 
 interface Props {
   user_name: string,
@@ -129,17 +128,12 @@ export default function MessageView(props: Props) {
   }, [obs_ref.current]);
 
   return (
-    <div className={styles.message_list}>
-      <div className={styles.messages_center}>
-        <div className={styles.messages}>
+    <div className={styles.top}>
+      <div className={styles.centering}>
+        <div className={styles.message_list}>
           <div
             ref={obs_ref}
-            style={{
-              height: "10rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+            className={styles.list_end}
           >{(() => {
             if (reachEnd) {
               return "メッセージの最後です";
