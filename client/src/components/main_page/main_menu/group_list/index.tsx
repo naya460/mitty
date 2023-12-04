@@ -2,8 +2,8 @@ import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react';
 import styles from './index.css'
 
-import CreatePostRequest from 'components/common/create_post_request'
 import Group from './group'
+import useWebSocket from 'components/common/useWebSocket';
 
 interface Props {
   setSelectedGroupData: (id: string, name: string) => void;
@@ -15,20 +15,24 @@ export default function GroupList(props: Props) {
   const [groupList, setGroupList] = useState<{ id: string, name: string}[]>(null);
   const [displayGroups, setDisplayGroups] = useState(null);
 
+  const [socketSend] = useWebSocket(
+    (message) => {
+      console.log(message);
+    }
+  );
+
   // グループの作成関数
   const handleCreateGroup = async (event) => {
     event.preventDefault();
 
     // 送信するリクエストを作成
-    const options = CreatePostRequest({
+    const message = {
+      route: 'group/create',
       group_name: event.target.group_name.value
-    });
-
-    await fetch(
-      `http://${location.hostname}:9090/group/create`,
-      { ...options, mode: 'cors', credentials: 'include' }
-    );
-    router.reload();
+    }
+    
+    // メッセージを送信
+    socketSend(message);
   }
 
   // 最初に読み込まれたとき、クエリを削除

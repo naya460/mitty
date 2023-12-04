@@ -5,6 +5,7 @@ import redis from "lib/redis";
 import { authUserSession } from "common/auth_user";
 import wsSendMessageRoute from "./message/send";
 import wsSubscribeRoute from "./subscribe";
+import wsCreateGroupRoute from "./group/create";
 
 const clients = new Map<string, {ws_id: string, ws: WebSocket}[]>();
 
@@ -57,6 +58,11 @@ export function createWebSocketServer(server: FastifyInstance) {
 
       if (json_message.route === 'message/send') {
         wsSendMessageRoute(json_message, user_id, clients);
+        return;
+      }
+
+      if (json_message.route === 'group/create') {
+        wsCreateGroupRoute(json_message, user_id, clients);
         return;
       }
     });

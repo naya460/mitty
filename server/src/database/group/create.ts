@@ -25,10 +25,9 @@ import getUserId from 'database/user/get_user_id';
 export default async function createGroup(
   user_id: string,
   group_name: string,
-): Promise<boolean> {
-
+): Promise<null | string> {
   // グループを追加
-  await prisma.group.create({
+  const created_data = await prisma.group.create({
     data: {
       group_name: group_name,
       members: {
@@ -39,5 +38,5 @@ export default async function createGroup(
     },
   });
 
-  return true;
+  return created_data.group_id;
 }
