@@ -23,7 +23,7 @@ export const createGroupRoute: UseRouteHandlerMethod<{
 
   // グループを追加
   const success = await createGroup(auth.user_id, req.body.group_name);
-  if (success === false) {
+  if (success === null) {
     res.status(400);
     return;
   }
