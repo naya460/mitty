@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import styles from './index.css'
 
@@ -89,22 +89,6 @@ export default function GroupList(props: Props) {
         // グループの表示を追加
         display_groups.push(
           <Group
-            onClick={() => {
-              // router optionを作成
-              const option = {
-                pathname: '/',
-                query: { group_id: groups[i].group_id }
-              };
-
-              // グループを選択していないとき、ページを追加して移動
-              if (router.query.group_id == null) {
-                router.push(option);
-              }
-              // グループを選択しているとき、ページを置き換え
-              else {
-                router.replace(option);
-              }
-            }}
             group_name={groups[i].group_name}
             group_id={groups[i].group_id}
             selected_group_id={props.selected_group_id}

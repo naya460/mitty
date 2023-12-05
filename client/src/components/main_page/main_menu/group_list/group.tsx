@@ -1,15 +1,16 @@
 import { useRef, useState } from 'react';
-import styles from './group.css'
+import { useRouter } from 'next/router';
+import styles from './group.css';
 import useWebSocket from 'components/common/useWebSocket';
 
 interface Props {
-  onClick: () => void;
   group_name: string;
   group_id: string;
   selected_group_id: string;
 }
 
 export default function Group(props: Props) {
+  const router = useRouter();
   const selected = useRef<boolean>(false);
   const [newMessageCount, setNewMessageCount] = useState(0);
   
@@ -30,7 +31,22 @@ export default function Group(props: Props) {
 
   // ボタンを押したとき
   const onClick = () => {
-    props.onClick();
+    // router optionを作成
+    const option = {
+      pathname: '/',
+      query: { group_id: props.group_id }
+    };
+
+    // グループを選択していないとき、ページを追加して移動
+    if (router.query.group_id == null) {
+      router.push(option);
+    }
+    // グループを選択しているとき、ページを置き換え
+    else {
+      router.replace(option);
+    }
+
+    // 未読メッセージ数を0にする
     setNewMessageCount(() => 0);
   }
   
