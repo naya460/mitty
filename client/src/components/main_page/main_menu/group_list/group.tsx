@@ -6,15 +6,12 @@ import useWebSocket from 'components/common/useWebSocket';
 interface Props {
   group_name: string;
   group_id: string;
-  selected_group_id: string;
+  is_selected: boolean;
 }
 
 export default function Group(props: Props) {
   const router = useRouter();
-  const selected = useRef<boolean>(false);
   const [newMessageCount, setNewMessageCount] = useState(0);
-  
-  selected.current = props.group_id == props.selected_group_id;
   
   // メッセージを受信したとき、数を増やす
   useWebSocket((message) => {
@@ -23,7 +20,7 @@ export default function Group(props: Props) {
       return;
     }
     // 選択されているとき、無視
-    if (selected.current) {
+    if (props.is_selected) {
       return;
     }
     setNewMessageCount((prev) => prev + 1);
@@ -54,7 +51,7 @@ export default function Group(props: Props) {
     <button
       className={`
         ${styles.top}
-        ${(selected.current)? styles.top_selected : styles.top_not_selected}
+        ${(props.is_selected)? styles.top_selected : styles.top_not_selected}
       `}
       onClick={onClick}
     >

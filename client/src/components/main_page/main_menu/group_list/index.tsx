@@ -13,7 +13,6 @@ interface Props {
 export default function GroupList(props: Props) {
   const router = useRouter();
   const [groupList, setGroupList] = useState<{ id: string, name: string}[]>(null);
-  const [displayGroups, setDisplayGroups] = useState(null);
 
   const [socketSend] = useWebSocket(
     (message) => {
@@ -61,7 +60,7 @@ export default function GroupList(props: Props) {
     );
   }, [router.query])
 
-  // 選択されたグループが変更されたら、表示を変更
+  // 最初にグループの一覧を読み込む
   useEffect(() => {
     (async () => {
       // グループを取得
@@ -70,9 +69,9 @@ export default function GroupList(props: Props) {
         { mode: 'cors', credentials: 'include' }
       );
       const groups = await res.json();
+
       // グループの表示を作成
       let group_list = [];
-      let display_groups = [];
       for (let i in groups) {
         // グループの一覧に追加
         group_list.push({
@@ -86,20 +85,10 @@ export default function GroupList(props: Props) {
             return list;
           }()
         });
-        // グループの表示を追加
-        display_groups.push(
-          <Group
-            group_name={groups[i].group_name}
-            group_id={groups[i].group_id}
-            selected_group_id={props.selected_group_id}
-            key={i}
-          />
-        )
       }
       setGroupList(group_list);
-      setDisplayGroups(display_groups);
     })()
-  }, [props.selected_group_id])
+  }, []);
 
   return (
     <div className={styles.top}>
@@ -107,7 +96,16 @@ export default function GroupList(props: Props) {
         <input name='group_name' type='text'/>
         <button type='submit'>Create Group</button>
       </form>
-      {displayGroups}
+      {groupList?.map((data) => {
+        return (
+          <Group
+            group_name={data.name}
+            group_id={data.id}
+            is_selected={data.id === props.selected_group_id}
+            key={data.id}
+          />
+        )
+      })}
     </div>
   )
 }
