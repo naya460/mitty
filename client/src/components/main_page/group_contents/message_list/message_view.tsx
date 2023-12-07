@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { DateTime } from 'luxon';
 
 import Message from './message';
-import useElementList, { MessageElement, Element } from './element_list';
+import useElementList, { Element } from './element_list';
 
 import styles from './message_view.css';
 
@@ -18,7 +18,7 @@ export default function MessageView(props: Props) {
   const [reachEnd, setReachEnd] = useState(false);
 
   const [loadNext] = useElementList({
-    selected_group_id: props.selected_group_id,
+    group_id: props.selected_group_id,
     onMessage: (elements) => {
       try {
         setDisplayMessages([...createDisplay(elements)]);
@@ -42,11 +42,11 @@ export default function MessageView(props: Props) {
 
     // 表示を作成
     let tmp: React.ReactElement[] = new Array;
-    let last_message: MessageElement = null;
+    let last_message: Element = null;
     messages.slice().reverse().forEach((value) => {
       // メッセージのとき
-      if (typeof (value as MessageElement).message_text === "string") {
-        value = value as MessageElement;
+      if (typeof (value as Element).message_text === "string") {
+        value = value as Element;
 
         // 日付が変わったとき、日付の線を表示
         if (last_message != null) {
