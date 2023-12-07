@@ -7,18 +7,18 @@ import useWebSocket from 'components/common/useWebSocket'
 
 function reducer(
   state: { element_list: Element[] },
-  action: { type: 'push', element: Element, oldest?: boolean }
+  action: { type: 'push', element: Element[], oldest?: boolean }
 ) {
   switch (action.type) {
     // 要素を追加
     case 'push': {
       // 末尾に追加
       if (action.oldest === true) {
-        return { element_list: [ ...state.element_list, action.element ] };
+        return { element_list: [ ...state.element_list, ...action.element ] };
       }
       // 先頭に追加
       else {
-        return { element_list: [ action.element, ...state.element_list ] };
+        return { element_list: [ ...action.element, ...state.element_list ] };
       }
     }
   }
@@ -48,7 +48,7 @@ export default function useElementList(props: Props): [ () => Promise<boolean> ]
 
   // 要素を追加する
   const addElement = (
-    element: Element,
+    element: Element[],
     oldest?: boolean,
   ) => {
     dispatch({type: 'push', element, oldest});
@@ -62,7 +62,7 @@ export default function useElementList(props: Props): [ () => Promise<boolean> ]
     }
     
     // メッセージ要素を追加
-    addElement(message.group_id, message);
+    addElement([message]);
     
     // コールバック関数を呼ぶ
     if (props.onMessage != null) {
@@ -91,11 +91,14 @@ export default function useElementList(props: Props): [ () => Promise<boolean> ]
     }
     const messages = await res.json();
 
-    // メッセージの表示を作成
+    // メッセージのリストを作成
+    const tmp: Element[] = [];
     for (let i in messages) {
-      // メッセージ要素を追加
-      addElement(messages[i], true);
+      tmp.push(messages[i]);
     }
+
+    // 新しいElementを追加
+    addElement(tmp, true);
     
     if (messages.length == 0) {
       return { length: messages.length };
