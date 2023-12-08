@@ -12,6 +12,9 @@ interface Props {
 export default function Group(props: Props) {
   const router = useRouter();
   const [newMessageCount, setNewMessageCount] = useState(0);
+
+  const selected_ref = useRef(props.is_selected);
+  selected_ref.current = props.is_selected;
   
   // メッセージを受信したとき、数を増やす
   useWebSocket((message) => {
@@ -20,7 +23,7 @@ export default function Group(props: Props) {
       return;
     }
     // 選択されているとき、無視
-    if (props.is_selected) {
+    if (selected_ref.current) {
       return;
     }
     setNewMessageCount((prev) => prev + 1);
