@@ -17,11 +17,26 @@ export default {
     transform: "translate(calc(100% + 5px), 0)",
     transition: "transform 0.25s 50ms",
     boxShadow: "0 0 5px 0 rgba(0, 0, 0, 50%)",
+    "@media": {
+      "screen and (min-width: 60rem)": {
+        transition: "none",
+      }
+    }
   }),
   top_display: style({
     scale: "1",
     minWidth: "10rem",
     transform: "translate(0, 0)",
+    "@media": {
+      "screen and (min-width: 60rem)": {
+        display: "block",
+        position: "initial",
+        transform: "translate(0, 0)",
+        backgroundColor: gvars.color.base._1,
+        boxShadow: "none",
+        paddingRight: "2rem",
+      }
+    }
   }),
   background: style({
     position: "absolute",
@@ -40,6 +55,12 @@ export default {
     scale: "1",
     opacity: "30%",
     pointerEvents: "initial",
+    "@media": {
+      "screen and (min-width: 60rem)": {
+        opacity: "0",
+        pointerEvents: "none",
+      }
+    }
   }),
   title_text: style({
     fontFamily: "sans-serif",
