@@ -24,7 +24,7 @@ export default {
   user_name: style({
     fontSize: "1rem",
     fontFamily: "sans-serif",
-    color: "blacK",
+    color: gvars.color.font._0,
   }),
   popup_hidden: style({
     visibility: "hidden",

@@ -16,7 +16,7 @@ export default {
 		borderRadius: "0.25rem",
 		fontSize: "1rem",
 		fontFamily: "sans-serif",
-		color: "black",
+		color: gvars.color.font._0,
 	}),
 	top_not_selected: style({
 		backgroundColor: gvars.color.base._1,

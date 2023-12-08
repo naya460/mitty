@@ -17,6 +17,7 @@ export default {
     transform: "translate(calc(100% + 5px), 0)",
     transition: "transform 0.25s 50ms",
     boxShadow: "0 0 5px 0 rgba(0, 0, 0, 50%)",
+    color: gvars.color.font._0,
     "@media": {
       "screen and (min-width: 60rem)": {
         transition: "none",
@@ -64,7 +65,7 @@ export default {
   }),
   title_text: style({
     fontFamily: "sans-serif",
-    color: "black",
+    color: gvars.color.font._0,
     fontSize: "1.2rem",
     width: "100%",
     textAlign: "center",

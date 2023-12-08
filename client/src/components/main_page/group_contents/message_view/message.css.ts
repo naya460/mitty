@@ -41,11 +41,12 @@ export default {
     borderRadius: "0.5rem",
     overflowWrap: "break-word",
     fontFamily: "sans-serif",
-    color: "black",
+    color: gvars.color.font._0,
   }),
   message_box_mine: style({
     backgroundColor: gvars.color.main._1,
     borderBottomRightRadius: "0",
+    color: gvars.color.font._0,
   }),
   message_box_mine_related: style({
     borderTopRightRadius: "0",

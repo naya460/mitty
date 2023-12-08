@@ -1,4 +1,4 @@
-import { createVar, style } from "@vanilla-extract/css";
+import { style } from "@vanilla-extract/css";
 import { gvars } from "components/common/global_vars.css";
 
 export default {
@@ -32,6 +32,7 @@ export default {
     boxSizing: "border-box",
     zIndex: "20",
     transition: "opacity 0.1s",
+    color: gvars.color.font._0,
   }),
   popup_hidden: style({
     opacity: "0",

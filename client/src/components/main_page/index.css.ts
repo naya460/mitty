@@ -1,4 +1,5 @@
 import { style } from "@vanilla-extract/css"
+import { gvars } from "components/common/global_vars.css";
 
 export default {
   top: style({
@@ -9,6 +10,7 @@ export default {
     flexBasis: "1",
     flexGrow: "1",
     overflowX: "hidden",
+    backgroundColor: gvars.color.base._0,
   }),
   main_view: style({
     width: "100%",

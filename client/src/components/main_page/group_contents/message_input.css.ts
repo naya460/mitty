@@ -26,7 +26,7 @@ export default {
     margin: "0.2rem 0.5rem",
     fontFamily: "sans-serif",
     fontSize: "1rem",
-    color: "black",
+    color: gvars.color.font._0,
     padding: "0.5rem",
     lineHeight: "1.5rem",
     ":focus-visible": {
@@ -39,6 +39,7 @@ export default {
     backgroundColor: gvars.color.main._3,
     margin: "0.2rem 0",
     marginRight: "0.5rem",
+    color: gvars.color.font._0,
     "@media": {
       "(hover: hover)": {
         ":hover": {

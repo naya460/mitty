@@ -39,7 +39,7 @@ export default {
     display: "flex",
     fontSize: "1.2rem",
     fontFamily: "sans-serif",
-    color: "black",
+    color: gvars.color.font._0,
     height: "100%",
     marginLeft: "0.5rem",
     alignItems: "center",
@@ -51,7 +51,7 @@ export default {
     borderRadius: "0.5rem",
     fontSize: "auto",
     fontFamily: "sans-serif",
-    color: "black",
+    color: gvars.color.font._0,
     "@media": {
       "screen and (hover: hover)": {
         ":hover": {
