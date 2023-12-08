@@ -17,6 +17,7 @@ export default {
     }
   }),
   top_null: style({
+    display: 'none',
     opacity: 0,
     "@media": {
       "screen and (max-width: 40rem)": {

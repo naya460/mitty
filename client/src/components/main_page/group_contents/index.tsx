@@ -1,38 +1,32 @@
-import { useContext, useState } from 'react'
+import { useContext, useRef } from 'react';
 
-import MessageList from './message_list'
-import MemberList from './member_list'
-
-import styles from './index.css'
 import { MainContext } from '../contexts';
+import GroupContentsContainer from './container';
 
 export default function GroupContents() {
-  const [displayMemberList, setMemberList] = useState(false);
-  const { group_id, group_name, unset_group } = useContext(MainContext);
+  const containers = useRef<{group_id: string, group_name: string}[]>([]);
+  const { group_id, group_name } = useContext(MainContext);
+
+  if (containers.current.some(value => { return value.group_id === group_id }) === false) {
+    if (group_id !== null) {
+      containers.current.push({group_id, group_name});
+    }
+  }
 
   return (
-    <div className={`
-      ${styles.top}
-      ${(group_id === null) && styles.top_null}
-    `}>
-      <div className={styles.header}>
-        <button
-          className={styles.back_button}
-          onClick={unset_group}
-        >←</button>
-        <div className={styles.group_name}>{group_name}</div>
-        <button
-          className={styles.member_button}
-          onClick={() => setMemberList(!displayMemberList)}
-        >Member</button>
-      </div>
-      <div className={styles.contents}>
-        <MessageList />
-        <MemberList
-          display={displayMemberList}
-          toggleMessageList={() => setMemberList(!displayMemberList)}
+    <div style={{
+      display: "flex",
+      width: "100%",
+      height: "100%"
+    }}>{
+      containers.current.map((container) => (
+        <GroupContentsContainer
+          key={container.group_id}
+          group_id={container.group_id}
+          group_name={container.group_name}
+          is_selected={group_id === container.group_id}
         />
-      </div>
-    </div>
-  )
+      ))
+    }</div>
+  );
 }
