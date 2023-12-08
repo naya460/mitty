@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 import Message from './message';
 import useElementList, { Element } from './element_list';
 
-import styles from './message_view.css';
+import styles from './index.css';
 import { MainContext } from 'components/main_page/contexts';
 
 interface Props {

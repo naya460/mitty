@@ -3,9 +3,9 @@ import { useContext, useState } from 'react';
 import styles from './index.css';
 import { MainContext } from '../contexts';
 
-import MessageView from './message_list/message_view';
+import MessageView from './message_view';
 import MemberList from './member_list';
-import MessageInput from './message_list/message_input';
+import MessageInput from './message_input';
 
 type Props = {
   group_id: string,
