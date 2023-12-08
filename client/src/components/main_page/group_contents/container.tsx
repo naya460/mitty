@@ -1,6 +1,6 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 
-import styles from './index.css';
+import styles from './container.css';
 
 import MessageView from './message_view';
 import MemberList from './member_list';
@@ -25,14 +25,16 @@ export default function GroupContentsContainer(props: Props) {
         group_name={props.group_name}
         toggleMemberList={() => setMemberList(!displayMemberList)}
       />
-      <div className={styles.contents}>
-        <MessageView group_id={props.group_id} />
+      <div className={styles.side}>
+        <div className={styles.contents}>
+          <MessageView group_id={props.group_id} />
+          <MessageInput />
+        </div>
         <MemberList
           display={displayMemberList}
           toggleMessageList={() => setMemberList(!displayMemberList)}
         />
       </div>
-      <MessageInput />
     </div>
   )
 }

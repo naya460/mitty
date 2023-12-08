@@ -3,7 +3,6 @@ import { gvars } from "components/common/global_vars.css";
 
 export default {
   top: style({
-    position: "absolute",
     display: "flex",
     height: "100%",
     width: "100%",
