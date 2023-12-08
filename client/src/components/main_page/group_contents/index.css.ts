@@ -20,7 +20,7 @@ export default {
     opacity: 0,
     "@media": {
       "screen and (max-width: 40rem)": {
-        opacity: 1,
+        opacity: 0,
         transform: "translate(0, 0)",
       },
     },
