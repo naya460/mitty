@@ -1,18 +1,15 @@
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import styles from './index.css'
 
 import Group from './group'
 import useWebSocket from 'components/common/useWebSocket';
+import { MainContext } from 'components/main_page/contexts';
 
-interface Props {
-  setSelectedGroupData: (id: string, name: string) => void;
-  selected_group_id: string;
-}
-
-export default function GroupList(props: Props) {
+export default function GroupList() {
   const router = useRouter();
   const [groupList, setGroupList] = useState<{ id: string, name: string}[]>(null);
+  const { group_id, set_group } = useContext(MainContext);
 
   const [socketSend] = useWebSocket(
     (message) => {
@@ -49,12 +46,12 @@ export default function GroupList(props: Props) {
 
     // クエリが指定されていないとき、選択を解除
     if (router.query.group_id as string == null) {
-      props.setSelectedGroupData(null, null);
+      set_group(null, null);
       return;
     }
     // 表示を更新
     const id = router.query.group_id as string;
-    props.setSelectedGroupData(
+    set_group(
       id,
       groupList.find(list => list.id === id).name
     );
@@ -101,7 +98,7 @@ export default function GroupList(props: Props) {
           <Group
             group_name={data.name}
             group_id={data.id}
-            is_selected={data.id === props.selected_group_id}
+            is_selected={data.id === group_id}
             key={data.id}
           />
         )

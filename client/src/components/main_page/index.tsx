@@ -1,10 +1,11 @@
-import { useState } from 'react'
-import { useRouter } from 'next/router'
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 
-import MainMenu from './main_menu'
-import GroupContents from './group_contents'
+import MainMenu from './main_menu';
+import GroupContents from './group_contents';
+import { MainContext } from './contexts';
 
-import styles from './index.css'
+import styles from './index.css';
 
 interface Props {
   user_name: string;
@@ -24,17 +25,16 @@ export default function MainPage(props: Props) {
   return (
     <div className={styles.top}>
       <div className={styles.main_view}>
-        <MainMenu
-          user_name={props.user_name}
-          setSelectedGroupData={handleSetSelectedGroupData}
-          selected_group_id={selectedGroupId}
-        />
-        <GroupContents
-          user_name={props.user_name}
-          selected_group_id={selectedGroupId}
-          selected_group_name={selectedGroupName}
-          clearSelectedGroup={() => router.back()}
-        />
+        <MainContext.Provider value={{
+          user_name: props.user_name,
+          group_id: selectedGroupId,
+          group_name: selectedGroupName,
+          set_group: handleSetSelectedGroupData,
+          unset_group: () => router.back(),
+        }}>
+          <MainMenu />
+          <GroupContents />
+        </MainContext.Provider>
       </div>
     </div>
   );

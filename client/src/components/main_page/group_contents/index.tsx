@@ -1,45 +1,36 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 
 import MessageList from './message_list'
 import MemberList from './member_list'
 
 import styles from './index.css'
+import { MainContext } from '../contexts';
 
-interface Props {
-  user_name: string
-  selected_group_id: string
-  selected_group_name: string
-  clearSelectedGroup: () => void;
-}
-
-export default function GroupContents(props: Props) {
+export default function GroupContents() {
   const [displayMemberList, setMemberList] = useState(false);
+  const { group_id, group_name, unset_group } = useContext(MainContext);
 
   return (
     <div className={`
       ${styles.top}
-      ${(props.selected_group_id === null) && styles.top_null}
+      ${(group_id === null) && styles.top_null}
     `}>
       <div className={styles.header}>
         <button
           className={styles.back_button}
-          onClick={props.clearSelectedGroup}
+          onClick={unset_group}
         >←</button>
-        <div className={styles.group_name}>{props.selected_group_name}</div>
+        <div className={styles.group_name}>{group_name}</div>
         <button
           className={styles.member_button}
           onClick={() => setMemberList(!displayMemberList)}
         >Member</button>
       </div>
       <div className={styles.contents}>
-        <MessageList
-          user_name={props.user_name}
-          selected_group_id={props.selected_group_id}
-        />
+        <MessageList />
         <MemberList
           display={displayMemberList}
           toggleMessageList={() => setMemberList(!displayMemberList)}
-          selected_group_id={props.selected_group_id}
         />
       </div>
     </div>

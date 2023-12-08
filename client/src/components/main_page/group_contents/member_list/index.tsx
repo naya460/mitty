@@ -1,27 +1,28 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 
 import CreatePostRequest from 'components/common/create_post_request'
 
 import styles from './index.css'
+import { MainContext } from 'components/main_page/contexts';
 
 interface Props {
   display: boolean;
   toggleMessageList: () => void;
-  selected_group_id: string;
 }
 
 export default function MemberList(props: Props) {
   const [members, setMembers] = useState(null);
+  const { group_id } = useContext(MainContext);
 
   // メンバーを取得
   useEffect(() => {
     // グループが指定されていないとき、何もしない
-    if (props.selected_group_id == null) return;
+    if (group_id == null) return;
 
     (async () => {
       // 送信するリクエストを作成
       const options = CreatePostRequest({
-        group_id: props.selected_group_id
+        group_id: group_id
       });
 
       // メンバーを取得
@@ -40,7 +41,7 @@ export default function MemberList(props: Props) {
       // メンバー一覧を更新
       setMembers(list);
     })()
-  }, [props.selected_group_id]);
+  }, [group_id]);
 
   // ユーザー追加処理
   const handleSubmit = async (event) => {
@@ -48,7 +49,7 @@ export default function MemberList(props: Props) {
 
     // メンバーを追加
     const option = CreatePostRequest({
-      group_id: props.selected_group_id,
+      group_id: group_id,
       add_user_name: event.target.user_name.value
     });
     const res = await fetch(

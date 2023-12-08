@@ -1,15 +1,13 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 import styles from './index.css';
 import PopupMenu from 'components/common/popup_menu';
+import { MainContext } from 'components/main_page/contexts';
 
-interface Props {
-  user_name: string,
-}
-
-export default function UserCard(props: Props) {
+export default function UserCard() {
   const router = useRouter();
+  const { user_name } = useContext(MainContext);
 
   const [displayPopup, setDisplayPopup] = useState(false);
 
@@ -29,14 +27,14 @@ export default function UserCard(props: Props) {
         className={styles.button}
         onClick={() => setDisplayPopup(true)}
       >
-        <div className={styles.user_name}>{props.user_name}</div>
+        <div className={styles.user_name}>{user_name}</div>
       </div>
       { /* popup  */ }
       <PopupMenu
         display={displayPopup}
         setHidden={() => setDisplayPopup(false)}
       >
-        <div>{props.user_name}</div>
+        <div>{user_name}</div>
         <a href='/' onClick={handleSignOut}>Sign Out</a>
       </PopupMenu>
     </div>

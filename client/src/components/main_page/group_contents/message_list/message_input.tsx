@@ -1,25 +1,24 @@
-import react, { useState } from 'react'
+import react, { useContext, useState } from 'react';
 
 import useWebSocket from 'components/common/useWebSocket';
 
-import styles from './message_input.css'
+import styles from './message_input.css';
+import { MainContext } from 'components/main_page/contexts';
 
-interface Props {
-  selected_group_id: string;
-}
-
-export default function MessageInput(props: Props) {
+export default function MessageInput() {
   const [text, setText] = useState('');
   const [lineCount, setLineCount] = useState(1);
 
   const [socketSend] = useWebSocket();
+
+  const { group_id } = useContext(MainContext);
 
   const sendMessage = () => {
     // 送信するリクエストを作成
     const message = {
       route: 'message/send',
       message: text,
-      group_id: props.selected_group_id
+      group_id: group_id
     };
 
     // メッセージを送信
@@ -53,7 +52,7 @@ export default function MessageInput(props: Props) {
     }
   }
 
-  const disabled = props.selected_group_id == null;
+  const disabled = group_id == null;
 
   return (
     <div className={styles.top}>
