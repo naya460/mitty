@@ -21,20 +21,19 @@ export default {
     "@media": {
       "screen and (max-width: 40rem)": {
         maxWidth: "100%",
-        minWidth: "0%",
+        width: "100%",
         flexBasis: "1",
-        flexGrow: "1",
         backgroundColor: "initial",
         padding: "0.5rem 1rem",
+        transition: "transform 0.4s ease-in-out, opacity 0.2s ease-in-out",
       },
     },
   }),
   top_selected: style({
     "@media": {
       "screen and (max-width: 40rem)": {
-        width: "0",
-        padding: "0",
-        scale: "0",
+        opacity: 0,
+        transform: "translate(-100%, 0)",
       }
     }
   }),

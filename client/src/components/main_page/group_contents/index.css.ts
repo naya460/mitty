@@ -8,14 +8,20 @@ export default {
     width: "100%",
     overflowX: "hidden",
     transition: "opacity 0.1s",
-  }),
-  top_null: style({
-    opacity: "0",
     "@media": {
       "screen and (max-width: 40rem)": {
-        opacity: "1",
-        width: "0",
-        scale: "0",
+        boxSizing: "border-box",
+        transform: "translate(-100%, 0)",
+        transition: "transform 0.4s ease-in-out, opacity 0.2s ease-in-out"
+      }
+    }
+  }),
+  top_null: style({
+    opacity: 0,
+    "@media": {
+      "screen and (max-width: 40rem)": {
+        opacity: 1,
+        transform: "translate(0, 0)",
       },
     },
   }),
