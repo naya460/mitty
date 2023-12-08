@@ -8,7 +8,7 @@ import { MainContext } from 'components/main_page/contexts';
 
 export default function MessageList() {
   const [messageViews, setMessageViews] = useState(new Map<string, React.ReactElement>());
-  const { user_name, group_id } = useContext(MainContext);
+  const { group_id } = useContext(MainContext);
 
   const last_group_id = useRef(group_id);
   if (group_id !== null) {
@@ -18,7 +18,7 @@ export default function MessageList() {
   if (messageViews.has(group_id) === false) {
     messageViews.set(
       group_id,
-      (<MessageView user_name={user_name} selected_group_id={group_id} />)
+      (<MessageView group_id={group_id} />)
     );
     setMessageViews(messageViews);
   }

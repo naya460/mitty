@@ -1,14 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { DateTime } from 'luxon';
 
 import Message from './message';
 import useElementList, { Element } from './element_list';
 
 import styles from './message_view.css';
+import { MainContext } from 'components/main_page/contexts';
 
 interface Props {
-  user_name: string,
-  selected_group_id: string
+  group_id: string,
 }
 
 export default function MessageView(props: Props) {
@@ -16,9 +16,10 @@ export default function MessageView(props: Props) {
   const count = useRef(0);
   const obs_ref = useRef();
   const [reachEnd, setReachEnd] = useState(false);
+  const { user_name } = useContext(MainContext);
 
   const [loadNext] = useElementList({
-    group_id: props.selected_group_id,
+    group_id: props.group_id,
     onMessage: (elements) => {
       try {
         setDisplayMessages([...createDisplay(elements)]);
@@ -93,7 +94,7 @@ export default function MessageView(props: Props) {
           <Message
             key={count.current}
             display_name={value.author.display_name}
-            mine={props.user_name == value.author.display_name}
+            mine={user_name == value.author.display_name}
             time={value.time}
             status={status}
           >
