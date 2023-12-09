@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react'
 
 import AuthenticationPage from 'components/authentication'
 import MainPage from 'components/main_page'
+import { themeLight, themeDark } from 'components/common/global_vars.css';
 
 export default function IndexPage() {
   const [json, setJson] = useState(null);
   const [page, setPage] = useState(<></>);
+  const [darkmode, setDarkmode] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -30,8 +32,26 @@ export default function IndexPage() {
     })();
   }, []);
 
+  // ダークモードの判定
+  useEffect(() => {
+    // ダークモードのクエリを取得
+    const dark_mode_query = window.matchMedia('(prefers-color-scheme: dark)');
+
+    // モードを設定
+    setDarkmode(dark_mode_query.matches);
+
+    // リスナーを登録
+    const listener = (event) => { setDarkmode(event.matches) };
+    dark_mode_query.addEventListener('change', listener);
+
+    // リスナーの解除を返却
+    return () => {
+      dark_mode_query.removeEventListener('change', listener);
+    }
+  }, []);
+
   return (
-    <div style={{width: '100%', height: '100%'}}>
+    <div style={{width: '100%', height: '100%'}} className={darkmode? themeDark: themeLight}>
       <div style={{width: '100%', height: '100%'}}>{page}</div>
       <style global jsx>{`
         html,

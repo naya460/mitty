@@ -50,13 +50,12 @@ export default function AuthenticationPage() {
   }
 
   return (
-    <>
-      <div className={styles.top}>
+    <div className={styles.top}>
+      <div className={styles.container}>
         <p className={styles.title}>mitty</p>
-        
         {Form()}
         {FormChangeButton()}
       </div>
-    </>
+    </div>
   );
 }
