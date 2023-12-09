@@ -22,7 +22,7 @@ export default {
     borderStyle: "solid",
     borderColor: gvars.color.main._3,
     borderRadius: "0.5rem",
-    backgroundColor: gvars.color.base._1,
+    backgroundColor: gvars.color.base.light,
     margin: "0.2rem 0.5rem",
     fontFamily: "sans-serif",
     fontSize: "1rem",

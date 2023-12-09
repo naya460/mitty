@@ -19,7 +19,7 @@ export default {
 		color: gvars.color.font._0,
 	}),
 	top_not_selected: style({
-		backgroundColor: gvars.color.base._1,
+		backgroundColor: gvars.color.base.dark,
 		"@media" : {
 			"screen and (hover: hover)": {
 				":hover": {

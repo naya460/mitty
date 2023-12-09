@@ -8,7 +8,7 @@ export default {
     flexBasis: "0",
     flexGrow: "0",
     padding: "0.5rem",
-    backgroundColor: gvars.color.base._0,
+    backgroundColor: gvars.color.bg.light,
     boxShadow: "0 0 4px 0 rgba(0, 0, 0, 40%)",
     zIndex: "10",
   }),
@@ -46,7 +46,7 @@ export default {
     flexGrow: "1",
   }),
   member_button: style({
-    backgroundColor: gvars.color.base._1,
+    backgroundColor: gvars.color.base.light,
     borderStyle: "none",
     borderRadius: "0.5rem",
     fontSize: "auto",

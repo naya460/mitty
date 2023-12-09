@@ -2,8 +2,13 @@ import { createGlobalTheme, createTheme } from "@vanilla-extract/css";
 
 export const [themeLight, gvars] = createTheme({
   color: {
+    bg: {
+      light: "#ffffff",
+      dark: "#f5f5f5",
+    },
     base: {
-      _0: "#ffffff",
+      light: "#f5f5f5",
+      dark: "#ededed",
       _1: "#f5f5f5",
       _2: "#bbbbbb",
       _3: "#999999",
@@ -24,8 +29,13 @@ export const [themeLight, gvars] = createTheme({
 
 export const themeDark = createTheme(gvars, {
   color: {
+    bg: {
+      light: "#383838",
+      dark: "#2c2c2c",
+    },
     base: {
-      _0: "#3c3c3c",
+      light: "#4d4d4d",
+      dark: "#323232",
       _1: "#292929",
       _2: "#bbbbbb",
       _3: "#999999",

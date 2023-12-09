@@ -23,7 +23,7 @@ export default {
   popup: style({
     position: "absolute",
     borderRadius: "0.5rem",
-    backgroundColor: gvars.color.base._0,
+    backgroundColor: gvars.color.bg.light,
     left: 0,
     right: 0,
     height: "auto",

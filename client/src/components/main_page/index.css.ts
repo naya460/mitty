@@ -10,7 +10,7 @@ export default {
     flexBasis: "1",
     flexGrow: "1",
     overflowX: "hidden",
-    backgroundColor: gvars.color.base._0,
+    backgroundColor: gvars.color.bg.light,
   }),
   main_view: style({
     width: "100%",

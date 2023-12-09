@@ -12,7 +12,7 @@ export default {
     top: "0",
     bottom: "0",
     padding: "0.5rem 1rem",
-    backgroundColor: gvars.color.base._0,
+    backgroundColor: gvars.color.bg.dark,
     zIndex: "5",
     transform: "translate(calc(100% + 5px), 0)",
     transition: "transform 0.25s 50ms",
@@ -33,7 +33,6 @@ export default {
         display: "block",
         position: "initial",
         transform: "translate(0, 0)",
-        backgroundColor: gvars.color.base._1,
         boxShadow: "none",
         paddingRight: "2rem",
       }

@@ -8,7 +8,7 @@ export default {
     height: "auto",
     minWidth: "15rem",
     maxWidth: "15rem",
-    backgroundColor: gvars.color.base._1,
+    backgroundColor: gvars.color.bg.dark,
     zIndex: "9",
     padding: "0.5rem 0.2rem",
     paddingRight: "0.5rem",
