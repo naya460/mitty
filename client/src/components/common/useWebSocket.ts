@@ -1,55 +1,69 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react';
 
-let socket: WebSocket = null;
-let ws_id: string = null;
-let callbacks: {callback: (message) => void, route?: string}[] = [];
-
-export default function useWebSocket(
-  callback? : (message) => void,
-  route?: string,
-): [(message) => void] {
-  const ws_id_ref = useRef('');
+function useWebSocketConnection() {
+  const socket = useRef<WebSocket>(null);
+  const ws_id = useRef<string>(null);
 
   useEffect(() => {
-    // コールバック関数を追加
-    if (callback) {
-      callbacks.push({callback, route});
-    }
-
     // WebSocketが用意されていないとき、作成
-    if (socket != null) return;
+    if (socket.current != null) return;
+
+    // ws_idを取得する
     (async () => {
       const a = await fetch(
         `http://${location.hostname}:9090/use_ws`,
         { mode: 'cors', credentials: 'include' }
       );
-      ws_id = (await a.json()).ws_id;
-      ws_id_ref.current = ws_id;
+      ws_id.current = (await a.json()).ws_id;
     })();
-    socket = new WebSocket(`ws://${location.hostname}:9090/`);
 
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      callbacks.forEach(f => {
-        if (f.route === undefined || f.route === data.route) {
-          f.callback(data);
-        }
-      })
-    }
+    // websocketで接続する
+    socket.current = new WebSocket(`ws://${location.hostname}:9090/`);
 
-    socket.onopen = (event) => {
+    // 接続時にデータをsubscribeする
+    socket.current. onopen = (event) => {
       (async () => {
-        while (!ws_id_ref.current) {
+        while (!ws_id.current) {
           await new Promise((resolve) => setTimeout(resolve, 10));
         }
-        socket.send(JSON.stringify({route: 'subscribe', ws_id: ws_id_ref.current}));
+        socket.current.send(JSON.stringify({route: 'subscribe', ws_id: ws_id.current}));
       })();
     }
 
     return () => {
-      socket.close();
+      socket.current.close();
     }
   }, []);
+
+  return { socket: socket.current, ws_id: ws_id.current };
+};
+
+export default function useWebSocket(
+  callback? : (message) => void,
+  route?: string,
+): [(message) => void] {
+  const {socket, ws_id} = useWebSocketConnection();
+
+  useEffect(() => {
+    // ソケットが登録されていないとき、無視
+    if (socket === null) return;
+
+    // コールバックが無いとき無視
+    if (callback === undefined) return;
+    
+    // イベントリスナーを作成
+    const listener = (event: MessageEvent) => {
+      const data = JSON.parse(event.data);
+      if (route === undefined || route === data.route) {
+        callback(data);
+      }
+    };
+    socket.addEventListener('message', listener)
+
+    return () => {
+      socket.removeEventListener('message', listener);
+    };
+  }, [callback]);
 
   return [
     (message: Object): void => {
