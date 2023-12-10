@@ -1,10 +1,14 @@
-import { createGlobalTheme, createTheme } from "@vanilla-extract/css";
+import { createTheme } from "@vanilla-extract/css";
 
 export const [themeLight, gvars] = createTheme({
   color: {
     bg: {
       light: "#ffffff",
       dark: "#f5f5f5",
+    },
+    field: {
+      onLight: "#f8f8f8",
+      onDark: "#fdfdfd",
     },
     base: {
       light: "#f5f5f5",
@@ -33,6 +37,10 @@ export const themeDark = createTheme(gvars, {
       light: "#383838",
       dark: "#2c2c2c",
     },
+    field: {
+      onLight: "#4d4d4d",
+      onDark: "#4d4d4d",
+    },
     base: {
       light: "#4d4d4d",
       dark: "#323232",
@@ -44,7 +52,7 @@ export const themeDark = createTheme(gvars, {
     main: {
       _0: "#6f806f",
       _1: "#4f604f",
-      _2: "#c0f0c0",
+      _2: "#70a070",
       _3: "#3f6f3f",
     },
     font: {

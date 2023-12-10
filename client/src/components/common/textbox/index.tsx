@@ -11,6 +11,7 @@ type Props = {
   className?: string,
   maxViewLine?: number,
   onKeyDown?: React.KeyboardEventHandler<HTMLTextAreaElement | HTMLInputElement>,
+  styleOnDark?: boolean,
 }
 
 export type TextBoxRef = {
@@ -44,7 +45,10 @@ export default React.forwardRef(function TextBox(props: Props, ref: React.Forwar
   }, [text]);
 
   return (
-    <>{
+    <div
+      className={`${props.className} ${styles.top}`}
+      style={props.style}
+    >{
       (() => {
         if (props.single) {
           return (
@@ -55,8 +59,8 @@ export default React.forwardRef(function TextBox(props: Props, ref: React.Forwar
               required={props.required}
               onChange={handleChange}
               onKeyDown={props.onKeyDown}
-              className={`${styles.text_area} ${props.className}`}
-              style={{ ...props.style, height: `${lineCount * 1.2}rem` }}
+              className={`${styles.textbox} ${(props.styleOnDark)? styles.onDark : null } ${styles.single}`}
+              style={{ height: `${lineCount * 1.2}rem` }}
               value={text}
             />
           )
@@ -68,13 +72,13 @@ export default React.forwardRef(function TextBox(props: Props, ref: React.Forwar
               required={props.required}
               onChange={handleChange}
               onKeyDown={props.onKeyDown}
-              className={`${styles.text_area} ${props.className}`}
-              style={{ ...props.style, height: `${lineCount * 1.5}rem` }}
+              className={`${styles.textbox} ${(props.styleOnDark)? styles.onDark : null }`}
+              style={{ height: `${lineCount * 1.5}rem` }}
               value={text}
             />
           );
         }
       })()
-    }</>
+    }</div>
   );
 });

@@ -101,6 +101,7 @@ export default function GroupList() {
           name='group_name'
           autoComplete='off'
           required={true}
+          styleOnDark={true}
         />
         <button type='submit'>Create Group</button>
       </form>

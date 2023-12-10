@@ -2,14 +2,18 @@ import { style } from "@vanilla-extract/css";
 import { gvars } from "../global_vars.css";
 
 export default {
-  text_area: style({
+  top: style({
+    display: 'flex',
+  }),
+  textbox: style({
+    flexGrow: 1,
     height: '1.5rem',
     resize: 'none',
     border: '1px',
     borderStyle: 'solid',
     borderColor: gvars.color.main._3,
     borderRadius: '0.5rem',
-    backgroundColor: gvars.color.base.light,
+    backgroundColor: gvars.color.field.onLight,
     fontFamily: 'sans-serif',
     fontSize: '1rem',
     color: gvars.color.font._0,
@@ -20,5 +24,11 @@ export default {
       outlineWidth: '2px',
       outlineStyle: 'solid',
     }
+  }),
+  onDark: style({
+    backgroundColor: gvars.color.field.onDark,
+  }),
+  single: style({
+    padding: '0.3rem',
   }),
 };
