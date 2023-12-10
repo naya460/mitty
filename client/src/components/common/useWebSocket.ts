@@ -1,15 +1,15 @@
 import { useEffect, useRef } from 'react';
 
+let socket: WebSocket = null;
+let ws_id: string = null;
+
 export default function useWebSocket(
   callback? : (message) => void,
   route?: string,
 ): [(message) => void] {
-  const socket = useRef<WebSocket>(null);
-  const ws_id = useRef<string>(null);
-
   useEffect(() => {
-    // WebSocketが用意されていないとき、作成
-    if (socket.current != null) return;
+    // WebSocketが生成されていないとき、作成
+    if (socket != null) return;
 
     // ws_idを取得する
     (async () => {
@@ -17,24 +17,24 @@ export default function useWebSocket(
         `http://${location.hostname}:9090/use_ws`,
         { mode: 'cors', credentials: 'include' }
       );
-      ws_id.current = (await a.json()).ws_id;
+      ws_id = (await a.json()).ws_id;
     })();
 
     // websocketで接続する
-    socket.current = new WebSocket(`ws://${location.hostname}:9090/`);
+    socket = new WebSocket(`ws://${location.hostname}:9090/`);
 
     // 接続時にデータをsubscribeする
-    socket.current. onopen = (event) => {
+    socket.onopen = (event) => {
       (async () => {
-        while (!ws_id.current) {
+        while (!ws_id) {
           await new Promise((resolve) => setTimeout(resolve, 10));
         }
-        socket.current.send(JSON.stringify({route: 'subscribe', ws_id: ws_id.current}));
+        socket.send(JSON.stringify({ route: 'subscribe', ws_id }));
       })();
     }
 
     return () => {
-      socket.current.close();
+      socket.close();
     }
   }, []);
 
@@ -53,17 +53,17 @@ export default function useWebSocket(
         callback(data);
       }
     };
-    socket.current.addEventListener('message', listener)
+    socket.addEventListener('message', listener)
 
     return () => {
-      socket.current.removeEventListener('message', listener);
+      socket.removeEventListener('message', listener);
     };
   }, [callback]);
 
   return [
     (message: Object): void => {
-      if (socket.current.OPEN) {
-        socket.current.send(JSON.stringify({...message, ws_id: ws_id.current}));
+      if (socket.OPEN) {
+        socket.send(JSON.stringify({ ...message, ws_id: ws_id }));
       }
     }
   ];
