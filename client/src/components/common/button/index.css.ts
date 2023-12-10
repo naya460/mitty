@@ -18,6 +18,7 @@ export default {
     color: gvars.color.font._0,
     padding: fallbackVar(ButtonVars.padding, '0.1rem 0.4rem'),
     backgroundColor: gvars.color.base.onLight,
+    cursor: 'pointer',
     '@media': {
       '(hover: hover)': {
         ':hover': {
