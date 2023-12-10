@@ -1,6 +1,9 @@
 import { useEffect, useRef } from 'react';
 
-function useWebSocketConnection() {
+export default function useWebSocket(
+  callback? : (message) => void,
+  route?: string,
+): [(message) => void] {
   const socket = useRef<WebSocket>(null);
   const ws_id = useRef<string>(null);
 
@@ -35,15 +38,7 @@ function useWebSocketConnection() {
     }
   }, []);
 
-  return { socket: socket.current, ws_id: ws_id.current };
-};
-
-export default function useWebSocket(
-  callback? : (message) => void,
-  route?: string,
-): [(message) => void] {
-  const {socket, ws_id} = useWebSocketConnection();
-
+  // コールバック関数の更新
   useEffect(() => {
     // ソケットが登録されていないとき、無視
     if (socket === null) return;
@@ -58,17 +53,17 @@ export default function useWebSocket(
         callback(data);
       }
     };
-    socket.addEventListener('message', listener)
+    socket.current.addEventListener('message', listener)
 
     return () => {
-      socket.removeEventListener('message', listener);
+      socket.current.removeEventListener('message', listener);
     };
   }, [callback]);
 
   return [
     (message: Object): void => {
-      if (socket.OPEN) {
-        socket.send(JSON.stringify({...message, ws_id}));
+      if (socket.current.OPEN) {
+        socket.current.send(JSON.stringify({...message, ws_id: ws_id.current}));
       }
     }
   ];
