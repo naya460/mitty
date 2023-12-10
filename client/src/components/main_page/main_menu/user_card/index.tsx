@@ -4,6 +4,7 @@ import { useContext, useState } from 'react';
 import styles from './index.css';
 import PopupMenu from 'components/common/popup_menu';
 import { MainContext } from 'components/main_page/contexts';
+import Button from 'components/common/button';
 
 export default function UserCard() {
   const router = useRouter();
@@ -23,12 +24,12 @@ export default function UserCard() {
   return (
     <div className={styles.top}>
       { /* button */ }
-      <div
+      <Button
         className={styles.button}
         onClick={() => setDisplayPopup(true)}
       >
         <div className={styles.user_name}>{user_name}</div>
-      </div>
+      </Button>
       { /* popup  */ }
       <PopupMenu
         display={displayPopup}

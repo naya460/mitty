@@ -1,4 +1,5 @@
 import { style } from "@vanilla-extract/css";
+import { ButtonVars } from "components/common/button/index.css";
 import { gvars } from "components/common/global_vars.css";
 
 export default {
@@ -6,20 +7,13 @@ export default {
     margin: "0.2rem"
   }),
   button: style({
-    padding: "0.2rem",
-    borderRadius: "0.2rem",
-    border: "0.1rem",
-    borderStyle: "solid",
-    borderColor: gvars.color.base._2,
-    userSelect: "none",
-    cursor: "pointer",
-    "@media": {
-      "screen and (hover: hover)": {
-        ":hover": {
-          backgroundColor: gvars.color.main._0,
-        },
-      },
+    vars: {
+      [ButtonVars.padding]: "0.3rem 0.5rem",
+      [ButtonVars.textAlign]: "left",
+      [ButtonVars.border]: `0.1rem solid ${gvars.color.base._2}`,
+      [ButtonVars.borderRadius]: "0.2rem",
     },
+    userSelect: "none",
   }),
   user_name: style({
     fontSize: "1rem",
