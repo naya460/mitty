@@ -5,11 +5,10 @@ import CreatePostRequest from 'components/common/create_post_request'
 
 import styles from './form.css'
 
+import Textbox from 'components/common/textbox';
+
 export default function SignUpForm() {
   const router = useRouter();
-  const user_name_form = useRef<HTMLInputElement>(null);
-  const password_form = useRef<HTMLInputElement>(null);
-  const confirm_password_form = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -37,30 +36,36 @@ export default function SignUpForm() {
     <form onSubmit={handleSubmit} className={styles.top}>
       {/* user name form */}
       <label className={styles.form_text}>User Name</label>
-      <input
+      <Textbox
+        single={true}
         type='text'
         name='user_name'
-        ref={user_name_form}
+        autoComplete='username'
         className={styles.form}
-        required
+        styleOnDark={true}
+        required={true}
       />
       {/* password form */}
       <label className={styles.form_text}>Password</label>
-      <input
+      <Textbox
+        single={true}
         type='password'
         name='password'
-        ref={password_form}
+        autoComplete='current-password'
         className={styles.form}
-        required
+        styleOnDark={true}
+        required={true}
       />
       {/* confirm password form */}
       <label className={styles.form_text}>Confirm Password</label>
-      <input
+      <Textbox
+        single={true}
         type='password'
         name='confirm_password'
-        ref={confirm_password_form}
+        autoComplete='new-password'
         className={styles.form}
-        required
+        styleOnDark={true}
+        required={true}
       />
       {/* submit button */}
       <button type='submit' className={styles.button}>Sign Up</button>

@@ -4,6 +4,7 @@ import styles from './index.css';
 
 type Props = {
   single?: boolean,
+  type?: 'text' | 'password', // single === true のみ
   name?: string,
   autoComplete?: string,
   required?: boolean,
@@ -53,7 +54,7 @@ export default React.forwardRef(function TextBox(props: Props, ref: React.Forwar
         if (props.single) {
           return (
             <input
-              type='text'
+              type={props.type || 'text'}
               name={props.name}
               autoComplete={props.autoComplete}
               required={props.required}

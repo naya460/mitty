@@ -4,11 +4,11 @@ import { useRef } from 'react'
 import CreatePostRequest from 'components/common/create_post_request'
 
 import styles from './form.css'
+import Textbox, { TextBoxRef } from 'components/common/textbox';
 
 export default function SingInForm() {
   const router = useRouter();
-  const user_name_form = useRef<HTMLInputElement>(null);
-  const password_form = useRef<HTMLInputElement>(null);
+  const password_form = useRef<TextBoxRef>(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -28,7 +28,7 @@ export default function SingInForm() {
       router.reload();
     } else {
       alert('The user does not exist, or the password is incorrect.');
-      password_form.current.value = '';
+      password_form.current.clearText();
     }
   }
 
@@ -36,21 +36,26 @@ export default function SingInForm() {
     <form onSubmit={handleSubmit} className={styles.top}>
       {/* user name form */}
       <label className={styles.form_text}>User Name</label>
-      <input
+      <Textbox
+        single={true}
         type='text'
         name='user_name'
-        ref={user_name_form}
+        autoComplete='username'
         className={styles.form}
-        required
+        styleOnDark={true}
+        required={true}
       />
       {/* password form */}
       <label className={styles.form_text}>Password</label>
-      <input
+      <Textbox
+        ref={password_form}
+        single={true}
         type='password'
         name='password'
-        ref={password_form}
+        autoComplete='current-password'
         className={styles.form}
-        required
+        styleOnDark={true}
+        required={true}
       />
       {/* submit button */}
       <button type='submit' className={styles.button}>Sign In</button>

@@ -5,7 +5,7 @@ export default {
   top: style({
     width: "100%",
     height: "100%",
-    backgroundColor: gvars.color.bg.light,
+    backgroundColor: gvars.color.bg.dark,
   }),
   container: style({
     display: "flex",
