@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router'
-import { useRef } from 'react'
 
 import CreatePostRequest from 'components/common/create_post_request'
 
 import styles from './form.css'
 
 import Textbox from 'components/common/textbox';
+import Button from 'components/common/button';
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -68,7 +68,11 @@ export default function SignUpForm() {
         required={true}
       />
       {/* submit button */}
-      <button type='submit' className={styles.button}>Sign Up</button>
+      <Button
+        type='submit'
+        accent={true}
+        className={styles.button}
+      >Sign Up</Button>
     </form>
   )
 }

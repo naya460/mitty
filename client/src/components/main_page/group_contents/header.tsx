@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import styles from './header.css';
 
 import { MainContext } from '../contexts';
+import Button from 'components/common/button';
 
 type Props = {
   group_name: string,
@@ -19,10 +20,9 @@ export default function GroupContentsHeader(props: Props) {
       onClick={unset_group}
     >←</button>
     <div className={styles.group_name}>{props.group_name}</div>
-    <button
-      className={styles.member_button}
+    <Button
       onClick={props.toggleMemberList}
-    >Member</button>
+    >Member</Button>
   </div>
   )
 }

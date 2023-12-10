@@ -45,19 +45,4 @@ export default {
     alignItems: "center",
     flexGrow: "1",
   }),
-  member_button: style({
-    backgroundColor: gvars.color.base.onLight,
-    borderStyle: "none",
-    borderRadius: "0.5rem",
-    fontSize: "auto",
-    fontFamily: "sans-serif",
-    color: gvars.color.font._0,
-    "@media": {
-      "screen and (hover: hover)": {
-        ":hover": {
-          backgroundColor: gvars.color.main._0,
-        },
-      },
-    },
-  }),
 };

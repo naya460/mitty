@@ -5,6 +5,7 @@ import useWebSocket from 'components/common/useWebSocket';
 import styles from './message_input.css';
 import { MainContext } from 'components/main_page/contexts';
 import TextBox, { TextBoxRef } from 'components/common/textbox';
+import Button from 'components/common/button';
 
 export default function MessageInput() {
   const [socketSend] = useWebSocket();
@@ -62,11 +63,12 @@ export default function MessageInput() {
           required={true}
           ref={textbox_ref}
         />
-        <button
+        <Button
           type='submit'
-          className={styles.send_button}
+          accent={true}
           disabled={disabled}
-        >Send</button>
+          className={styles.send_button}
+        >Send</Button>
       </form>
     </div>
   );

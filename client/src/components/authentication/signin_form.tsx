@@ -5,6 +5,7 @@ import CreatePostRequest from 'components/common/create_post_request'
 
 import styles from './form.css'
 import Textbox, { TextBoxRef } from 'components/common/textbox';
+import Button from 'components/common/button';
 
 export default function SingInForm() {
   const router = useRouter();
@@ -58,7 +59,11 @@ export default function SingInForm() {
         required={true}
       />
       {/* submit button */}
-      <button type='submit' className={styles.button}>Sign In</button>
+      <Button
+        type='submit'
+        accent={true}
+        className={styles.button}
+      >Sign In</Button>
     </form>
   )
 }
