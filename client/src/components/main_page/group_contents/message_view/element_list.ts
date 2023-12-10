@@ -57,7 +57,7 @@ export default function useElementList(props: Props): [ () => Promise<boolean> ]
 
   useWebSocket((message) => {
     // グループのメッセージを読み込んでいないとき、無視
-    if (state_ref.current.element_list.length === 0) {
+    if (state.element_list.length === 0) {
       return;
     }
     
@@ -67,7 +67,7 @@ export default function useElementList(props: Props): [ () => Promise<boolean> ]
     // コールバック関数を呼ぶ
     if (props.onMessage != null) {
       // 選択されているグループのときのみ呼び出す
-      props.onMessage(state_ref.current.element_list);
+      props.onMessage(state.element_list);
     }
   }, 'message/send');
 

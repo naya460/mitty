@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from './group.css';
 import useWebSocket from 'components/common/useWebSocket';
@@ -12,9 +12,6 @@ interface Props {
 export default function Group(props: Props) {
   const router = useRouter();
   const [newMessageCount, setNewMessageCount] = useState(0);
-
-  const selected_ref = useRef(props.is_selected);
-  selected_ref.current = props.is_selected;
   
   // メッセージを受信したとき、数を増やす
   useWebSocket((message) => {
@@ -23,7 +20,7 @@ export default function Group(props: Props) {
       return;
     }
     // 選択されているとき、無視
-    if (selected_ref.current) {
+    if (props.is_selected) {
       return;
     }
     setNewMessageCount((prev) => prev + 1);

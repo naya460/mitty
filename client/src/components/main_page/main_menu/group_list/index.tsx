@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import styles from './index.css'
 
 import Group from './group'
@@ -12,14 +12,9 @@ export default function GroupList() {
   const [groupList, setGroupList] = useState<{ id: string, name: string}[]>(null);
   const { group_id, set_group } = useContext(MainContext);
 
-  const addGroup = useRef<(message: {group_id: string, group_name: string}) => void>();
-  addGroup.current = (message) => {
-    setGroupList([ ...groupList, { id: message.group_id, name: message.group_name }]);
-  }
-
   const [socketSend] = useWebSocket(
     (message) => {
-      addGroup.current(message);
+      setGroupList([ ...groupList, { id: message.group_id, name: message.group_name }]);
     }, 'group/create'
   );
 
