@@ -5,6 +5,7 @@ import styles from './index.css'
 import Group from './group'
 import useWebSocket from 'components/common/useWebSocket';
 import { MainContext } from 'components/main_page/contexts';
+import Textbox from 'components/common/textbox';
 
 export default function GroupList() {
   const router = useRouter();
@@ -95,7 +96,12 @@ export default function GroupList() {
   return (
     <div className={styles.top}>
       <form onSubmit={handleCreateGroup}>
-        <input name='group_name' type='text'/>
+        <Textbox
+          single={true}
+          name='group_name'
+          autoComplete='off'
+          required={true}
+        />
         <button type='submit'>Create Group</button>
       </form>
       {groupList?.map((data) => {

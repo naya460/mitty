@@ -3,13 +3,14 @@ import React, { useState, useRef, useImperativeHandle } from "react";
 import styles from './index.css';
 
 type Props = {
+  single?: boolean,
   name?: string,
   autoComplete?: string,
   required?: boolean,
   style?: React.CSSProperties,
   className?: string,
   maxViewLine?: number,
-  onKeyDown?: React.KeyboardEventHandler<HTMLTextAreaElement>,
+  onKeyDown?: React.KeyboardEventHandler<HTMLTextAreaElement | HTMLInputElement>,
 }
 
 export type TextBoxRef = {
@@ -22,7 +23,7 @@ export default React.forwardRef(function TextBox(props: Props, ref: React.Forwar
   const [lineCount, setLineCount] = useState(1);
 
   // 変更を適応するハンドラ
-  const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (event) => {
+  const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = (event) => {
     // 文字列を更新
     setText(event.target.value);
 
@@ -43,17 +44,37 @@ export default React.forwardRef(function TextBox(props: Props, ref: React.Forwar
   }, [text]);
 
   return (
-    <>
-      <textarea
-        name={props.name}
-        autoComplete={props.autoComplete}
-        required={props.required}
-        onChange={handleChange}
-        onKeyDown={props.onKeyDown}
-        className={`${styles.text_area} ${props.className}`}
-        style={{ ...props.style, height: `${lineCount * 1.5}rem` }}
-        value={text}
-      />
-    </>
+    <>{
+      (() => {
+        if (props.single) {
+          return (
+            <input
+              type='text'
+              name={props.name}
+              autoComplete={props.autoComplete}
+              required={props.required}
+              onChange={handleChange}
+              onKeyDown={props.onKeyDown}
+              className={`${styles.text_area} ${props.className}`}
+              style={{ ...props.style, height: `${lineCount * 1.2}rem` }}
+              value={text}
+            />
+          )
+        } else {
+          return (
+            <textarea
+              name={props.name}
+              autoComplete={props.autoComplete}
+              required={props.required}
+              onChange={handleChange}
+              onKeyDown={props.onKeyDown}
+              className={`${styles.text_area} ${props.className}`}
+              style={{ ...props.style, height: `${lineCount * 1.5}rem` }}
+              value={text}
+            />
+          );
+        }
+      })()
+    }</>
   );
 });
