@@ -4,15 +4,15 @@ export const [themeLight, gvars] = createTheme({
   color: {
     bg: {
       light: "#ffffff",
-      dark: "#f5f5f5",
+      dark: "#f0f0f0",
     },
     field: {
       onLight: "#f8f8f8",
       onDark: "#fdfdfd",
     },
     base: {
-      light: "#f5f5f5",
-      dark: "#ededed",
+      onLight: "#f0f0f0",
+      onDark: "#f8f8f8",
       _1: "#f5f5f5",
       _2: "#bbbbbb",
       _3: "#999999",
@@ -38,12 +38,12 @@ export const themeDark = createTheme(gvars, {
       dark: "#2c2c2c",
     },
     field: {
-      onLight: "#4d4d4d",
+      onLight: "#555555",
       onDark: "#4d4d4d",
     },
     base: {
-      light: "#4d4d4d",
-      dark: "#323232",
+      onLight: "#4d4d4d",
+      onDark: "#323232",
       _1: "#292929",
       _2: "#bbbbbb",
       _3: "#999999",

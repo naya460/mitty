@@ -46,7 +46,7 @@ export default {
     flexGrow: "1",
   }),
   member_button: style({
-    backgroundColor: gvars.color.base.light,
+    backgroundColor: gvars.color.base.onLight,
     borderStyle: "none",
     borderRadius: "0.5rem",
     fontSize: "auto",
