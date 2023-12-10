@@ -14,6 +14,7 @@ export default function MessageInput() {
 
   const sendMessage = () => {
     const text = textbox_ref.current.text;
+    if (text === '') return;
 
     // 送信するリクエストを作成
     const message = {

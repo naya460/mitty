@@ -17,6 +17,9 @@ export default async function wsSendMessageRoute(
   const message_text = json_message.message;
   if (message_text === undefined) return;
 
+  // メッセージが空のとき無視
+  if (message_text === '') return;
+
   // メッセージを追加
   const success = await addMessage(user_id, group_id, message_text);
   if (success === false) {
