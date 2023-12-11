@@ -20,6 +20,7 @@ import Group from './group'
 import useWebSocket from 'components/common/useWebSocket';
 import { MainContext } from 'components/main_page/contexts';
 import Textbox from 'components/common/textbox';
+import ListItem from 'components/common/list/list_item';
 
 export default function GroupList() {
   const router = useRouter();

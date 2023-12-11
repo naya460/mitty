@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from './group.css';
 import useWebSocket from 'components/common/useWebSocket';
+import ListItem from 'components/common/list/list_item';
 
 interface Props {
   group_name: string;
@@ -62,21 +63,21 @@ export default function Group(props: Props) {
   }
   
   return (
-    <button
-      className={`
-        ${styles.top}
-        ${(props.is_selected)? styles.top_selected : styles.top_not_selected}
-      `}
-      onClick={onClick}
-    >
-      <div>{props.group_name}</div>
-      <div className={styles.count}>{
-        (() => {
-          if (newMessageCount != 0) {
-            return newMessageCount;
-          }
-        })()
-      }</div>
-    </button>
+    <div className={styles.top}>
+      <ListItem
+        title={props.group_name}
+        itemEnd={
+          <div className={styles.count}>{
+            (() => {
+              if (newMessageCount != 0) {
+                return newMessageCount;
+              }
+            })()
+          }</div>
+        }
+        selected={props.is_selected}
+        onClick={onClick}
+      />
+    </div>
   );
 }
