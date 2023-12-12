@@ -17,10 +17,10 @@ import { gvars } from "../global_vars.css";
 
 export default {
   top: style({
-    display: 'flex',
+    display: "flex",
   }),
   textbox: style({
-    flexGrow: 1,
+    width: "100%",
     height: '1.5rem',
     resize: 'none',
     border: '1px',

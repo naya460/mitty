@@ -21,6 +21,7 @@ import useWebSocket from 'components/common/useWebSocket';
 import { MainContext } from 'components/main_page/contexts';
 import Textbox from 'components/common/textbox';
 import ListItem from 'components/common/list/list_item';
+import Button from 'components/common/button';
 
 export default function GroupList() {
   const router = useRouter();
@@ -105,7 +106,10 @@ export default function GroupList() {
 
   return (
     <div className={styles.top}>
-      <form onSubmit={handleCreateGroup}>
+      <form
+        className={styles.form}
+        onSubmit={handleCreateGroup}
+      >
         <Textbox
           single={true}
           name='group_name'
@@ -113,7 +117,7 @@ export default function GroupList() {
           required={true}
           styleOnDark={true}
         />
-        <button type='submit'>Create Group</button>
+        <Button type='submit' accent={true}>+</Button>
       </form>
       {groupList?.map((data) => {
         return (
