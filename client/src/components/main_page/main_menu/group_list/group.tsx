@@ -67,13 +67,9 @@ export default function Group(props: Props) {
       <ListItem
         title={props.group_name}
         itemEnd={
-          <div className={styles.count}>{
-            (() => {
-              if (newMessageCount != 0) {
-                return newMessageCount;
-              }
-            })()
-          }</div>
+          <div className={styles.count}>
+            {(newMessageCount)? newMessageCount : null}
+          </div>
         }
         selected={props.is_selected}
         onClick={onClick}
