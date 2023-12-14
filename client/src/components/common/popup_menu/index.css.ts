@@ -42,7 +42,7 @@ export default {
     right: 0,
     height: "auto",
     boxShadow: "0 2px 10px 2px rgba(0, 0, 0, 0.2)",
-    padding: "1rem",
+    padding: "0.4rem",
     boxSizing: "border-box",
     zIndex: "20",
     transition: "opacity 0.1s",

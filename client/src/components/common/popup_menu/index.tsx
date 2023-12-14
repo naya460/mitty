@@ -12,10 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import ListItem from '../list/list_item';
 import styles from './index.css';
 
 interface Props {
   children?: React.ReactNode,
+  list?: { text: string, onClick?: React.MouseEventHandler }[]
   display?: boolean,
   setHidden?: () => void,
 }
@@ -38,6 +40,15 @@ export default function PopupMenu(props: Props) {
           `}
         >
             {props.children}
+            {
+              props.list?.map(value => (
+                <ListItem
+                  key={value.text}
+                  title={value.text}
+                  onClick={value.onClick}
+                ></ListItem>
+              ))
+            }
         </div>
       </div>
     </>

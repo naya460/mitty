@@ -48,10 +48,8 @@ export default function UserCard() {
       <PopupMenu
         display={displayPopup}
         setHidden={() => setDisplayPopup(false)}
-      >
-        <div>{user_name}</div>
-        <a href='/' onClick={handleSignOut}>Sign Out</a>
-      </PopupMenu>
+        list={[{ text: 'Sign Out', onClick: handleSignOut }]}
+      />
     </div>
   );
 }
