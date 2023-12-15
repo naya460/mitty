@@ -22,11 +22,13 @@ import { MainContext } from 'components/main_page/contexts';
 import Textbox from 'components/common/textbox';
 import ListItem from 'components/common/list/list_item';
 import Button from 'components/common/button';
+import Dialog from 'components/common/dialog';
 
 export default function GroupList() {
   const router = useRouter();
   const [groupList, setGroupList] = useState<{ id: string, name: string}[]>(null);
   const { group_id, set_group } = useContext(MainContext);
+  const [dialog, setDialog] = useState(false);
 
   const [socketSend] = useWebSocket(
     (message) => {
@@ -106,19 +108,22 @@ export default function GroupList() {
 
   return (
     <div className={styles.top}>
-      <form
-        className={styles.form}
-        onSubmit={handleCreateGroup}
-      >
-        <Textbox
-          single={true}
-          name='group_name'
-          autoComplete='off'
-          required={true}
-          styleOnDark={true}
-        />
-        <Button type='submit' accent={true}>+</Button>
-      </form>
+      <Button onClick={() => setDialog(true)}>Create Group</Button>
+      <Dialog display={dialog} setHidden={() => setDialog(false)}>
+        <form
+          className={styles.form}
+          onSubmit={handleCreateGroup}
+        >
+          <Textbox
+            single={true}
+            name='group_name'
+            autoComplete='off'
+            required={true}
+            styleOnDark={true}
+          />
+          <Button type='submit' accent={true}>+</Button>
+        </form>
+      </Dialog>
       {groupList?.map((data) => {
         return (
           <Group
