@@ -19,24 +19,24 @@ export default {
   top: style({
     position: "sticky",
     bottom: "0",
-    paddingTop: "0.1rem",
-    marginTop: "0.1rem",
-    paddingBottom: "0.3rem",
+    paddingTop: "0.2rem",
+    marginTop: "0.2rem",
+    paddingBottom: "0.5rem",
     backgroundColor: gvars.color.bg.light,
     boxSizing: "border-box",
   }),
   form: style({
-    display: "inline-flex",
-    flexDirection: "row",
+    display: "grid",
+    gridTemplateColumns: "1fr auto",
+    gap: "0.5rem",
     width: "100%",
     height: "fit-content",
   }),
   message_box: style({
     width: "100%",
-    margin: "0.2rem 0.5rem",
   }),
   send_button: style({
-    margin: "0.2rem 0",
-    marginRight: "0.5rem",
+    width: "100%",
+    height: "100%",
   }),
 };
