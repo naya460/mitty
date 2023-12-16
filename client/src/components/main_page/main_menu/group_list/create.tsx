@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import useWebSocket from 'components/common/useWebSocket';
-import Textbox from 'components/common/textbox';
+import Textbox, { TextBoxRef } from 'components/common/textbox';
 import Button from 'components/common/button';
 import { FormDialog } from 'components/common/dialog';
 
 export default function CreateGroupButton() {
   const [dialog, setDialog] = useState(false);
+  const textbox_ref = useRef<TextBoxRef>();
 
   const [socketSend] = useWebSocket();
 
@@ -22,6 +23,9 @@ export default function CreateGroupButton() {
     
     // メッセージを送信
     socketSend(message);
+
+    // 中身をリセット
+    textbox_ref.current.clearText();
   }
 
   return (
@@ -40,6 +44,7 @@ export default function CreateGroupButton() {
           autoComplete='off'
           required={true}
           styleOnDark={true}
+          ref={textbox_ref}
         />
       </FormDialog>
     </>
