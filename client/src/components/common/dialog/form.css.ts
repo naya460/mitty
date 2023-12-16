@@ -5,7 +5,7 @@ export default {
     height: '100%',
     display: 'grid',
     gridTemplateRows: '1fr 2rem',
-    gap: '0.5rem',
+    gap: '1rem',
   }),
   buttons: style({
     display: 'grid',

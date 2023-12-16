@@ -14,7 +14,7 @@ export default function Dialog(props: Props) {
         className={`${styles.background} ${(props.display)? styles.background_display : styles.hidden}`}
         onClick={props.setHidden}
       />
-      <div className={`${styles.top} ${props.display || styles.hidden}`}>
+      <div className={styles.top}>
         <div className={`${styles.dialog} ${props.display || styles.hidden}`}>
           <div className={styles.title}>{props.title}</div>
           <div>{props.children}</div>

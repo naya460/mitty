@@ -12,11 +12,10 @@ export default {
     left: 0,
     right: 0,
     pointerEvents: 'none',
-    transition: 'opacity 0.2s',
   }),
   dialog: style({
     width: 'min(20rem, 100% - 2rem)',
-    height: 'min(15rem, 100% - 2rem)',
+    height: 'min(fit-content, 100% - 2rem)',
     borderRadius: '0.5rem',
     backgroundColor: gvars.color.bg.light,
     boxShadow: '0 0 5px 0 rgba(0, 0, 0, 20%)',
@@ -25,7 +24,8 @@ export default {
     pointerEvents: 'auto',
     display: 'grid',
     gridTemplateRows: 'auto 1fr',
-    gap: '0.5rem',
+    gap: '1rem',
+    transition: 'opacity 0.2s ease-out',
   }),
   background: style({
     position: 'fixed',
@@ -34,7 +34,7 @@ export default {
     left: 0,
     right: 0,
     backgroundColor: gvars.color.base._4,
-    transition: 'opacity 0.2s',
+    transition: 'opacity 0.2s ease-out',
   }),
   background_display: style({
     opacity: '50%',
