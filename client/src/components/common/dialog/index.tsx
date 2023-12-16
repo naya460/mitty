@@ -4,6 +4,7 @@ type Props = {
   children?: React.ReactNode,
   display?: boolean,
   setHidden?: () => void,
+  title?: string,
 }
 
 export default function Dialog(props: Props) {
@@ -15,7 +16,8 @@ export default function Dialog(props: Props) {
       />
       <div className={`${styles.top} ${props.display || styles.hidden}`}>
         <div className={styles.dialog}>
-          {props.children}
+          <div className={styles.title}>{props.title}</div>
+          <div>{props.children}</div>
         </div>
       </div>
     </>

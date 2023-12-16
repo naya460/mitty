@@ -109,7 +109,11 @@ export default function GroupList() {
   return (
     <div className={styles.top}>
       <Button onClick={() => setDialog(true)}>Create Group</Button>
-      <Dialog display={dialog} setHidden={() => setDialog(false)}>
+      <Dialog
+        title={'グループを作成'}
+        display={dialog}
+        setHidden={() => setDialog(false)}
+      >
         <form
           className={styles.form}
           onSubmit={handleCreateGroup}

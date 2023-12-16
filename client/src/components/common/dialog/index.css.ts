@@ -23,6 +23,9 @@ export default {
     padding: '1rem',
     boxSizing: 'border-box',
     pointerEvents: 'auto',
+    display: 'grid',
+    gridTemplateRows: 'auto 1fr',
+    gap: '0.5rem',
   }),
   background: style({
     position: 'fixed',
@@ -39,5 +42,9 @@ export default {
   hidden: style({
     opacity: 0,
     pointerEvents: 'none',
+  }),
+  title: style({
+    fontFamily: 'sans-serif',
+    color: gvars.color.font._0,
   }),
 };
