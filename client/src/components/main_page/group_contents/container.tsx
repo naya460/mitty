@@ -39,9 +39,7 @@ export default function GroupContentsContainer(props: Props) {
         toggleMemberList={() => setMemberList(!displayMemberList)}
       />
       <div className={styles.side}>
-        <div className={styles.contents}>
-          <MessageView group_id={props.group_id} />
-        </div>
+        <MessageView group_id={props.group_id} />
         <MemberList
           display={displayMemberList}
           toggleMessageList={() => setMemberList(!displayMemberList)}

@@ -24,7 +24,7 @@ export default {
     padding: "0.5rem",
     backgroundColor: gvars.color.bg.light,
     boxShadow: "0 0 4px 0 rgba(0, 0, 0, 40%)",
-    zIndex: "10",
+    zIndex: 1,
   }),
   back_button: style({
     width: "0",
