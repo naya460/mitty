@@ -15,8 +15,8 @@ export default {
     transition: 'opacity 0.2s',
   }),
   dialog: style({
-    width: '20rem',
-    height: '15rem',
+    width: 'min(20rem, 100% - 2rem)',
+    height: 'min(15rem, 100% - 2rem)',
     borderRadius: '0.5rem',
     backgroundColor: gvars.color.bg.light,
     boxShadow: '0 0 5px 0 rgba(0, 0, 0, 20%)',
