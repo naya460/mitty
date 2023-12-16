@@ -23,9 +23,4 @@ export default {
     flexBasis: "0",
     flexGrow: "0",
   }),
-  form: style({
-    display: "grid",
-    gridTemplateColumns: "1fr auto",
-    gap: "0.2rem",
-  }),
 };

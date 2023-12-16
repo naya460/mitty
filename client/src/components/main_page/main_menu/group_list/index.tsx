@@ -19,36 +19,18 @@ import styles from './index.css'
 import Group from './group'
 import useWebSocket from 'components/common/useWebSocket';
 import { MainContext } from 'components/main_page/contexts';
-import Textbox from 'components/common/textbox';
-import ListItem from 'components/common/list/list_item';
-import Button from 'components/common/button';
-import Dialog from 'components/common/dialog';
+import CreateGroupButton from './create';
 
 export default function GroupList() {
   const router = useRouter();
   const [groupList, setGroupList] = useState<{ id: string, name: string}[]>(null);
   const { group_id, set_group } = useContext(MainContext);
-  const [dialog, setDialog] = useState(false);
 
-  const [socketSend] = useWebSocket(
+  useWebSocket(
     (message) => {
       setGroupList([ ...groupList, { id: message.group_id, name: message.group_name }]);
     }, 'group/create'
   );
-
-  // グループの作成関数
-  const handleCreateGroup = async (event) => {
-    event.preventDefault();
-
-    // 送信するリクエストを作成
-    const message = {
-      route: 'group/create',
-      group_name: event.target.group_name.value
-    }
-    
-    // メッセージを送信
-    socketSend(message);
-  }
 
   // 最初に読み込まれたとき、クエリを削除
   useEffect(() => {
@@ -108,26 +90,7 @@ export default function GroupList() {
 
   return (
     <div className={styles.top}>
-      <Button onClick={() => setDialog(true)}>Create Group</Button>
-      <Dialog
-        title={'グループを作成'}
-        display={dialog}
-        setHidden={() => setDialog(false)}
-      >
-        <form
-          className={styles.form}
-          onSubmit={handleCreateGroup}
-        >
-          <Textbox
-            single={true}
-            name='group_name'
-            autoComplete='off'
-            required={true}
-            styleOnDark={true}
-          />
-          <Button type='submit' accent={true}>+</Button>
-        </form>
-      </Dialog>
+      <CreateGroupButton />
       {groupList?.map((data) => {
         return (
           <Group
@@ -139,5 +102,5 @@ export default function GroupList() {
         )
       })}
     </div>
-  )
+  );
 }
