@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useEffect, useReducer, useRef } from "react"
+import { useEffect, useReducer, useRef, useState } from "react"
 
 import CreatePostRequest from 'components/common/create_post_request'
 import useWebSocket from 'components/common/useWebSocket'
@@ -48,7 +48,7 @@ export type Element = {
 }
 
 interface Props {
-  group_id: string,
+  default_group_id: string,
   // selected_group_idのメッセージが来たときに呼ばれる
   onMessage?: (element: Element[]) => void;
   // メッセージが読み込まれたときに呼ばれる
@@ -56,6 +56,7 @@ interface Props {
 }
 
 export default function useElementList(props: Props): [ () => Promise<boolean> ] {
+  const [group_id,] = useState(props.default_group_id);
   const [state, dispatch] = useReducer(reducer, { element_list: [] });
   const state_ref = useRef(state);
   state_ref.current = state;
@@ -74,24 +75,26 @@ export default function useElementList(props: Props): [ () => Promise<boolean> ]
     if (state_ref.current.element_list.length === 0) {
       return;
     }
+
+    // 異なるグループのとき無視
+    if (message.group_id !== group_id) return;
     
     // メッセージ要素を追加
     addElement([message]);
     
     // コールバック関数を呼ぶ
     if (props.onMessage != null) {
-      // 選択されているグループのときのみ呼び出す
       props.onMessage(state_ref.current.element_list);
     }
   }, 'message/send');
 
   // メッセージを取得する
   const getMessages = async (last_message_id?: string) => {
-    if (props.group_id == null) return;
+    if (group_id == null) return;
 
     // 送信するリクエストを作成
     const options = CreatePostRequest({
-      group_id: props.group_id,
+      group_id: group_id,
       last_message_id,
     });
 
@@ -121,25 +124,18 @@ export default function useElementList(props: Props): [ () => Promise<boolean> ]
     return { length: messages.length, id: messages[messages.length - 1].message_id };
   }
 
-  // selected_group_idが更新されたとき
+  // 最初の読み込み
   useEffect(() => {
     (async () => {
-      // グループが選択されていないとき無視
-      if (props.group_id == null) {
-        return;
-      }
-
-      // まだ読み込んでいないselected_group_idのとき、メッセージを取得する
-      if (state_ref.current.element_list.length === 0) {
-        await getMessages();
-      }
+      // メッセージを取得
+      await getMessages();
 
       // コールバック関数を呼ぶ
       if (props.onUpdate != null) {
         props.onUpdate(state_ref.current.element_list);
       }
     })();    
-  }, [props.group_id]);
+  }, []);
 
   return [
     async () => {
@@ -154,5 +150,5 @@ export default function useElementList(props: Props): [ () => Promise<boolean> ]
       }
       return true;
     }
-  ]
+  ];
 }

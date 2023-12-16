@@ -33,7 +33,7 @@ export default function MessageView(props: Props) {
   const { user_name } = useContext(MainContext);
 
   const [loadNext] = useElementList({
-    group_id: props.group_id,
+    default_group_id: props.group_id,
     onMessage: (elements) => {
       try {
         setDisplayMessages([...createDisplay(elements)]);
