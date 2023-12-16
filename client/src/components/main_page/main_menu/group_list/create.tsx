@@ -1,11 +1,9 @@
 import { useState } from 'react';
 
-import styles from './create.css';
-
 import useWebSocket from 'components/common/useWebSocket';
 import Textbox from 'components/common/textbox';
 import Button from 'components/common/button';
-import Dialog from 'components/common/dialog';
+import { FormDialog } from 'components/common/dialog';
 
 export default function CreateGroupButton() {
   const [dialog, setDialog] = useState(false);
@@ -29,25 +27,21 @@ export default function CreateGroupButton() {
   return (
     <>
       <Button onClick={() => setDialog(true)}>Create Group</Button>
-      <Dialog
+      <FormDialog
         title={'グループを作成'}
         display={dialog}
         setHidden={() => setDialog(false)}
+        onSubmit={handleCreateGroup}
+        accept_text='作成'
       >
-        <form
-          className={styles.form}
-          onSubmit={handleCreateGroup}
-        >
-          <Textbox
-            single={true}
-            name='group_name'
-            autoComplete='off'
-            required={true}
-            styleOnDark={true}
-          />
-          <Button type='submit' accent={true}>+</Button>
-        </form>
-      </Dialog>
+        <Textbox
+          single={true}
+          name='group_name'
+          autoComplete='off'
+          required={true}
+          styleOnDark={true}
+        />
+      </FormDialog>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import styles from './index.css';
+import styles from './base.css';
 
 type Props = {
   children?: React.ReactNode,
