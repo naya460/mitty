@@ -20,9 +20,11 @@ import useElementList, { Element } from './element_list';
 
 import styles from './index.css';
 import { MainContext } from 'components/main_page/contexts';
+import MessageInput from './message_input';
 
 interface Props {
   group_id: string,
+  children?: React.ReactNode,
 }
 
 export default function MessageView(props: Props) {
@@ -156,7 +158,8 @@ export default function MessageView(props: Props) {
               return "…… 読み込み中 ……";
             }
           })()}</div>
-          {displayMessages}
+          <div>{displayMessages}</div>
+          <MessageInput />
         </div>
       </div>
     </div>

@@ -25,12 +25,12 @@ export default {
     flexBasis: "0",
     flexGrow: "1",
     overflowY: "scroll",
-    padding: "0.1rem 1rem",
   }),
   centering: style({
     position: "relative",
     display: "flex",
-    justifyContent: "center"
+    flexDirection: "column-reverse",
+    alignItems: "center",
   }),
   message_list: style({
     position: "absolute",

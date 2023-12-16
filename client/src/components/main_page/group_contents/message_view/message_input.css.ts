@@ -13,13 +13,17 @@
 // limitations under the License.
 
 import { style } from "@vanilla-extract/css";
+import { gvars } from "components/common/global_vars.css";
 
 export default {
   top: style({
-    width: "100%",
-    padding: "0.1rem 0",
+    position: "sticky",
+    bottom: "0",
+    paddingTop: "0.1rem",
+    marginTop: "0.1rem",
     paddingBottom: "0.3rem",
-    flexBasis: "0",
+    backgroundColor: gvars.color.bg.light,
+    boxSizing: "border-box",
   }),
   form: style({
     display: "inline-flex",
