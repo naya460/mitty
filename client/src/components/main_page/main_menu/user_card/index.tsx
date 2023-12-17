@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import { useRouter } from 'next/router';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 
 import styles from './index.css';
 import PopupMenu from 'components/common/popup_menu';
@@ -31,6 +31,8 @@ export default function UserCard() {
 
   const [dialog, setDialog] = useState(false);
   const textbox_ref = useRef<TextBoxRef>();
+
+  const [imageUrl, setImageUrl] = useState('');
 
   // サインアウト処理
   const handleSignOut = async () => {
@@ -56,6 +58,17 @@ export default function UserCard() {
     textbox_ref.current.clearText();
   }
 
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(
+        `http://${location.hostname}:9090/user/get_icon`,
+        { mode: 'cors', credentials: 'include' }
+      );
+      const url = URL.createObjectURL(await res.blob());
+      setImageUrl(url);
+    })();
+  }, []);
+
   return (
     <div className={styles.top}>
       { /* button */ }
@@ -63,7 +76,10 @@ export default function UserCard() {
         className={styles.button}
         onClick={() => setDisplayPopup(true)}
       >
-        <div className={styles.user_name}>{user_name}</div>
+        <div className={styles.user}>
+          <img src={imageUrl} className={styles.icon} />
+          <div className={styles.user_name}>{user_name}</div>
+        </div>
       </Button>
       { /* popup  */ }
       <PopupMenu

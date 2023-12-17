@@ -19,6 +19,7 @@ import { signoutRoute } from './signout';
 import { signupRoute, signupBodySchema } from './signup';
 import { getUserNameRoute } from "./get_name";
 import { renameBodySchema, renameRoute } from "./rename";
+import { getIconRoute } from "./get_icon";
 
 export default function apiUserRoutes(
   server: FastifyInstance,
@@ -51,6 +52,11 @@ export default function apiUserRoutes(
     '/rename',
     { schema: { body: renameBodySchema } },
     renameRoute
+  );
+
+  server.get(
+    '/get_icon',
+    getIconRoute
   );
 
   done();
