@@ -18,6 +18,7 @@ import { signinRoute, signinBodySchema } from './signin';
 import { signoutRoute } from './signout';
 import { signupRoute, signupBodySchema } from './signup';
 import { getUserNameRoute } from "./get_name";
+import { renameBodySchema, renameRoute } from "./rename";
 
 export default function apiUserRoutes(
   server: FastifyInstance,
@@ -44,6 +45,12 @@ export default function apiUserRoutes(
   server.get(
     '/get_name',
     getUserNameRoute
+  );
+
+  server.post(
+    '/rename',
+    { schema: { body: renameBodySchema } },
+    renameRoute
   );
 
   done();
