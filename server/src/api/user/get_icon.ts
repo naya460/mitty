@@ -16,6 +16,7 @@ import { createCanvas } from "canvas";
 import authUser from "common/auth_user";
 import prisma from "lib/prisma";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
+import md5 from "md5";
 
 export const getIconRoute: UseRouteHandlerMethod = async (req, res) => {
   // ユーザーを認証
@@ -40,20 +41,28 @@ export const getIconRoute: UseRouteHandlerMethod = async (req, res) => {
   }
 
   // 画像を生成
-  const canvas = createCanvas(256, 256);
+  const canvas = createCanvas(255, 255);
   const ctx = canvas.getContext('2d');
 
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, 256, 256);
 
-  const text = name[0];
-  ctx.font = "192px sans-serif";
-  ctx.fillStyle = "#000000";
-  ctx.fillText(text, ctx.measureText(text).width / 2, 208);
+  const hash = md5(auth.user_id);
+
+  const color = parseInt(hash[0], 16) * 16 + parseInt(hash[1], 16);
+  ctx.fillStyle = `hsl(${color} 90% 45%)`;
+
+  for (let i = 0; i < 3; ++i) {
+    for (let j = 0; j < 5; ++j) {
+      if (parseInt(hash[i * 3 + j + 2], 16) % 2) {
+        ctx.fillRect(53 + i * 30, 53 + j * 30, 30, 30);
+        ctx.fillRect(173 - i * 30, 53 + j * 30, 30, 30);
+      }      
+    }
+  }
 
   const image = canvas.toBuffer('image/jpeg');
 
-  console.log(image);
   res.status(200).type('image/jpeg');
   return image;
 }
