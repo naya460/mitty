@@ -33,6 +33,8 @@ export default function UserCard() {
   const textbox_ref = useRef<TextBoxRef>();
 
   const [imageUrl, setImageUrl] = useState('');
+  const [iconDialog, setIconDialog] = useState(false);
+  const canvas_ref = useRef<HTMLCanvasElement>();
 
   // サインアウト処理
   const handleSignOut = async () => {
@@ -56,6 +58,45 @@ export default function UserCard() {
       { ...options, mode: 'cors', credentials: 'include',  }
     );
     textbox_ref.current.clearText();
+  }
+
+  // アイコンを変更する処理
+  const handleSetIcon = async (event) => {
+    event.preventDefault();
+
+    const new_icon = canvas_ref.current.toDataURL('image/jpeg');
+    console.log(new_icon);
+  }
+
+  // ファイルを読み込み時の処理
+  const handleChange = async (event) => {
+    event.preventDefault();
+    
+    const file = event.target.files[0];
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const image = new Image();
+      image.onload = () => {
+        const ctx = canvas_ref.current.getContext('2d');
+        // 縦長のとき
+        if (image.height >= image.width) {
+          ctx.drawImage(
+            image, 0, -image.height * (256 / image.width) / 2 + 128,
+            256, image.height * (256 / image.width)
+          );
+        }
+        // 横長のとき
+        else {
+          ctx.drawImage(
+            image, -image.width * (256 / image.height) / 2 + 128, 0,
+            image.width * (256 / image.height), 256
+          );
+        }
+      }
+      image.src = reader.result as string;
+    }
+    reader.readAsDataURL(file);
   }
 
   useEffect(() => {
@@ -87,8 +128,11 @@ export default function UserCard() {
         setHidden={() => setDisplayPopup(false)}
         list={[
           {
-            text: 'Change Display Name',
+            text: '表示名を変更',
             onClick: () => { setDisplayPopup(false); setDialog(true); }
+          }, {
+            text: 'アイコンを変更',
+            onClick: () => { setDisplayPopup(false); setIconDialog(true); }
           }, {
             text: 'Sign Out', onClick: handleSignOut
           },
@@ -96,7 +140,7 @@ export default function UserCard() {
       />
       { /* dialog */ }
       <FormDialog
-        title={'ユーザーの表示名を変更'}
+        title='表示名を変更'
         display={dialog}
         setHidden={() => setDialog(false)}
         onSubmit={handleRename}
@@ -110,6 +154,20 @@ export default function UserCard() {
           styleOnDark={true}
           ref={textbox_ref}
         />
+      </FormDialog>
+      <FormDialog
+        title='アイコンを変更'
+        display={iconDialog}
+        setHidden={() => setIconDialog(false)}
+        onSubmit={handleSetIcon}
+        accept_text='変更'
+      >
+        <canvas
+          width='256px' height='256px'
+          ref={canvas_ref}
+          style={{borderRadius: '128px'}}
+        />
+        <input id='icon' type='file' accept='image/*' onChange={handleChange} />
       </FormDialog>
     </div>
   );
