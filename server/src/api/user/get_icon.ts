@@ -26,18 +26,24 @@ export const getIconRoute: UseRouteHandlerMethod = async (req, res) => {
     return;
   }
 
-  // 表示名を入手
-  const name = (await prisma.user.findUnique({
+  // アイコンを入手
+  const user = await prisma.user.findUnique({
     select: {
-      display_name: true,
+      icon: true,
     },
     where: {
       user_id: auth.user_id,
     },
-  }))?.display_name;
-  if (name === undefined) {
+  });
+  if (user === null) {
     res.status(400);
     return;
+  }
+
+  // アイコンがある場合
+  if (user.icon !== null) {
+    res.status(200).type('image/jpeg');
+    return user.icon;
   }
 
   // 画像を生成
@@ -62,6 +68,16 @@ export const getIconRoute: UseRouteHandlerMethod = async (req, res) => {
   }
 
   const image = canvas.toBuffer('image/jpeg');
+
+  // identiconを保存
+  await prisma.user.update({
+    data: {
+      icon: image,
+    },
+    where: {
+      user_id: auth.user_id,
+    },
+  });
 
   res.status(200).type('image/jpeg');
   return image;

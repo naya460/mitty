@@ -28,6 +28,7 @@ model User {
     hash         String
     messages     Message[]
     groups       GroupsOnUsers[]
+    icon         Bytes?
 }
 
 model Group {
