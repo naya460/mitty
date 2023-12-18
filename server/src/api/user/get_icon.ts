@@ -49,7 +49,7 @@ export const getIconRoute: UseRouteHandlerMethod = async (req, res) => {
 
   const hash = md5(auth.user_id);
 
-  const color = parseInt(hash[0], 16) * 16 + parseInt(hash[1], 16);
+  const color = parseInt(hash[0], 16) * 16 + parseInt(hash[1], 16) * 360 / 256;
   ctx.fillStyle = `hsl(${color} 90% 45%)`;
 
   for (let i = 0; i < 3; ++i) {
