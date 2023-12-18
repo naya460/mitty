@@ -55,7 +55,7 @@ export default function UserCard() {
 
     await fetch(
       `http://${location.hostname}:9090/user/rename`,
-      { ...options, mode: 'cors', credentials: 'include',  }
+      { ...options, mode: 'cors', credentials: 'include' }
     );
     textbox_ref.current.clearText();
   }
@@ -65,7 +65,15 @@ export default function UserCard() {
     event.preventDefault();
 
     const new_icon = canvas_ref.current.toDataURL('image/jpeg');
-    console.log(new_icon);
+
+    const options = CreatePostRequest(
+      { icon: new_icon },
+    );
+
+    await fetch(
+      `http://${location.hostname}:9090/user/set_icon`,
+      { ...options, mode: 'cors', credentials: 'include' }
+    );
   }
 
   // ファイルを読み込み時の処理
