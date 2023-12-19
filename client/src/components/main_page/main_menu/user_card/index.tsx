@@ -22,17 +22,16 @@ import Button from 'components/common/button';
 import { FormDialog } from 'components/common/dialog';
 import Textbox, { TextBoxRef } from 'components/common/textbox';
 import CreatePostRequest from 'components/common/create_post_request';
+import User from 'components/main_page/common/user';
 
 export default function UserCard() {
   const router = useRouter();
-  const { user_name } = useContext(MainContext);
 
   const [displayPopup, setDisplayPopup] = useState(false);
 
   const [dialog, setDialog] = useState(false);
   const textbox_ref = useRef<TextBoxRef>();
 
-  const [imageUrl, setImageUrl] = useState('');
   const [iconDialog, setIconDialog] = useState(false);
   const canvas_ref = useRef<HTMLCanvasElement>();
 
@@ -107,17 +106,6 @@ export default function UserCard() {
     reader.readAsDataURL(file);
   }
 
-  useEffect(() => {
-    (async () => {
-      const res = await fetch(
-        `http://${location.hostname}:9090/user/get_icon`,
-        { mode: 'cors', credentials: 'include' }
-      );
-      const url = URL.createObjectURL(await res.blob());
-      setImageUrl(url);
-    })();
-  }, []);
-
   return (
     <div className={styles.top}>
       { /* button */ }
@@ -125,10 +113,7 @@ export default function UserCard() {
         className={styles.button}
         onClick={() => setDisplayPopup(true)}
       >
-        <div className={styles.user}>
-          <img src={imageUrl} className={styles.icon} />
-          <div className={styles.user_name}>{user_name}</div>
-        </div>
+        <User />
       </Button>
       { /* popup  */ }
       <PopupMenu

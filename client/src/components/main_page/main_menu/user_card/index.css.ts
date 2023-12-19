@@ -29,22 +29,6 @@ export default {
     },
     userSelect: "none",
   }),
-  user: style({
-    display: "grid",
-    gridTemplateColumns: "auto 1fr",
-    gap: "0.5rem",
-  }),
-  icon: style({
-    aspectRatio: "1 / 1",
-    width: "auto",
-    height: "1.4rem",
-    borderRadius: "0.7rem",
-  }),
-  user_name: style({
-    fontSize: "1rem",
-    fontFamily: "sans-serif",
-    color: gvars.color.font._0,
-  }),
   popup_hidden: style({
     visibility: "hidden",
   }),
