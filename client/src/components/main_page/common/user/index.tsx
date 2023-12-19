@@ -12,31 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useEffect, useState, useContext } from "react";
-import { MainContext } from "components/main_page/contexts";
-
 import styles from "./index.css";
 
-export default function User() {
-  const [imageUrl, setImageUrl] = useState('');
-  const { user_name } = useContext(MainContext);
+type Props = {
+  user_name: string,
+  icon_url: string,
+};
 
-  // アイコンの読み込み
-  useEffect(() => {
-    (async () => {
-      const res = await fetch(
-        `http://${location.hostname}:9090/user/get_icon`,
-        { mode: 'cors', credentials: 'include' }
-      );
-      const url = URL.createObjectURL(await res.blob());
-      setImageUrl(url);
-    })();
-  }, []);
-
+export default function User(props: Props) {
   return (
     <div className={styles.top}>
-      <img src={imageUrl} className={styles.icon} />
-      <div className={styles.name}>{user_name}</div>
+      <img src={props.icon_url} className={styles.icon} />
+      <div className={styles.name}>{props.user_name}</div>
     </div>
   );
 }

@@ -18,6 +18,7 @@ import CreatePostRequest from 'components/common/create_post_request'
 
 import styles from './index.css'
 import { MainContext } from 'components/main_page/contexts';
+import User from 'components/main_page/common/user';
 
 interface Props {
   display: boolean;
@@ -25,7 +26,7 @@ interface Props {
 }
 
 export default function MemberList(props: Props) {
-  const [members, setMembers] = useState(null);
+  const [members, setMembers] = useState<{name: string, url: string}[]>([]);
   const { group_id } = useContext(MainContext);
 
   // メンバーを取得
@@ -48,11 +49,15 @@ export default function MemberList(props: Props) {
 
       // メンバー名のリストを作成
       let list = [];
-      for (let i in json) {
-        list.push(json[i].user.display_name);
-      }
-
-      // メンバー一覧を更新
+      json.forEach(async (value) => {
+        let url = null;
+        if (value.user.icon !== null) {
+          const buffer = Buffer.from(value.user.icon, "binary");
+          const blob = new Blob([buffer], {type: "image/jpeg"});
+          url = URL.createObjectURL(blob);
+        }
+        list.push({ name: value.user.display_name, url });
+      });
       setMembers(list);
     })()
   }, [group_id]);
@@ -66,11 +71,10 @@ export default function MemberList(props: Props) {
       group_id: group_id,
       add_user_name: event.target.user_name.value
     });
-    const res = await fetch(
+    await fetch(
       `http://${location.hostname}:9090/group/member/add`,
       { ...option, mode: 'cors', credentials: 'include' }
     );
-    const message = await res.text();
   }
 
   return (
@@ -87,17 +91,11 @@ export default function MemberList(props: Props) {
         ${(props.display) && styles.top_display}
       `}>
         <div className={styles.title_text}>Group Member</div>
-        {
-          function() {
-            let list = [];
-            for (let i in members) {
-              list.push(
-                <div key={i}>{members[i]}</div>
-              );
-            }
-            return <>{list}</>
-          }()
-        }
+        <div className={styles.user_list}>{
+          members.map(value => (
+            <User user_name={value.name} icon_url={value.url} />
+          ))
+        }</div>
         <form onSubmit={handleSubmit}>
           <input type='text' name='user_name'/><br/>
           <button type='submit'>Add Member</button>

@@ -82,4 +82,9 @@ export default {
     textAlign: "center",
     marginBottom: "0.5rem",
   }),
+  user_list: style({
+    display: "grid",
+    gridTemplateRows: "repeat(auto)",
+    gap: "0.5rem",
+  }),
 };

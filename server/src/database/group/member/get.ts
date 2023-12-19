@@ -58,6 +58,7 @@ export default async function getGroupMember(
       user: {
         select: {
           display_name: true,
+          icon: true,
         },
       },
     },
