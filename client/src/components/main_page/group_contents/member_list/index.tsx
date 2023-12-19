@@ -26,7 +26,7 @@ interface Props {
 }
 
 export default function MemberList(props: Props) {
-  const [members, setMembers] = useState<{name: string, url: string}[]>([]);
+  const [members, setMembers] = useState<{id: string,name: string, url: string}[]>([]);
   const { group_id } = useContext(MainContext);
 
   // メンバーを取得
@@ -56,7 +56,7 @@ export default function MemberList(props: Props) {
           const blob = new Blob([buffer], {type: "image/jpeg"});
           url = URL.createObjectURL(blob);
         }
-        list.push({ name: value.user.display_name, url });
+        list.push({ id: value.user.user_id, name: value.user.display_name, url });
       });
       setMembers(list);
     })()
@@ -93,7 +93,7 @@ export default function MemberList(props: Props) {
         <div className={styles.title_text}>Group Member</div>
         <div className={styles.user_list}>{
           members.map(value => (
-            <User user_name={value.name} icon_url={value.url} />
+            <User key={value.id} user_name={value.name} icon_url={value.url} />
           ))
         }</div>
         <form onSubmit={handleSubmit}>
