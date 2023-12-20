@@ -14,8 +14,8 @@
 
 import { createCanvas } from "canvas";
 import authUser from "common/auth_user";
-import getUserIcon from "database/user/get_icon";
-import setUserIcon from "database/user/set_icon";
+import getUserIcon from "database/user/icon/get";
+import setUserIcon from "database/user/icon/set";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
 import md5 from "md5";
 

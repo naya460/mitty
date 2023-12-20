@@ -19,8 +19,8 @@ import { signoutRoute } from './signout';
 import { signupRoute, signupBodySchema } from './signup';
 import { getUserNameRoute } from "./get_name";
 import { renameBodySchema, renameRoute } from "./rename";
-import { getIconRoute } from "./get_icon";
-import { setIconRoute, setIconSchema } from "./set_icon";
+import { getIconRoute } from "./icon/get";
+import { setIconRoute, setIconSchema } from "./icon/set";
 
 export default function apiUserRoutes(
   server: FastifyInstance,

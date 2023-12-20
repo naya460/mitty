@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import authUser from "common/auth_user";
-import setUserIcon from "database/user/set_icon";
+import setUserIcon from "database/user/icon/set";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
 
 export const setIconSchema = {
