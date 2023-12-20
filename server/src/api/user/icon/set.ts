@@ -41,7 +41,7 @@ export const setIconRoute: UseRouteHandlerMethod<{
   const fileData = req.body.icon.replace(/^data:\w+\/\w+;base64,/, '');
   const image = Buffer.from(fileData, 'base64');
   
-  setUserIcon(auth.user_id, image);
+  await setUserIcon(auth.user_id, image);
 
   res.status(200);
   return;
