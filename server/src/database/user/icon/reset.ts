@@ -37,7 +37,7 @@ export default async function resetUserIcon(
       if (parseInt(hash[i * 3 + j + 2], 16) % 2) {
         ctx.fillRect(53 + i * 30, 53 + j * 30, 30, 30);
         ctx.fillRect(173 - i * 30, 53 + j * 30, 30, 30);
-      }      
+      }
     }
   }
 
