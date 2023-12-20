@@ -14,7 +14,8 @@
 
 import { createCanvas } from "canvas";
 import authUser from "common/auth_user";
-import prisma from "lib/prisma";
+import getUserIcon from "database/user/get_icon";
+import setUserIcon from "database/user/set_icon";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
 import md5 from "md5";
 
@@ -27,23 +28,16 @@ export const getIconRoute: UseRouteHandlerMethod = async (req, res) => {
   }
 
   // アイコンを入手
-  const user = await prisma.user.findUnique({
-    select: {
-      icon: true,
-    },
-    where: {
-      user_id: auth.user_id,
-    },
-  });
-  if (user === null) {
+  const icon = await getUserIcon(auth.user_id);
+  if (icon === null) {
     res.status(400);
     return;
   }
 
   // アイコンがある場合
-  if (user.icon !== null) {
+  if (icon !== null) {
     res.status(200).type('image/jpeg');
-    return user.icon;
+    return icon;
   }
 
   // 画像を生成
@@ -70,14 +64,7 @@ export const getIconRoute: UseRouteHandlerMethod = async (req, res) => {
   const image = canvas.toBuffer('image/jpeg');
 
   // identiconを保存
-  await prisma.user.update({
-    data: {
-      icon: image,
-    },
-    where: {
-      user_id: auth.user_id,
-    },
-  });
+  setUserIcon(auth.user_id, image);
 
   res.status(200).type('image/jpeg');
   return image;

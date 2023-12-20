@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import authUser from "common/auth_user";
-import prisma from "lib/prisma";
+import setUserIcon from "database/user/set_icon";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
 
 export const setIconSchema = {
@@ -41,14 +41,7 @@ export const setIconRoute: UseRouteHandlerMethod<{
   const fileData = req.body.icon.replace(/^data:\w+\/\w+;base64,/, '');
   const image = Buffer.from(fileData, 'base64');
   
-  await prisma.user.update({
-    data: {
-      icon: image,
-    },
-    where: {
-      user_id: auth.user_id,
-    },
-  });
+  setUserIcon(auth.user_id, image);
 
   res.status(200);
   return;
