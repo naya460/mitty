@@ -15,6 +15,10 @@
 import createGroup from "database/group/create";
 import { getClient } from "websocket/subscribe";
 
+import { Redis } from 'ioredis';
+const redis = new Redis();
+const redis_pub = new Redis();
+
 export default async function wsCreateGroupRoute(
   json_message: any,
   user_id: string,
@@ -22,6 +26,15 @@ export default async function wsCreateGroupRoute(
   // グループ名があるか確認
   const group_name = json_message.group_name;
   if (group_name === undefined) return;
+
+  redis_pub.publish('api/group/create', JSON.stringify({
+    user_id, group_name,
+  }));
+}
+
+redis.subscribe('api/group/create');
+redis.on('message', async (channel, message) => {
+  const {user_id, group_name} = JSON.parse(message);
 
   // グループを作成
   const group_id = await createGroup(user_id, group_name);
@@ -36,4 +49,4 @@ export default async function wsCreateGroupRoute(
       group_name: group_name,
     }));
   });
-}
+});
