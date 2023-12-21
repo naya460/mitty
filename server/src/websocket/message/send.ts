@@ -17,6 +17,9 @@ import prisma from 'lib/prisma';
 import addMessage from "database/message/add";
 import getUserDisplayName from "database/user/get_display_name";
 import { getClient } from 'websocket/subscribe';
+import { Redis } from 'ioredis';
+const redis_pub = new Redis();
+const redis_sub = new Redis();
 
 export default async function wsSendMessageRoute(
   json_message: any,
@@ -33,14 +36,21 @@ export default async function wsSendMessageRoute(
   // メッセージが空のとき無視
   if (message_text === '') return;
 
+  // 配信
+  redis_pub.publish('api/message/send', JSON.stringify({
+    user_id, group_id, message_text
+  }));
+}
+
+redis_sub.subscribe('api/message/send');
+redis_sub.on('message', async (channel, message) => {
+  const {user_id, group_id, message_text} = JSON.parse(message);
+
   // メッセージを追加
   const success = await addMessage(user_id, group_id, message_text);
   if (success === false) {
     return;
   }
-
-  // display_nameを取得
-  const display_name = await getUserDisplayName(user_id);
 
   // グループのメンバーのクッキーを取得
   const member_cookie = await prisma.groupsOnUsers.findMany({
@@ -55,6 +65,9 @@ export default async function wsSendMessageRoute(
       group_id: group_id
     }
   });
+
+  // display_nameを取得
+  const display_name = await getUserDisplayName(user_id);
 
   // メッセージをメンバーに送信
   member_cookie.forEach(async (data) => {
@@ -77,4 +90,4 @@ export default async function wsSendMessageRoute(
       }));
     });
   });
-}
+});
