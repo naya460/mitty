@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import createGroup from "database/group/create";
 import { getClient } from "websocket/subscribe";
 
 import { Redis } from 'ioredis';
@@ -23,10 +22,7 @@ export default function subscribeGroupCreate() {
 }
 
 redis.on('message', async (channel, message) => {
-  const {user_id, group_name} = JSON.parse(message);
-
-  // グループを作成
-  const group_id = await createGroup(user_id, group_name);
+  const {user_id, group_id, group_name} = JSON.parse(message);
 
   // ユーザーに作成したグループを返答
   const ws = await getClient(user_id);

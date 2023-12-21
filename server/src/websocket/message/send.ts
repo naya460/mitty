@@ -14,7 +14,6 @@
 
 import prisma from 'lib/prisma';
 
-import addMessage from "database/message/add";
 import getUserDisplayName from "database/user/get_display_name";
 import { getClient } from 'websocket/subscribe';
 
@@ -27,12 +26,6 @@ export default function subscribeMessageSend() {
 
 redis.on('message', async (channel, message) => {
   const {user_id, group_id, message_text} = JSON.parse(message);
-
-  // メッセージを追加
-  const success = await addMessage(user_id, group_id, message_text);
-  if (success === false) {
-    return;
-  }
 
   // グループのメンバーのクッキーを取得
   const member_cookie = await prisma.groupsOnUsers.findMany({

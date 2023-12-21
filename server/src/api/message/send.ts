@@ -15,6 +15,7 @@
 import authUser from "common/auth_user";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
 import redis from "lib/redis";
+import addMessage from "database/message/add";
 
 export const sendMessageBodySchema = {
   type: 'object',
@@ -38,7 +39,13 @@ export const sendMessageRoute: UseRouteHandlerMethod<{
   const auth = await authUser(req, res);
   if (auth === null) return;
 
-  // メッセージの追加と配信
+  // メッセージを追加
+  const success = await addMessage(auth.user_id, req.body.group_id, req.body.message_text);
+  if (success === false) {
+    return;
+  }
+
+  // メッセージの配信
   await redis.publish('api/message/send', JSON.stringify({
     user_id: auth.user_id,
     group_id: req.body.group_id,

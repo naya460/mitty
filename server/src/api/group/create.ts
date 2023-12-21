@@ -14,7 +14,7 @@
 
 import authUser from "common/auth_user";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
-import redis from "lib/redis";
+import redis from "lib/redis";import createGroup from "database/group/create";
 
 export const createGroupBodySchema = {
   type: 'object',
@@ -35,9 +35,13 @@ export const createGroupRoute: UseRouteHandlerMethod<{
   const auth = await authUser(req, res);
   if (auth === null) return;
 
+  // グループを作成
+  const group_id = await createGroup(auth.user_id, req.body.group_name);
+
   // グループを追加
   await redis.publish('api/group/create', JSON.stringify({
     user_id: auth.user_id,
+    group_id: group_id,
     group_name: req.body.group_name,
   }));
 }
