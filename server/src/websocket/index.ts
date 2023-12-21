@@ -17,11 +17,13 @@ import { WebSocketServer } from 'ws';
 import redis from "lib/redis";
 
 import { authUserSession } from "common/auth_user";
-import wsSendMessageRoute from "./message/send";
+import subscribeMessageSend from "./message/send";
 import { wsSubscribeRoute } from "./subscribe";
 import wsCreateGroupRoute from "./group/create";
 
 export function createWebSocketServer(server: FastifyInstance) {
+  subscribeMessageSend();
+
   const wss = new WebSocketServer(server);
 
   server.server.on('upgrade', async (req, socket) => {
@@ -65,11 +67,6 @@ export function createWebSocketServer(server: FastifyInstance) {
       // ルーティング
       if (json_message.route === 'subscribe') {
         wsSubscribeRoute(user_id, ws_id, ws);
-        return;
-      }
-
-      if (json_message.route === 'message/send') {
-        wsSendMessageRoute(json_message, user_id);
         return;
       }
 

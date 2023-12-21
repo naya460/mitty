@@ -17,33 +17,15 @@ import prisma from 'lib/prisma';
 import addMessage from "database/message/add";
 import getUserDisplayName from "database/user/get_display_name";
 import { getClient } from 'websocket/subscribe';
+
 import { Redis } from 'ioredis';
-const redis_pub = new Redis();
-const redis_sub = new Redis();
+const redis = new Redis();
 
-export default async function wsSendMessageRoute(
-  json_message: any,
-  user_id: string,
-) {
-  // グループIDがあるか確認
-  const group_id = json_message.group_id;
-  if (group_id === undefined) return;
-
-  // メッセージがあるか確認
-  const message_text = json_message.message;
-  if (message_text === undefined) return;
-
-  // メッセージが空のとき無視
-  if (message_text === '') return;
-
-  // 配信
-  redis_pub.publish('api/message/send', JSON.stringify({
-    user_id, group_id, message_text
-  }));
+export default function subscribeMessageSend() {
+  redis.subscribe('api/message/send');
 }
 
-redis_sub.subscribe('api/message/send');
-redis_sub.on('message', async (channel, message) => {
+redis.on('message', async (channel, message) => {
   const {user_id, group_id, message_text} = JSON.parse(message);
 
   // メッセージを追加
