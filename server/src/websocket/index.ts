@@ -17,12 +17,11 @@ import { WebSocketServer } from 'ws';
 import redis from "lib/redis";
 
 import { authUserSession } from "common/auth_user";
-import subscribeMessageSend from "./message/send";
 import { wsSubscribeRoute } from "./subscribe";
-import wsCreateGroupRoute from "./group/create";
+import subscribeMessageSend from "./message/send";
+import subscribeGroupCreate from "./group/create";
 
 export function createWebSocketServer(server: FastifyInstance) {
-  subscribeMessageSend();
 
   const wss = new WebSocketServer(server);
 
@@ -69,11 +68,10 @@ export function createWebSocketServer(server: FastifyInstance) {
         wsSubscribeRoute(user_id, ws_id, ws);
         return;
       }
-
-      if (json_message.route === 'group/create') {
-        wsCreateGroupRoute(json_message, user_id);
-        return;
-      }
     });
   });
+
+  // redisのsubscribe
+  subscribeMessageSend();
+  subscribeGroupCreate();
 }
