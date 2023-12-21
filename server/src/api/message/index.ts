@@ -28,7 +28,7 @@ export default function apiMessageRoutes(
   );
 
   server.post(
-    'send',
+    '/send',
     { schema: { body: sendMessageBodySchema } },
     sendMessageRoute
   );

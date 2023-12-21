@@ -14,32 +14,32 @@
 
 import react, { useContext, useRef } from 'react';
 
-import useWebSocket from 'components/common/useWebSocket';
-
 import styles from './message_input.css';
 import { MainContext } from 'components/main_page/contexts';
 import TextBox, { TextBoxRef } from 'components/common/textbox';
 import Button from 'components/common/button';
+import CreatePostRequest from 'components/common/create_post_request';
 
 export default function MessageInput() {
-  const [socketSend] = useWebSocket();
   const textbox_ref = useRef<TextBoxRef>();
 
   const { group_id } = useContext(MainContext);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     const text = textbox_ref.current.text;
     if (text === '') return;
 
     // 送信するリクエストを作成
-    const message = {
-      route: 'message/send',
-      message: text,
+    const options = CreatePostRequest({
+      message_text: text,
       group_id: group_id
-    };
+    });
 
     // メッセージを送信
-    socketSend(message);
+    await fetch(
+      `http://${location.hostname}:9090/message/send`,
+      { ...options, mode: 'cors', credentials: 'include' }
+    );
 
     // 入力欄を初期化
     textbox_ref.current.clearText();
