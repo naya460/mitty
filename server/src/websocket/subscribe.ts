@@ -14,11 +14,12 @@
 
 import { WebSocket } from "ws";
 
-export default async function wsSubscribeRoute(
+const clients = new Map<string, {ws_id: string, ws: WebSocket}[]>();
+
+export async function wsSubscribeRoute(
   user_id: string,
   ws_id: string,
   ws: WebSocket,
-  clients: Map<string, {ws_id: string, ws: WebSocket}[]>
 ) {
   // 配信先として登録
   if (clients.get(user_id)?.find((data) => {data.ws_id === ws_id}) === undefined) {
@@ -30,4 +31,8 @@ export default async function wsSubscribeRoute(
       clients.set(user_id, tmp);
     }
   }
+}
+
+export async function getClient(user_id: string) {
+  return clients.get(user_id);
 }

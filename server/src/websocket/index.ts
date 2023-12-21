@@ -13,15 +13,13 @@
 // limitations under the License.
 
 import { FastifyInstance } from "fastify";
-import { WebSocket, WebSocketServer } from 'ws';
+import { WebSocketServer } from 'ws';
 import redis from "lib/redis";
 
 import { authUserSession } from "common/auth_user";
 import wsSendMessageRoute from "./message/send";
-import wsSubscribeRoute from "./subscribe";
+import { wsSubscribeRoute } from "./subscribe";
 import wsCreateGroupRoute from "./group/create";
-
-const clients = new Map<string, {ws_id: string, ws: WebSocket}[]>();
 
 export function createWebSocketServer(server: FastifyInstance) {
   const wss = new WebSocketServer(server);
@@ -66,17 +64,17 @@ export function createWebSocketServer(server: FastifyInstance) {
 
       // ルーティング
       if (json_message.route === 'subscribe') {
-        wsSubscribeRoute(user_id, ws_id, ws, clients);
+        wsSubscribeRoute(user_id, ws_id, ws);
         return;
       }
 
       if (json_message.route === 'message/send') {
-        wsSendMessageRoute(json_message, user_id, clients);
+        wsSendMessageRoute(json_message, user_id);
         return;
       }
 
       if (json_message.route === 'group/create') {
-        wsCreateGroupRoute(json_message, user_id, clients);
+        wsCreateGroupRoute(json_message, user_id);
         return;
       }
     });

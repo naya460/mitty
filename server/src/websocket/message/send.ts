@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { WebSocket } from "ws";
 import prisma from 'lib/prisma';
 
 import addMessage from "database/message/add";
 import getUserDisplayName from "database/user/get_display_name";
+import { getClient } from 'websocket/subscribe';
 
 export default async function wsSendMessageRoute(
   json_message: any,
   user_id: string,
-  clients: Map<string, {ws_id: string, ws: WebSocket}[]>,
 ) {
   // グループIDがあるか確認
   const group_id = json_message.group_id;
@@ -58,9 +57,9 @@ export default async function wsSendMessageRoute(
   });
 
   // メッセージをメンバーに送信
-  member_cookie.forEach((data) => {
+  member_cookie.forEach(async (data) => {
     // ユーザーのwsの一覧を取得
-    const ws_list = clients.get(data.user.user_id);
+    const ws_list = await getClient(data.user.user_id);
     // wsが無いとき次のユーザーへ
     if (ws_list === undefined) return;
 
