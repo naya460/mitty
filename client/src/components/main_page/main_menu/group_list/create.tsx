@@ -14,29 +14,29 @@
 
 import React, { useRef, useState } from 'react';
 
-import useWebSocket from 'components/common/useWebSocket';
 import Textbox, { TextBoxRef } from 'components/common/textbox';
 import Button from 'components/common/button';
 import { FormDialog } from 'components/common/dialog';
+import CreatePostRequest from 'components/common/create_post_request';
 
 export default function CreateGroupButton() {
   const [dialog, setDialog] = useState(false);
   const textbox_ref = useRef<TextBoxRef>();
-
-  const [socketSend] = useWebSocket();
 
   // グループの作成関数
   const handleCreateGroup = async (event) => {
     event.preventDefault();
 
     // 送信するリクエストを作成
-    const message = {
-      route: 'group/create',
-      group_name: event.target.group_name.value
-    }
+    const options = CreatePostRequest({
+      group_name: event.target.group_name.value,
+    });
     
     // メッセージを送信
-    socketSend(message);
+    await fetch(
+      `http://${location.hostname}:9090/group/create`,
+      { ...options, mode: 'cors', credentials: 'include' }
+    );
 
     // 中身をリセット
     textbox_ref.current.clearText();
