@@ -29,14 +29,12 @@ export const getUserNameRoute: UseRouteHandlerMethod<{
     user_id?: string,
   }
 }> = async (req, res) => {
-  console.log({ok: 1})
   // ユーザーを認証
   const auth = await authUser(req, res);
   if (auth === null) {
-    res.status(200);
-    return null
+    res.status(400);
+    return;
   };
-  console.log({ok: 1})
 
   // ユーザー名を取得
   const display_name = await getUserDisplayName(

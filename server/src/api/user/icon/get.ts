@@ -17,7 +17,18 @@ import getUserIcon from "database/user/icon/get";
 import resetUserIcon from "database/user/icon/reset";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
 
-export const getIconRoute: UseRouteHandlerMethod = async (req, res) => {
+export const getIconSchema = {
+  type: 'object',
+  properties: {
+    user_id: { type: 'string' },
+  },
+};
+
+export const getIconRoute: UseRouteHandlerMethod<{
+  Body: {
+    user_id?: string,
+  }
+}> = async (req, res) => {
   // ユーザーを認証
   const auth = await authUser(req, res);
   if (auth === null) {
@@ -26,7 +37,9 @@ export const getIconRoute: UseRouteHandlerMethod = async (req, res) => {
   }
 
   // アイコンを入手
-  const icon = await getUserIcon(auth.user_id);
+  const icon = await getUserIcon(
+    (req.body.user_id === undefined)? auth.user_id : req.body.user_id
+  );
 
   // アイコンがある場合
   if (icon !== null) {
@@ -34,7 +47,9 @@ export const getIconRoute: UseRouteHandlerMethod = async (req, res) => {
     return icon;
   }
 
-  const identicon = await resetUserIcon(auth.user_id);
+  const identicon = await resetUserIcon(
+    (req.body.user_id === undefined)? auth.user_id : req.body.user_id
+  );
 
   res.status(200).type('image/jpeg');
   return identicon;

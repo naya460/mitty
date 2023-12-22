@@ -19,7 +19,7 @@ import { signoutRoute } from './signout';
 import { signupRoute, signupBodySchema } from './signup';
 import { getUserNameRoute, getUserNameSchema } from "./get_name";
 import { renameBodySchema, renameRoute } from "./rename";
-import { getIconRoute } from "./icon/get";
+import { getIconRoute, getIconSchema } from "./icon/get";
 import { setIconRoute, setIconSchema } from "./icon/set";
 import { checkAuthRoute } from "./check_auth";
 
@@ -57,8 +57,9 @@ export default function apiUserRoutes(
     renameRoute
   );
 
-  server.get(
+  server.post(
     '/get_icon',
+    { schema: { body: getIconSchema } },
     getIconRoute
   );
 

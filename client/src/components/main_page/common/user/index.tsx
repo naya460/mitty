@@ -19,23 +19,27 @@ import CreatePostRequest from "components/common/create_post_request";
 
 type Props = {
   user_id: string,
-  icon_url: string,
 };
 
 export default function User(props: Props) {
   const [userName, setUserName] = useState('');
+  const [iconUrl, setIconUrl] = useState('');
 
   // 名前を取得
   useEffect(() => {
     (async () => {
-      const name = await getDisplayName(props.user_id);
+      const namePromise = getDisplayName(props.user_id);
+      const iconPromise = getIconUrl(props.user_id);
+      const name = await namePromise;
+      const icon = await iconPromise;
       setUserName(name);
+      setIconUrl(icon);
     })();
   }, [props.user_id]);
 
   return (
     <div className={styles.top}>
-      <img src={props.icon_url} className={styles.icon} />
+      <img src={iconUrl} className={styles.icon} />
       <div className={styles.name}>{userName}</div>
     </div>
   );
@@ -61,5 +65,28 @@ const getDisplayName = async (user_id: string): Promise<string> => {
     const display_name = (await res.json()).display_name;
     name_cache.set(user_id, display_name);
     return display_name;
+  }
+}
+
+// アイコンのキャッシュ処理
+const icon_cache = new Map<string, string>();
+
+const getIconUrl = async (user_id: string): Promise<string> => {
+  if (icon_cache.has(user_id)) {
+    return icon_cache.get(user_id);
+  } else {
+    const options = CreatePostRequest({
+      user_id: user_id,
+    });
+
+    // ユーザーのアイコンを取得
+    const res = await fetch(
+      `http://${location.hostname}:9090/user/get_icon`,
+      { ...options, mode: 'cors', credentials: 'include' }
+    );
+
+    const url = URL.createObjectURL(await res.blob());
+    icon_cache.set(user_id, url);
+    return url;
   }
 }

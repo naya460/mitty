@@ -108,18 +108,6 @@ export default function UserCard() {
     reader.readAsDataURL(file);
   }
 
-  // アイコンの読み込み
-  useEffect(() => {
-    (async () => {
-      const res = await fetch(
-        `http://${location.hostname}:9090/user/get_icon`,
-        { mode: 'cors', credentials: 'include' }
-      );
-      const url = URL.createObjectURL(await res.blob());
-      setImageUrl(url);
-    })();
-  }, []);
-
   return (
     <div className={styles.top}>
       { /* button */ }
@@ -127,7 +115,7 @@ export default function UserCard() {
         className={styles.button}
         onClick={() => setDisplayPopup(true)}
       >
-        <User user_id={user_id} icon_url={imageUrl} />
+        <User user_id={user_id} />
       </Button>
       { /* popup  */ }
       <PopupMenu

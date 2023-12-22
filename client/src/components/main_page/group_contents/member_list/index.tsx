@@ -27,18 +27,11 @@ interface Props {
 }
 
 export default function MemberList(props: Props) {
-  const [members, setMembers] = useState<{id: string, url: string}[]>([]);
+  const [members, setMembers] = useState<string[]>([]);
   const { group_id } = useContext(MainContext);
 
   useWebSocket((message) => {
-    const buffer = Buffer.from(message.add_user_icon, "binary");
-    const blob = new Blob([buffer], {type: "image/jpeg"});
-    const url = URL.createObjectURL(blob);
-    setMembers(prev => [...prev, {
-      id: message.add_user_id,
-      name: message.add_user_name,
-      url: url,
-    }]);
+    setMembers(prev => [...prev, message.add_user_id]);
   }, 'group/member/add');
 
   // メンバーを取得
@@ -62,13 +55,7 @@ export default function MemberList(props: Props) {
       // メンバー名のリストを作成
       let list = [];
       json.forEach(async (value) => {
-        let url = null;
-        if (value.user.icon !== null) {
-          const buffer = Buffer.from(value.user.icon, "binary");
-          const blob = new Blob([buffer], {type: "image/jpeg"});
-          url = URL.createObjectURL(blob);
-        }
-        list.push({ id: value.user.user_id, url });
+        list.push(value.user.user_id);
       });
       setMembers(list);
     })()
@@ -105,7 +92,7 @@ export default function MemberList(props: Props) {
         <div className={styles.title_text}>Group Member</div>
         <div className={styles.user_list}>{
           members.map(value => (
-            <User key={value.id} user_id={value.id} icon_url={value.url} />
+            <User key={value} user_id={value} />
           ))
         }</div>
         <form onSubmit={handleSubmit}>
