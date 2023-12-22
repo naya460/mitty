@@ -16,7 +16,6 @@ import { createContext } from "react";
 
 export const MainContext = createContext<{
   user_id: string,
-  user_name: string,
   group_id: string,
   group_name: string,
   set_group: (id: string, name: string) => void,

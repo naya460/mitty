@@ -12,18 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { useState, useEffect } from "react";
+
 import styles from "./index.css";
+import CreatePostRequest from "components/common/create_post_request";
 
 type Props = {
-  user_name: string,
+  user_id: string,
   icon_url: string,
 };
 
 export default function User(props: Props) {
+  const [userName, setUserName] = useState('');
+
+  // 名前を取得
+  useEffect(() => {
+    (async () => {
+      const options = CreatePostRequest({
+        user_id: props.user_id,
+      });
+
+      // ユーザーの表示名を取得
+      const res = await fetch(
+        `http://${location.hostname}:9090/user/get_name`,
+        { ...options, mode: 'cors', credentials: 'include' }
+      );
+      setUserName((await res.json()).display_name);
+    })();
+  }, []);
+
   return (
     <div className={styles.top}>
       <img src={props.icon_url} className={styles.icon} />
-      <div className={styles.name}>{props.user_name}</div>
+      <div className={styles.name}>{userName}</div>
     </div>
   );
 }

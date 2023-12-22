@@ -17,7 +17,7 @@ import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import { signinRoute, signinBodySchema } from './signin';
 import { signoutRoute } from './signout';
 import { signupRoute, signupBodySchema } from './signup';
-import { getUserNameRoute } from "./get_name";
+import { getUserNameRoute, getUserNameSchema } from "./get_name";
 import { renameBodySchema, renameRoute } from "./rename";
 import { getIconRoute } from "./icon/get";
 import { setIconRoute, setIconSchema } from "./icon/set";
@@ -44,9 +44,10 @@ export default function apiUserRoutes(
     { schema: { body: signupBodySchema } },
     signupRoute
   );
-
-  server.get(
+  
+  server.post(
     '/get_name',
+    { schema: { body: getUserNameSchema } },
     getUserNameRoute
   );
 

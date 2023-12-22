@@ -26,7 +26,7 @@ import User from 'components/main_page/common/user';
 
 export default function UserCard() {
   const router = useRouter();
-  const { user_name } = useContext(MainContext);
+  const { user_id } = useContext(MainContext);
 
   const [displayPopup, setDisplayPopup] = useState(false);
 
@@ -127,7 +127,7 @@ export default function UserCard() {
         className={styles.button}
         onClick={() => setDisplayPopup(true)}
       >
-        <User user_name={user_name} icon_url={imageUrl} />
+        <User user_id={user_id} icon_url={imageUrl} />
       </Button>
       { /* popup  */ }
       <PopupMenu
