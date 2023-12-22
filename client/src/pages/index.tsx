@@ -19,29 +19,27 @@ import MainPage from 'components/main_page'
 import { themeLight, themeDark } from 'components/common/global_vars.css';
 
 export default function IndexPage() {
-  const [json, setJson] = useState(null);
-  const [page, setPage] = useState(<></>);
+  const [authenticated, setAuthenticated] = useState(null);
+  const [userId, setUserId] = useState('');
   const [darkmode, setDarkmode] = useState(false);
 
   useEffect(() => {
     (async () => {
-      // ユーザー情報を取得
-      const user = await fetch(
-        `http://${location.hostname}:9090/user/get_name`,
+      // 認証しているか確認
+      const res = await fetch(
+        `http://${location.hostname}:9090/user/check_auth`,
         { mode: 'cors', credentials: 'include' }
       );
-      const tmp = await user.json();
+
       // サインインしていないときのページを設定
-      if (tmp === null) {
-        setPage(<AuthenticationPage />);
+      if (res.ok === false) {
+        setAuthenticated(false);
       }
-      // jsonが異なるとき更新
-      if (json !== tmp) {
-        setJson(tmp);
-        // サインインしているときのページを設定
-        if (tmp !== null) {
-          setPage(<MainPage user_name={tmp.display_name} />);
-        }        
+
+      // サインインしているときのページを設定
+      if (res.ok === true) {
+        setUserId((await res.json()).user_id);
+        setAuthenticated(true);
       }
     })();
   }, []);
@@ -66,7 +64,18 @@ export default function IndexPage() {
 
   return (
     <div style={{width: '100%', height: '100%'}} className={darkmode? themeDark: themeLight}>
-      <div style={{width: '100%', height: '100%'}}>{page}</div>
+      <div style={{width: '100%', height: '100%'}}>{
+        (() => {
+          switch(authenticated) {
+            case null:
+              return null;
+            case false:
+              return <AuthenticationPage />
+            case true:
+              return <MainPage user_id={userId} />
+          }
+        })()
+      }</div>
       <style global jsx>{`
         html,
         body,
@@ -78,5 +87,5 @@ export default function IndexPage() {
         }
       `}</style>
     </div>
-  )
+  );
 }

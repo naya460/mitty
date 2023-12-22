@@ -21,6 +21,7 @@ import { getUserNameRoute } from "./get_name";
 import { renameBodySchema, renameRoute } from "./rename";
 import { getIconRoute } from "./icon/get";
 import { setIconRoute, setIconSchema } from "./icon/set";
+import { checkAuthRoute } from "./check_auth";
 
 export default function apiUserRoutes(
   server: FastifyInstance,
@@ -64,7 +65,12 @@ export default function apiUserRoutes(
     '/set_icon',
     { schema: { body: setIconSchema } },
     setIconRoute
-  )
+  );
+
+  server.get(
+    '/check_auth',
+    checkAuthRoute
+  );
 
   done();
 }

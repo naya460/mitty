@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { createContext } from "react";
+import authUser from "common/auth_user";
+import { UseRouteHandlerMethod } from "lib/use_route_handler";
 
-export const MainContext = createContext<{
-  user_id: string,
-  user_name: string,
-  group_id: string,
-  group_name: string,
-  set_group: (id: string, name: string) => void,
-  unset_group: () => void,
-}>(null);
+export const checkAuthRoute: UseRouteHandlerMethod = async (req, res) => {
+  // ユーザーを認証
+  const auth = await authUser(req, res);
+  if (auth === null) return;
+
+  res.status(200).type('application/json');
+  return { user_id: auth.user_id };
+}

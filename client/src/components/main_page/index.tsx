@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import MainMenu from './main_menu';
@@ -22,13 +22,14 @@ import { MainContext } from './contexts';
 import styles from './index.css';
 
 interface Props {
-  user_name: string;
+  user_id: string;
 }
 
 export default function MainPage(props: Props) {
   const router = useRouter();
   const [selectedGroupId, setSelectedGroupId] = useState(null);
   const [selectedGroupName, setSelectedGroupName] = useState(null);
+  const [userName, setUserName] = useState('');
   
   // 表示するグループを変更する関数
   const handleSetSelectedGroupData = (id: string, name: string) => {
@@ -36,11 +37,24 @@ export default function MainPage(props: Props) {
     setSelectedGroupName(() => name);
   }
 
+  // 名前を取得
+  useEffect(() => {
+    (async () => {
+      // ユーザーの表示名を取得
+      const res = await fetch(
+        `http://${location.hostname}:9090/user/get_name`,
+        { mode: 'cors', credentials: 'include' }
+      );
+      setUserName((await res.json()).display_name);
+    })();
+  }, []);
+
   return (
     <div className={styles.top}>
       <div className={styles.main_view}>
         <MainContext.Provider value={{
-          user_name: props.user_name,
+          user_id: props.user_id,
+          user_name: userName,
           group_id: selectedGroupId,
           group_name: selectedGroupName,
           set_group: handleSetSelectedGroupData,
