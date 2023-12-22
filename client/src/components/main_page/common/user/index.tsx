@@ -33,6 +33,17 @@ export default function User(props: Props) {
     }
   }, "user/rename");
 
+  useWebSocket((message) => {
+    console.log(message.icon);
+    const buffer = Buffer.from(message.icon, "base64");
+    const blob = new Blob([buffer]);
+    const url = URL.createObjectURL(blob);
+    icon_cache.set(message.user_id, url);
+    if (message.user_id === props.user_id) {
+      setIconUrl(url);
+    }
+  }, "user/icon/set");
+
   // 名前を取得
   useEffect(() => {
     (async () => {

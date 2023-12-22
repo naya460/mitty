@@ -22,6 +22,7 @@ import subscribeMessageSend from "./message/send";
 import subscribeGroupCreate from "./group/create";
 import subscribeGroupMemberAdd from "./group/member/add";
 import subscribeUserRename from "./user/rename";
+import subscribeUserIconSet from "./user/icon/set";
 
 export function createWebSocketServer(server: FastifyInstance) {
 
@@ -78,4 +79,5 @@ export function createWebSocketServer(server: FastifyInstance) {
   subscribeGroupCreate();
   subscribeGroupMemberAdd();
   subscribeUserRename();
+  subscribeUserIconSet();
 }

@@ -18,12 +18,12 @@ import { getClient } from "websocket/subscribe";
 import { Redis } from "ioredis";
 const redis = new Redis();
 
-export default function subscribeUserRename() {
-  redis.subscribe('api/user/rename');
+export default function subscribeUserIconSet() {
+  redis.subscribe('api/user/icon/set');
 }
 
 redis.on('message', async (channel, message) => {
-  const {user_id, display_name} = JSON.parse(message);
+  const {user_id, icon} = JSON.parse(message);
 
   // 参加しているグループのメンバーを取得
   const members = await prisma.groupsOnUsers.findMany({
@@ -54,9 +54,9 @@ redis.on('message', async (channel, message) => {
 
     ws_list.forEach((ws) => {
       ws.ws.send(JSON.stringify({
-        route: 'user/rename',
+        route: 'user/icon/set',
         user_id: user_id,
-        display_name: display_name,
+        icon: icon,
       }));
     });
   });

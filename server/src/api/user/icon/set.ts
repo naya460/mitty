@@ -15,6 +15,7 @@
 import { Canvas, Image } from "canvas";
 import authUser from "common/auth_user";
 import setUserIcon from "database/user/icon/set";
+import redis from "lib/redis";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
 
 export const setIconSchema = {
@@ -66,6 +67,12 @@ export const setIconRoute: UseRouteHandlerMethod<{
   
   // アイコンに設定
   await setUserIcon(auth.user_id, verified_image);
+
+  // 配信
+  redis.publish('api/user/icon/set', JSON.stringify({
+    user_id: auth.user_id,
+    icon: verified_image.toString('base64'),
+  }));
 
   res.status(200);
   return;
