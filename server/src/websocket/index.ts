@@ -20,6 +20,7 @@ import { authUserSession } from "common/auth_user";
 import { wsSubscribeRoute } from "./subscribe";
 import subscribeMessageSend from "./message/send";
 import subscribeGroupCreate from "./group/create";
+import subscribeGroupMemberAdd from "./group/member/add";
 
 export function createWebSocketServer(server: FastifyInstance) {
 
@@ -74,4 +75,5 @@ export function createWebSocketServer(server: FastifyInstance) {
   // redisのsubscribe
   subscribeMessageSend();
   subscribeGroupCreate();
+  subscribeGroupMemberAdd();
 }

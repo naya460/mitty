@@ -14,8 +14,6 @@
 
 import prisma from 'lib/prisma';
 
-import getUserId from '../user/get_user_id';
-
 // # getGroup
 //   ユーザーが参加しているグループを取得する
 //

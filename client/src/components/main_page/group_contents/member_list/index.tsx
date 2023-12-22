@@ -19,6 +19,7 @@ import CreatePostRequest from 'components/common/create_post_request'
 import styles from './index.css'
 import { MainContext } from 'components/main_page/contexts';
 import User from 'components/main_page/common/user';
+import useWebSocket from 'components/common/useWebSocket';
 
 interface Props {
   display: boolean;
@@ -26,8 +27,19 @@ interface Props {
 }
 
 export default function MemberList(props: Props) {
-  const [members, setMembers] = useState<{id: string,name: string, url: string}[]>([]);
+  const [members, setMembers] = useState<{id: string, name: string, url: string}[]>([]);
   const { group_id } = useContext(MainContext);
+
+  useWebSocket((message) => {
+    const buffer = Buffer.from(message.add_user_icon, "binary");
+    const blob = new Blob([buffer], {type: "image/jpeg"});
+    const url = URL.createObjectURL(blob);
+    setMembers(prev => [...prev, {
+      id: message.add_user_id,
+      name: message.add_user_name,
+      url: url,
+    }]);
+  }, 'group/member/add');
 
   // メンバーを取得
   useEffect(() => {
