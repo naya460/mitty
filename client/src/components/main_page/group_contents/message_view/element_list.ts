@@ -43,7 +43,7 @@ function reducer(
 export type Element = {
   message_id: string,
   message_text: string,
-  author: { display_name: string },
+  author: { user_id: string, display_name: string },
   time: Date,
 }
 

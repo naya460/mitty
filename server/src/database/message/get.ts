@@ -54,6 +54,7 @@ export default async function getMessage(
       message_text: true,
       author: {
         select: {
+          user_id: true,
           display_name: true,
         },
       },

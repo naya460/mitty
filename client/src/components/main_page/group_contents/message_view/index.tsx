@@ -32,7 +32,7 @@ export default function MessageView(props: Props) {
   const count = useRef(0);
   const obs_ref = useRef();
   const [reachEnd, setReachEnd] = useState(false);
-  const { user_name } = useContext(MainContext);
+  const { user_id } = useContext(MainContext);
 
   const [loadNext] = useElementList({
     default_group_id: props.group_id,
@@ -99,7 +99,7 @@ export default function MessageView(props: Props) {
 
           const time_diff = value_time.diff(last_time).as("minutes");
           
-          if (time_diff <= 5 && last_message.author.display_name === value.author.display_name) {
+          if (time_diff <= 5 && last_message.author.user_id === value.author.user_id) {
             status = false;
           }
         }
@@ -110,7 +110,7 @@ export default function MessageView(props: Props) {
           <Message
             key={count.current}
             display_name={value.author.display_name}
-            mine={user_name == value.author.display_name}
+            mine={user_id == value.author.user_id}
             time={value.time}
             status={status}
           >
