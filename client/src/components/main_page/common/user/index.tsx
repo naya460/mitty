@@ -28,18 +28,10 @@ export default function User(props: Props) {
   // 名前を取得
   useEffect(() => {
     (async () => {
-      const options = CreatePostRequest({
-        user_id: props.user_id,
-      });
-
-      // ユーザーの表示名を取得
-      const res = await fetch(
-        `http://${location.hostname}:9090/user/get_name`,
-        { ...options, mode: 'cors', credentials: 'include' }
-      );
-      setUserName((await res.json()).display_name);
+      const name = await getDisplayName(props.user_id);
+      setUserName(name);
     })();
-  }, []);
+  }, [props.user_id]);
 
   return (
     <div className={styles.top}>
@@ -47,4 +39,27 @@ export default function User(props: Props) {
       <div className={styles.name}>{userName}</div>
     </div>
   );
+}
+
+// ユーザー名のキャッシュ処理
+const name_cache = new Map<string, string>();
+
+const getDisplayName = async (user_id: string): Promise<string> => {
+  if (name_cache.has(user_id)) {
+    return name_cache.get(user_id);
+  } else {
+    const options = CreatePostRequest({
+      user_id: user_id,
+    });
+
+    // ユーザーの表示名を取得
+    const res = await fetch(
+      `http://${location.hostname}:9090/user/get_name`,
+      { ...options, mode: 'cors', credentials: 'include' }
+    );
+
+    const display_name = (await res.json()).display_name;
+    name_cache.set(user_id, display_name);
+    return display_name;
+  }
 }
