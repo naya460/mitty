@@ -14,6 +14,7 @@
 
 import authUser from "common/auth_user";
 import prisma from "lib/prisma";
+import redis from "lib/redis";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
 
 export const renameBodySchema = {
@@ -47,6 +48,12 @@ export const renameRoute: UseRouteHandlerMethod<{
       display_name: req.body.new_name,
     },
   });
+
+  // 配信
+  redis.publish('api/user/rename', JSON.stringify({
+    user_id: auth.user_id,
+    display_name: req.body.new_name,
+  }));
 
   res.status(200);
   return;

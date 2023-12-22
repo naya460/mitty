@@ -16,6 +16,7 @@ import { useState, useEffect } from "react";
 
 import styles from "./index.css";
 import CreatePostRequest from "components/common/create_post_request";
+import useWebSocket from "components/common/useWebSocket";
 
 type Props = {
   user_id: string,
@@ -24,6 +25,13 @@ type Props = {
 export default function User(props: Props) {
   const [userName, setUserName] = useState('');
   const [iconUrl, setIconUrl] = useState('');
+
+  useWebSocket((message) => {
+    name_cache.set(message.user_id, message.display_name);
+    if (message.user_id === props.user_id) {
+      setUserName(message.display_name);
+    }
+  }, "user/rename");
 
   // 名前を取得
   useEffect(() => {

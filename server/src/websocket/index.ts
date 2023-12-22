@@ -21,6 +21,7 @@ import { wsSubscribeRoute } from "./subscribe";
 import subscribeMessageSend from "./message/send";
 import subscribeGroupCreate from "./group/create";
 import subscribeGroupMemberAdd from "./group/member/add";
+import subscribeUserRename from "./user/rename";
 
 export function createWebSocketServer(server: FastifyInstance) {
 
@@ -76,4 +77,5 @@ export function createWebSocketServer(server: FastifyInstance) {
   subscribeMessageSend();
   subscribeGroupCreate();
   subscribeGroupMemberAdd();
+  subscribeUserRename();
 }
