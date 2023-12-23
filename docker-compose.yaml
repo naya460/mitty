@@ -19,3 +19,8 @@ services:
       - ./client:/client
     working_dir: /client
     entrypoint: npm run dev
+  
+  redis:
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
