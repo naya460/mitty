@@ -9,6 +9,7 @@ services:
       - POSTGRES_PASSWORD=postgres
     volumes:
       - ./:/work
+      - ./db_data:/var/lib/postgresql/data
     working_dir: /work
   
   client:
