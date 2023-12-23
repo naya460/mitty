@@ -82,6 +82,7 @@ export default function UserCard() {
     event.preventDefault();
     
     const file = event.target.files[0];
+    if (file === undefined) return;
 
     const reader = new FileReader();
     reader.onload = () => {
