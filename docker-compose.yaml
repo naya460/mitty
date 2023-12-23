@@ -1,7 +1,9 @@
 version: '3'
 services:
-  db:
-    build: .
+  postgres:
+    build:
+      context: .
+      dockerfile: ./postgres.dockerfile
     ports:
       - 5432:5432
     environment:
@@ -25,3 +27,14 @@ services:
     image: redis:7-alpine
     ports:
       - 6379:6379
+  
+  server:
+    build:
+      context: .
+      dockerfile: ./server/server.dockerfile
+    ports:
+      - 9090:9090
+    volumes:
+      - ./server:/server
+    working_dir: /server
+    entrypoint: npm run dev

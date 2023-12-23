@@ -15,8 +15,14 @@
 import { Redis } from "ioredis";
 
 import { getClient } from "websocket/subscribe";
-const redis = new Redis();
-const redis_pub = new Redis();
+const redis = new Redis({
+  host: "redis",
+  port: 6379,
+});
+const redis_pub = new Redis({
+  host: "redis",
+  port: 6379,
+});
 
 export default function subscribeGroupMemberAdd() {
   redis.subscribe('api/group/member/add');
