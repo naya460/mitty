@@ -10,3 +10,12 @@ services:
     volumes:
       - ./:/work
     working_dir: /work
+  
+  client:
+    image: node:20-alpine
+    ports:
+      - 3000:3000
+    volumes:
+      - ./client:/client
+    working_dir: /client
+    entrypoint: npm run dev
