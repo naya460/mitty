@@ -12,100 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useState, useEffect } from "react";
-
+import UserIcon from "./icon";
 import styles from "./index.css";
-import CreatePostRequest from "components/common/create_post_request";
-import useWebSocket from "components/common/useWebSocket";
+import UserName from "./name";
 
 type Props = {
   user_id: string,
 };
 
 export default function User(props: Props) {
-  const [userName, setUserName] = useState('');
-  const [iconUrl, setIconUrl] = useState('');
-
-  useWebSocket((message) => {
-    name_cache.set(message.user_id, message.display_name);
-    if (message.user_id === props.user_id) {
-      setUserName(message.display_name);
-    }
-  }, "user/rename");
-
-  useWebSocket((message) => {
-    console.log(message.icon);
-    const buffer = Buffer.from(message.icon, "base64");
-    const blob = new Blob([buffer]);
-    const url = URL.createObjectURL(blob);
-    icon_cache.set(message.user_id, url);
-    if (message.user_id === props.user_id) {
-      setIconUrl(url);
-    }
-  }, "user/icon/set");
-
-  // 名前を取得
-  useEffect(() => {
-    (async () => {
-      const namePromise = getDisplayName(props.user_id);
-      const iconPromise = getIconUrl(props.user_id);
-      const name = await namePromise;
-      const icon = await iconPromise;
-      setUserName(name);
-      setIconUrl(icon);
-    })();
-  }, [props.user_id]);
 
   return (
     <div className={styles.top}>
-      <img src={iconUrl} className={styles.icon} />
-      <div className={styles.name}>{userName}</div>
+      <UserIcon user_id={props.user_id} />
+      <UserName user_id={props.user_id} />
     </div>
   );
-}
-
-// ユーザー名のキャッシュ処理
-const name_cache = new Map<string, string>();
-
-const getDisplayName = async (user_id: string): Promise<string> => {
-  if (name_cache.has(user_id)) {
-    return name_cache.get(user_id);
-  } else {
-    const options = CreatePostRequest({
-      user_id: user_id,
-    });
-
-    // ユーザーの表示名を取得
-    const res = await fetch(
-      `http://${location.hostname}:9090/user/get_name`,
-      { ...options, mode: 'cors', credentials: 'include' }
-    );
-
-    const display_name = (await res.json()).display_name;
-    name_cache.set(user_id, display_name);
-    return display_name;
-  }
-}
-
-// アイコンのキャッシュ処理
-const icon_cache = new Map<string, string>();
-
-const getIconUrl = async (user_id: string): Promise<string> => {
-  if (icon_cache.has(user_id)) {
-    return icon_cache.get(user_id);
-  } else {
-    const options = CreatePostRequest({
-      user_id: user_id,
-    });
-
-    // ユーザーのアイコンを取得
-    const res = await fetch(
-      `http://${location.hostname}:9090/user/get_icon`,
-      { ...options, mode: 'cors', credentials: 'include' }
-    );
-
-    const url = URL.createObjectURL(await res.blob());
-    icon_cache.set(user_id, url);
-    return url;
-  }
 }
