@@ -13,18 +13,20 @@
 // limitations under the License.
 
 import { style } from "@vanilla-extract/css";
-import { gvars } from "components/common/global_vars.css";
+import { UserIconVars } from "../common/user/icon.css";
+import { UserNameVars } from "../common/user/name.css";
 
 export default {
   top: style({
+    padding: "1rem",
+    boxSizing: "border-box",
     display: "grid",
     gridTemplateColumns: "auto 1fr",
-    gap: "0.5rem",
-  }),
-  name: style({
-    fontSize: "1rem",
-    fontFamily: "sans-serif",
-    color: gvars.color.font._0,
-    alignSelf: "center"
+    height: "fit-content",
+    gap: "1rem",
+    vars: {
+      [UserIconVars.size]: "6rem",
+      [UserNameVars.fontSize]: "1.4rem",
+    },
   }),
 };

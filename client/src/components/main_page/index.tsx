@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import MainMenu from './main_menu';
@@ -20,6 +20,7 @@ import GroupContents from './group_contents';
 import { MainContext } from './contexts';
 
 import styles from './index.css';
+import UserProfile from './user_profile';
 
 interface Props {
   user_id: string;
@@ -29,11 +30,20 @@ export default function MainPage(props: Props) {
   const router = useRouter();
   const [selectedGroupId, setSelectedGroupId] = useState(null);
   const [selectedGroupName, setSelectedGroupName] = useState(null);
+  const [selectedUserProfile, setSelectedUserProfile] = useState(null);
   
   // 表示するグループを変更する関数
   const handleSetSelectedGroupData = (id: string, name: string) => {
     setSelectedGroupId(() => id);
     setSelectedGroupName(() => name);
+    setSelectedUserProfile(() => null);
+  }
+
+  // 表示するユーザープロフィールを変更する関数
+  const handleSetSelectedUserProfile = (id: string) => {
+    setSelectedGroupId(() => null);
+    setSelectedGroupName(() => null);
+    setSelectedUserProfile(() => id);
   }
 
   return (
@@ -45,9 +55,19 @@ export default function MainPage(props: Props) {
           group_name: selectedGroupName,
           set_group: handleSetSelectedGroupData,
           unset_group: () => router.back(),
+          set_user_profile: handleSetSelectedUserProfile,
         }}>
           <MainMenu />
-          <GroupContents />
+          <div style={{
+            display: `${(selectedGroupId)? 'flex' : 'none'}`,
+            width: "100%",
+            height: "100%"
+          }}><GroupContents /></div>
+          <div style={{
+            display: `${(selectedUserProfile)? 'flex' : 'none'}`,
+            width: "100%",
+            height: "100%"
+          }}><UserProfile user_id={selectedUserProfile} /></div>
         </MainContext.Provider>
       </div>
     </div>

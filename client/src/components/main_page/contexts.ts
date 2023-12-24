@@ -20,4 +20,5 @@ export const MainContext = createContext<{
   group_name: string,
   set_group: (id: string, name: string) => void,
   unset_group: () => void,
+  set_user_profile: (id: string) => void,
 }>(null);

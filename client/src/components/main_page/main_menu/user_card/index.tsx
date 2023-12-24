@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 
 import styles from './index.css';
 import PopupMenu from 'components/common/popup_menu';
@@ -26,7 +26,7 @@ import User from 'components/main_page/common/user';
 
 export default function UserCard() {
   const router = useRouter();
-  const { user_id } = useContext(MainContext);
+  const { user_id, set_user_profile } = useContext(MainContext);
 
   const [displayPopup, setDisplayPopup] = useState(false);
 
@@ -152,6 +152,9 @@ export default function UserCard() {
         setHidden={() => setDisplayPopup(false)}
         list={[
           {
+            text: 'プロフィールを表示',
+            onClick: () => { setDisplayPopup(false); set_user_profile(user_id); }
+          } , {
             text: '表示名を変更',
             onClick: () => { setDisplayPopup(false); setDialog(true); }
           }, {

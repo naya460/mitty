@@ -14,7 +14,7 @@
 
 import { useEffect, useState } from "react";
 
-import styles from "./index.css";
+import styles from "./name.css";
 
 import useWebSocket from "components/common/useWebSocket";
 import CreatePostRequest from "components/common/create_post_request";

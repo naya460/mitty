@@ -21,7 +21,6 @@ type Props = {
 };
 
 export default function User(props: Props) {
-
   return (
     <div className={styles.top}>
       <UserIcon user_id={props.user_id} />

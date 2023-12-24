@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { style } from "@vanilla-extract/css";
+import { createVar, fallbackVar, style } from "@vanilla-extract/css";
 import { gvars } from "components/common/global_vars.css";
 
+export const UserNameVars = {
+  fontSize: createVar(),
+};
+
 export default {
-  top: style({
-    display: "grid",
-    gridTemplateColumns: "auto 1fr",
-    gap: "0.5rem",
-  }),
   name: style({
-    fontSize: "1rem",
+    fontSize: fallbackVar(UserNameVars.fontSize, "1rem"),
     fontFamily: "sans-serif",
     color: gvars.color.font._0,
     alignSelf: "center"

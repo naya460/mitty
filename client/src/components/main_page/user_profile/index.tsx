@@ -12,19 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { style } from "@vanilla-extract/css";
-import { gvars } from "components/common/global_vars.css";
+import styles from "./index.css";
 
-export default {
-  top: style({
-    display: "grid",
-    gridTemplateColumns: "auto 1fr",
-    gap: "0.5rem",
-  }),
-  name: style({
-    fontSize: "1rem",
-    fontFamily: "sans-serif",
-    color: gvars.color.font._0,
-    alignSelf: "center"
-  }),
+import UserIcon from "../common/user/icon";
+import UserName from "../common/user/name";
+
+type Props = {
+  user_id: string,
 };
+
+export default function UserProfile(props: Props) {
+  return (
+    <div className={styles.top}>
+      <UserIcon user_id={props.user_id} />
+      <UserName user_id={props.user_id} />
+    </div>
+  );
+}
