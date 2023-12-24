@@ -36,6 +36,7 @@ services:
       dockerfile: ./server/server.dockerfile
     ports:
       - 9090:9090
+      - 5555:5555
     volumes:
       - ./server:/server
     working_dir: /server
