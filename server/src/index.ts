@@ -22,6 +22,7 @@ import { createWebSocketServer } from 'websocket';
 
 const server = fastify({
   logger: true,
+  bodyLimit: 10 * 1024 * 1024
 });
 
 server.register(fastifyCookie, {

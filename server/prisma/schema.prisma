@@ -29,6 +29,7 @@ model User {
     messages     Message[]
     groups       GroupsOnUsers[]
     icon         Bytes?
+    files        File[]
 }
 
 model Group {
@@ -57,4 +58,17 @@ model Message {
     time         DateTime @default(now())
 
     @@index([message_id, group_id])
+}
+
+model File {
+    file_id    String   @id @default(cuid())
+    file_type  String
+    file_data  Bytes
+
+    author     User     @relation(fields: [author_id], references: [user_id])
+    author_id  String
+
+    time       DateTime @default(now())
+
+    @@index([author_id])
 }

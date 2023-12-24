@@ -33,9 +33,10 @@ export default function UserCard() {
   const [dialog, setDialog] = useState(false);
   const textbox_ref = useRef<TextBoxRef>();
   
-  const [imageUrl, setImageUrl] = useState('');
   const [iconDialog, setIconDialog] = useState(false);
   const canvas_ref = useRef<HTMLCanvasElement>();
+
+  const [imageDialog, setImageDialog] = useState(false);
 
   // サインアウト処理
   const handleSignOut = async () => {
@@ -109,6 +110,33 @@ export default function UserCard() {
     reader.readAsDataURL(file);
   }
 
+  // 画像を送信する処理
+  const handleSendImage = async (event) => {
+    event.preventDefault();
+
+    const file = event.target.image.files[0];
+    if (file === undefined) return;
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const options = CreatePostRequest(
+        { file: reader.result },
+      );
+  
+      await fetch(
+        `http://${location.hostname}:9090/file/add`,
+        { ...options, mode: 'cors', credentials: 'include' }
+      );
+  
+      const data = await fetch(
+        `http://${location.hostname}:9090/user/get_file_list`,
+        {  mode: 'cors', credentials: 'include' }
+      );
+      console.log(await data.json());
+    }
+    reader.readAsDataURL(file);
+  }
+
   return (
     <div className={styles.top}>
       { /* button */ }
@@ -131,7 +159,10 @@ export default function UserCard() {
             onClick: () => { setDisplayPopup(false); setIconDialog(true); }
           }, {
             text: 'Sign Out', onClick: handleSignOut
-          },
+          }, {
+            text: '［開発段階］画像を送信',
+            onClick: () => { setDisplayPopup(false); setImageDialog(true); }
+          }
         ]}
       />
       { /* dialog */ }
@@ -164,6 +195,15 @@ export default function UserCard() {
           style={{borderRadius: '128px'}}
         />
         <input id='icon' type='file' accept='image/*' onChange={handleChange} />
+      </FormDialog>
+      <FormDialog
+        title='画像を送信'
+        display={imageDialog}
+        setHidden={() => setImageDialog(false)}
+        onSubmit={handleSendImage}
+        accept_text='送信'
+      >
+        <input id='image' type='file' accept='image/*' />
       </FormDialog>
     </div>
   );

@@ -13,27 +13,18 @@
 // limitations under the License.
 
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
+import { addFileRoute, addFileSchema } from "./add";
 
-import apiUserRoutes from "./user";
-import apiMessageRoutes from "./message";
-import apiGroupRoutes from "./group";
-import { useWsRoute } from "./use_ws";
-import apiFileRoutes from "./file";
-
-export default function apiRoutes(
+export default function apiFileRoutes(
   server: FastifyInstance,
   opts: FastifyPluginOptions,
   done: (err?: Error | undefined) => void
 ): void {
-  server.register(apiUserRoutes, { prefix: 'user' });
-
-  server.register(apiMessageRoutes, { prefix: 'message' });
-
-  server.register(apiGroupRoutes, { prefix: 'group' });
-
-  server.register(apiFileRoutes, { prefix: 'file' });
-
-  server.get('/use_ws', useWsRoute);
+  server.post(
+    '/add',
+    { schema: { body: addFileSchema }},
+    addFileRoute
+  );
 
   done();
 }

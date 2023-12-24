@@ -22,6 +22,7 @@ import { renameBodySchema, renameRoute } from "./rename";
 import { getIconRoute, getIconSchema } from "./icon/get";
 import { setIconRoute, setIconSchema } from "./icon/set";
 import { checkAuthRoute } from "./check_auth";
+import { getUserFileListRoute } from "./get_file_list";
 
 export default function apiUserRoutes(
   server: FastifyInstance,
@@ -72,6 +73,11 @@ export default function apiUserRoutes(
   server.get(
     '/check_auth',
     checkAuthRoute
+  );
+
+  server.get(
+    '/get_file_list',
+    getUserFileListRoute
   );
 
   done();
