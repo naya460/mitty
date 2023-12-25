@@ -58,7 +58,7 @@ export default function UserProfile(props: Props) {
       </div>
       <div className={styles.image_list}>
         {Array.from(files).map(value => (
-          <img src={value[1]} className={styles.image} />
+          <img src={value[1]} key={value[1]} className={styles.image} />
         ))}
       </div>
     </div>
