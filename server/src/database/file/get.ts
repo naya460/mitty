@@ -12,26 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { FastifyInstance, FastifyPluginOptions } from "fastify";
-import { addFileRoute, addFileSchema } from "./add";
-import { getFileRoute, getFileSchema } from "./get";
+import prisma from "lib/prisma";
 
-export default function apiFileRoutes(
-  server: FastifyInstance,
-  opts: FastifyPluginOptions,
-  done: (err?: Error | undefined) => void
-): void {
-  server.post(
-    '/add',
-    { schema: { body: addFileSchema }},
-    addFileRoute
-  );
-
-  server.post(
-    '/get',
-    { schema: { body: getFileSchema }},
-    getFileRoute
-  );
-
-  done();
+export default async function getFile(
+  file_id: string,
+): Promise<{file_type: string, file_data: Buffer} | null> {
+  // ファイルを読み込み
+  const file = await prisma.file.findUnique({
+    select: {
+      file_type: true,
+      file_data: true,
+    },
+    where: {
+      file_id: file_id,
+    },
+  });
+  if (file === null) return null;
+  return file;
 }

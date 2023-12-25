@@ -18,6 +18,10 @@ import { UserNameVars } from "../common/user/name.css";
 
 export default {
   top: style({
+    overflowY: "scroll",
+    width: "100%",
+  }),
+  header: style({
     padding: "1rem",
     boxSizing: "border-box",
     display: "grid",
@@ -29,4 +33,18 @@ export default {
       [UserNameVars.fontSize]: "1.4rem",
     },
   }),
+  image_list: style({
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, 10rem)",
+    gridTemplateRows: "10rem",
+    width: "100%",
+    boxSizing: "border-box",
+    padding: "1rem",
+    gap: "1rem",
+  }),
+  image: style({
+    width: "100%",
+    height: "100%",
+    objectFit: "cover"
+  })
 };
