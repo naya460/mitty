@@ -61,6 +61,9 @@ const getIconUrl = async (user_id: string): Promise<string> => {
   if (icon_cache.has(user_id)) {
     return icon_cache.get(user_id);
   } else {
+    // nullのとき無視
+    if (user_id === null) return;
+
     const options = CreatePostRequest({
       user_id: user_id,
     });
