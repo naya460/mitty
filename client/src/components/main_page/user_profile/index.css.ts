@@ -35,16 +35,18 @@ export default {
   }),
   image_list: style({
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, 10rem)",
-    gridTemplateRows: "10rem",
+    gridTemplateColumns: "repeat(auto-fill, minmax(10rem, 1fr))",
     width: "100%",
     boxSizing: "border-box",
     padding: "1rem",
     gap: "1rem",
+    justifyItems: "center",
+    transition: "grid-template-columns 1s"
   }),
   image: style({
+    aspectRatio: "1/1",
     width: "100%",
-    height: "100%",
-    objectFit: "cover"
+    height: "auto",
+    objectFit: "cover",
   })
 };
