@@ -16,7 +16,7 @@ import prisma from "lib/prisma";
 
 export default async function getUserIcon(
   user_id: string,
-): Promise<Buffer | null> {
+): Promise<Buffer | null | undefined> {
   const user = await prisma.user.findUnique({
     select: {
       icon: true,
@@ -26,6 +26,6 @@ export default async function getUserIcon(
     },
   });
 
-  if (user === null) return null;
+  if (user === null) return undefined;
   return user.icon;
 }

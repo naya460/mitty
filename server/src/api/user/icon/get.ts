@@ -41,6 +41,12 @@ export const getIconRoute: UseRouteHandlerMethod<{
     (req.body.user_id === undefined)? auth.user_id : req.body.user_id
   );
 
+  // ユーザーが存在しない場合
+  if (icon === undefined) {
+    res.status(400);
+    return;
+  }
+
   // アイコンがある場合
   if (icon !== null) {
     res.status(200).type('image/jpeg');
