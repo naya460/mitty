@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import MainMenu from './main_menu';
@@ -45,6 +45,31 @@ export default function MainPage(props: Props) {
     setSelectedGroupName(() => null);
     setSelectedUserProfile(() => id);
   }
+  
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      // クエリを解析
+      const query = url.split('?')[1]?.split('&').map(data => {
+        const [key, value] = data.split('=');
+        return {key, value}
+      });
+
+      // 指定が無いとき
+      if (query === undefined) {
+        setSelectedGroupId(() => null);
+        setSelectedUserProfile(() => null);
+      }
+      // グループの指定があるとき
+      else if (query.find(value => value.key === 'group_id')) {
+        setSelectedGroupId(() => query.find(value => value.key === 'group_id').value);
+        setSelectedUserProfile(() => null);
+      }
+    }
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    }
+  }, []);
 
   return (
     <div className={styles.top}>

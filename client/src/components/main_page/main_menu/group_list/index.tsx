@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useRouter } from 'next/router';
 import { useState, useEffect, useContext } from 'react';
 import styles from './index.css'
 
@@ -22,7 +21,6 @@ import { MainContext } from 'components/main_page/contexts';
 import CreateGroupButton from './create';
 
 export default function GroupList() {
-  const router = useRouter();
   const [groupList, setGroupList] = useState<{ id: string, name: string}[]>(null);
   const { group_id, set_group } = useContext(MainContext);
 
@@ -32,31 +30,17 @@ export default function GroupList() {
     }, 'group/create'
   );
 
-  // 最初に読み込まれたとき、クエリを削除
-  useEffect(() => {
-    router.replace({
-      pathname: '/',
-      query: {}
-    });
-  }, []);
-
   // クエリが更新されたとき表示を変更
   useEffect(() => {
     // グループが存在しないとき、何もしない
     if (groupList == null) return;
 
-    // クエリが指定されていないとき、選択を解除
-    if (router.query.group_id as string == null) {
-      set_group(null, null);
-      return;
-    }
     // 表示を更新
-    const id = router.query.group_id as string;
     set_group(
-      id,
-      groupList.find(list => list.id === id).name
+      group_id,
+      groupList.find(list => list.id === group_id)?.name
     );
-  }, [router.query])
+  }, [group_id]);
 
   // 最初にグループの一覧を読み込む
   useEffect(() => {
