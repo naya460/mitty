@@ -17,7 +17,7 @@ import React, { useRef, useState } from 'react';
 import Textbox, { TextBoxRef } from 'components/common/textbox';
 import Button from 'components/common/button';
 import { FormDialog } from 'components/common/dialog';
-import CreatePostRequest from 'components/common/create_post_request';
+import mittyFetch from 'utils/fetch';
 
 export default function CreateGroupButton() {
   const [dialog, setDialog] = useState(false);
@@ -26,17 +26,14 @@ export default function CreateGroupButton() {
   // グループの作成関数
   const handleCreateGroup = async (event) => {
     event.preventDefault();
-
-    // 送信するリクエストを作成
-    const options = CreatePostRequest({
-      group_name: event.target.group_name.value,
-    });
     
     // メッセージを送信
-    await fetch(
-      `http://${location.hostname}:9090/group/create`,
-      { ...options, mode: 'cors', credentials: 'include' }
-    );
+    await mittyFetch({
+      route: 'group/create',
+      post_data: {
+        group_name: event.target.group_name.value,
+      }
+    });
 
     // 中身をリセット
     textbox_ref.current.clearText();

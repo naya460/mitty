@@ -14,8 +14,8 @@
 
 import { useEffect, useReducer, useRef, useState } from "react"
 
-import CreatePostRequest from 'components/common/create_post_request'
 import useWebSocket from 'components/common/useWebSocket'
+import mittyFetch from "utils/fetch";
 
 // ===================================
 
@@ -92,17 +92,14 @@ export default function useElementList(props: Props): [ () => Promise<boolean> ]
   const getMessages = async (last_message_id?: string) => {
     if (group_id == null) return;
 
-    // 送信するリクエストを作成
-    const options = CreatePostRequest({
-      group_id: group_id,
-      last_message_id,
-    });
-
     // メッセージを取得する
-    const res = await fetch(
-      `http://${location.hostname}:9090/message/get`,
-      { ...options, mode: 'cors', credentials: 'include' }
-    );
+    const res = await mittyFetch({
+      route: 'message/get',
+      post_data: {
+        group_id: group_id,
+        last_message_id,
+      }
+    });
     if (!res.ok) {
       return;
     }

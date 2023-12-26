@@ -19,6 +19,7 @@ import Group from './group'
 import useWebSocket from 'components/common/useWebSocket';
 import { MainContext } from 'components/main_page/contexts';
 import CreateGroupButton from './create';
+import mittyFetch from 'utils/fetch';
 
 export default function GroupList() {
   const [groupList, setGroupList] = useState<{ id: string, name: string}[]>(null);
@@ -46,10 +47,9 @@ export default function GroupList() {
   useEffect(() => {
     (async () => {
       // グループを取得
-      const res = await fetch(
-        `http://${location.hostname}:9090/group/get`,
-        { mode: 'cors', credentials: 'include' }
-      );
+      const res = await mittyFetch({
+        route: 'group/get',
+      });
       const groups = await res.json();
 
       // グループの表示を作成

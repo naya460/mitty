@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import styles from "./icon.css";
 
 import useWebSocket from "components/common/useWebSocket";
-import CreatePostRequest from "components/common/create_post_request";
+import mittyFetch from "utils/fetch";
 
 type Props = {
   user_id: string,
@@ -64,15 +64,13 @@ const getIconUrl = async (user_id: string): Promise<string> => {
     // nullのとき無視
     if (user_id === null) return;
 
-    const options = CreatePostRequest({
-      user_id: user_id,
-    });
-
     // ユーザーのアイコンを取得
-    const res = await fetch(
-      `http://${location.hostname}:9090/user/get_icon`,
-      { ...options, mode: 'cors', credentials: 'include' }
-    );
+    const res = await mittyFetch({
+      route: "user/get_icon",
+      post_data: {
+        user_id: user_id,
+      }
+    });
 
     const url = URL.createObjectURL(await res.blob());
     icon_cache.set(user_id, url);

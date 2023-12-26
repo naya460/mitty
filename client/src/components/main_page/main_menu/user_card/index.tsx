@@ -21,8 +21,8 @@ import { MainContext } from 'components/main_page/contexts';
 import Button from 'components/common/button';
 import { FormDialog } from 'components/common/dialog';
 import Textbox, { TextBoxRef } from 'components/common/textbox';
-import CreatePostRequest from 'components/common/create_post_request';
 import User from 'components/main_page/common/user';
+import mittyFetch from 'utils/fetch';
 
 export default function UserCard() {
   const router = useRouter();
@@ -40,10 +40,9 @@ export default function UserCard() {
 
   // サインアウト処理
   const handleSignOut = async () => {
-    await fetch(
-      `http://${location.hostname}:9090/user/signout`,
-      { mode: 'cors', credentials: 'include' }
-    );
+    await mittyFetch({
+      route: 'user/signout',
+    });
     router.reload();
   }
 
@@ -51,14 +50,12 @@ export default function UserCard() {
   const handleRename = async (event) => {
     event.preventDefault();
 
-    const options = CreatePostRequest(
-      { new_name: event.target.new_name.value },
-    );
-
-    await fetch(
-      `http://${location.hostname}:9090/user/rename`,
-      { ...options, mode: 'cors', credentials: 'include' }
-    );
+    await mittyFetch({
+      route: 'user/rename',
+      post_data: {
+        new_name: event.target.new_name.value
+      }
+    });
     textbox_ref.current.clearText();
   }
 
@@ -68,14 +65,12 @@ export default function UserCard() {
 
     const new_icon = canvas_ref.current.toDataURL('image/jpeg');
 
-    const options = CreatePostRequest(
-      { icon: new_icon },
-    );
-
-    await fetch(
-      `http://${location.hostname}:9090/user/set_icon`,
-      { ...options, mode: 'cors', credentials: 'include' }
-    );
+    await mittyFetch({
+      route: "user/set_icon",
+      post_data: {
+        icon: new_icon
+      }
+    });
   }
 
   // ファイルを読み込み時の処理
@@ -119,19 +114,17 @@ export default function UserCard() {
 
     const reader = new FileReader();
     reader.onload = async () => {
-      const options = CreatePostRequest(
-        { file: reader.result },
-      );
   
-      await fetch(
-        `http://${location.hostname}:9090/file/add`,
-        { ...options, mode: 'cors', credentials: 'include' }
-      );
+      await mittyFetch({
+        route: "file/add",
+        post_data: {
+          file: reader.result
+        },
+      });
   
-      const data = await fetch(
-        `http://${location.hostname}:9090/user/get_file_list`,
-        {  mode: 'cors', credentials: 'include' }
-      );
+      const data = await mittyFetch({
+        route: 'user/get_file_list',
+      });
       console.log(await data.json());
     }
     reader.readAsDataURL(file);

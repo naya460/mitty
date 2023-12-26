@@ -18,7 +18,7 @@ import styles from './message_input.css';
 import { MainContext } from 'components/main_page/contexts';
 import TextBox, { TextBoxRef } from 'components/common/textbox';
 import Button from 'components/common/button';
-import CreatePostRequest from 'components/common/create_post_request';
+import mittyFetch from 'utils/fetch';
 
 export default function MessageInput() {
   const textbox_ref = useRef<TextBoxRef>();
@@ -29,17 +29,14 @@ export default function MessageInput() {
     const text = textbox_ref.current.text;
     if (text === '') return;
 
-    // 送信するリクエストを作成
-    const options = CreatePostRequest({
-      message_text: text,
-      group_id: group_id
-    });
-
     // メッセージを送信
-    await fetch(
-      `http://${location.hostname}:9090/message/send`,
-      { ...options, mode: 'cors', credentials: 'include' }
-    );
+    await mittyFetch({
+      route: "message/send",
+      post_data: {
+        message_text: text,
+        group_id: group_id
+      }
+    });
 
     // 入力欄を初期化
     textbox_ref.current.clearText();

@@ -14,12 +14,11 @@
 
 import { useRouter } from 'next/router'
 
-import CreatePostRequest from 'components/common/create_post_request'
-
 import styles from './form.css'
 
 import Textbox from 'components/common/textbox';
 import Button from 'components/common/button';
+import mittyFetch from 'utils/fetch';
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -27,17 +26,14 @@ export default function SignUpForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // 送信するデータを作成
-    const options = CreatePostRequest({
-      user_name: event.target.user_name.value,
-      password: event.target.password.value,
-      confirm_password: event.target.confirm_password.value,
+    const response = await mittyFetch({
+      route: 'user/signup',
+      post_data: {
+        user_name: event.target.user_name.value,
+        password: event.target.password.value,
+        confirm_password: event.target.confirm_password.value,
+      }
     });
-
-    const response = await fetch(
-      `http://${location.hostname}:9090/user/signup`,
-      { ...options, mode: 'cors', credentials: 'include' }
-    );
 
     if (response.ok) {
       router.reload();

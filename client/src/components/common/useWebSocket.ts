@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
+import mittyFetch from 'utils/fetch';
 
 let socket: WebSocket = null;
 let ws_id: string = null;
@@ -27,10 +28,9 @@ export default function useWebSocket(
 
     // ws_idを取得する
     (async () => {
-      const a = await fetch(
-        `http://${location.hostname}:9090/use_ws`,
-        { mode: 'cors', credentials: 'include' }
-      );
+      const a = await mittyFetch({
+        route: 'use_ws',
+      });
       ws_id = (await a.json()).ws_id;
     })();
 

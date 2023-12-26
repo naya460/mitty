@@ -15,11 +15,10 @@
 import { useRouter } from 'next/router'
 import { useRef } from 'react'
 
-import CreatePostRequest from 'components/common/create_post_request'
-
 import styles from './form.css'
 import Textbox, { TextBoxRef } from 'components/common/textbox';
 import Button from 'components/common/button';
+import mittyFetch from 'utils/fetch';
 
 export default function SingInForm() {
   const router = useRouter();
@@ -28,16 +27,13 @@ export default function SingInForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // 送信するリクエストを作成
-    const options = CreatePostRequest({
-      user_name: event.target.user_name.value,
-      password: event.target.password.value,
+    const response = await mittyFetch({
+      route: 'user/signin',
+      post_data: {
+        user_name: event.target.user_name.value,
+        password: event.target.password.value,
+      }
     });
-
-    const response = await fetch(
-      `http://${location.hostname}:9090/user/signin`,
-      { ...options, credentials: 'include' }
-    );
     
     if (response.ok) {
       router.reload();

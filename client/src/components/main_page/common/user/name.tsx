@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import styles from "./name.css";
 
 import useWebSocket from "components/common/useWebSocket";
-import CreatePostRequest from "components/common/create_post_request";
+import mittyFetch from "utils/fetch";
 
 type Props = {
   user_id: string,
@@ -55,15 +55,13 @@ const getDisplayName = async (user_id: string): Promise<string> => {
   if (name_cache.has(user_id)) {
     return name_cache.get(user_id);
   } else {
-    const options = CreatePostRequest({
-      user_id: user_id,
-    });
-
     // ユーザーの表示名を取得
-    const res = await fetch(
-      `http://${location.hostname}:9090/user/get_name`,
-      { ...options, mode: 'cors', credentials: 'include' }
-    );
+    const res = await mittyFetch({
+      route: 'user/get_name',
+      post_data: {
+        user_id: user_id,
+      }
+    });
 
     const display_name = (await res.json()).display_name;
     name_cache.set(user_id, display_name);

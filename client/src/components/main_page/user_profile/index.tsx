@@ -17,7 +17,7 @@ import styles from "./index.css";
 import UserIcon from "../common/user/icon";
 import UserName from "../common/user/name";
 import { useEffect, useState } from "react";
-import CreatePostRequest from "components/common/create_post_request";
+import mittyFetch from "utils/fetch";
 
 type Props = {
   user_id: string,
@@ -28,20 +28,17 @@ export default function UserProfile(props: Props) {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch(
-        `http://${location.hostname}:9090/user/get_file_list`,
-        { mode: 'cors', credentials: 'include' }
-      );
+      const res = await mittyFetch({
+        route: 'user/get_file_list',
+      });
       const json = await res.json();
       json.forEach(async (value) => {
-        const options = CreatePostRequest({
-          file_id: value.file_id,
+        const res = await mittyFetch({
+          route: 'file/get',
+          post_data: {
+            file_id: value.file_id,
+          },
         });
-
-        const res = await fetch(
-          `http://${location.hostname}:9090/file/get`,
-          { ...options, mode: 'cors', credentials: 'include' }
-        );
         const url = URL.createObjectURL(await res.blob());
 
         files.set(value.file_id, url);

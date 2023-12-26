@@ -17,6 +17,7 @@ import { useState, useEffect } from 'react'
 import AuthenticationPage from 'components/authentication'
 import MainPage from 'components/main_page'
 import { themeLight, themeDark } from 'components/common/global_vars.css';
+import mittyFetch from 'utils/fetch';
 
 export default function IndexPage() {
   const [authenticated, setAuthenticated] = useState(null);
@@ -26,10 +27,9 @@ export default function IndexPage() {
   useEffect(() => {
     (async () => {
       // 認証しているか確認
-      const res = await fetch(
-        `http://${location.hostname}:9090/user/check_auth`,
-        { mode: 'cors', credentials: 'include' }
-      );
+      const res = await mittyFetch({
+        route: 'user/check_auth',
+      });
 
       // サインインしていないときのページを設定
       if (res.ok === false) {

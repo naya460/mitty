@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useState, useEffect, useContext } from 'react'
-
-import CreatePostRequest from 'components/common/create_post_request'
+import { useState, useEffect, useContext } from 'react';
 
 import styles from './index.css'
 import { MainContext } from 'components/main_page/contexts';
 import User from 'components/main_page/common/user';
 import useWebSocket from 'components/common/useWebSocket';
+import mittyFetch from 'utils/fetch';
 
 interface Props {
   display: boolean;
@@ -40,16 +39,13 @@ export default function MemberList(props: Props) {
     if (group_id == null) return;
 
     (async () => {
-      // 送信するリクエストを作成
-      const options = CreatePostRequest({
-        group_id: group_id
-      });
-
       // メンバーを取得
-      const res = await fetch(
-        `http://${location.hostname}:9090/group/member/get`,
-        { ...options, mode: 'cors', credentials: 'include' }
-      );
+      const res = await mittyFetch({
+        route: "group/member/get",
+        post_data: {
+          group_id: group_id
+        }
+      });
       const json = await res.json();
 
       // メンバー名のリストを作成
@@ -64,16 +60,14 @@ export default function MemberList(props: Props) {
   // ユーザー追加処理
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // メンバーを追加
-    const option = CreatePostRequest({
-      group_id: group_id,
-      add_user_name: event.target.user_name.value
+    
+    await mittyFetch({
+      route: 'group/member/add',
+      post_data: {
+        group_id: group_id,
+        add_user_name: event.target.user_name.value
+      }
     });
-    await fetch(
-      `http://${location.hostname}:9090/group/member/add`,
-      { ...option, mode: 'cors', credentials: 'include' }
-    );
   }
 
   return (
