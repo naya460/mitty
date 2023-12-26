@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import CreatePostRequest from "components/common/create_post_request";
+import createPostRequest from "utils/fetch/create_post_request";
 
 export default async function mittyFetch(options: {
   route: string,
@@ -21,7 +21,7 @@ export default async function mittyFetch(options: {
   // post_dataがあるとき、Requestデータを作成
   const post = (() => {
     if (options.post_data === undefined) return null;
-    return CreatePostRequest(options.post_data);
+    return createPostRequest(options.post_data);
   })();
   
   // APIにアクセス

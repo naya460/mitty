@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export default function CreatePostRequest(data: Object) {
-    // JSONとしてテキスト化
-    const json_str = JSON.stringify(data);
+export default function createPostRequest(data: Object) {
+  // JSONとしてテキスト化
+  const json_str = JSON.stringify(data);
 
-    // 送信するリクエスト内容を作成
-    return {
-        method: 'POST',
-        headers: {
-            'Content-Type': "application/json"
-        },
-        body: json_str
-    }
+  // 送信するリクエスト内容を作成
+  return {
+    method: 'POST',
+    headers: {
+      'Content-Type': "application/json"
+    },
+    body: json_str
+  }
 }
