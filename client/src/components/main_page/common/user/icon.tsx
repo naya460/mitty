@@ -18,6 +18,7 @@ import styles from "./icon.css";
 
 import useWebSocket from "components/common/useWebSocket";
 import mittyFetch from "utils/fetch";
+import { mittyCache } from "utils/cache/cache";
 
 type Props = {
   user_id: string,
@@ -32,8 +33,10 @@ export default function UserIcon(props: Props) {
     const buffer = Buffer.from(message.icon, "base64");
     const blob = new Blob([buffer]);
     const url = URL.createObjectURL(blob);
+
     // アイコンをキャッシュ
-    icon_cache.set(message.user_id, url);
+    iconCache.updateData(message.user_id, url);
+    
     // 一致するとき変更
     if (message.user_id === props.user_id) {
       setIconUrl(url);
@@ -43,9 +46,7 @@ export default function UserIcon(props: Props) {
   // アイコンを取得
   useEffect(() => {
     (async () => {
-      const iconPromise = getIconUrl(props.user_id);
-      const icon = await iconPromise;
-      setIconUrl(icon);
+      setIconUrl(await iconCache.getData(props.user_id));
     })();
   }, [props.user_id]);
 
@@ -55,25 +56,19 @@ export default function UserIcon(props: Props) {
 }
 
 // アイコンのキャッシュ処理
-const icon_cache = new Map<string, string>();
-
-const getIconUrl = async (user_id: string): Promise<string> => {
-  if (icon_cache.has(user_id)) {
-    return icon_cache.get(user_id);
-  } else {
-    // nullのとき無視
-    if (user_id === null) return;
-
+const iconCache = new mittyCache<string, string>({
+  fetcher: async (id) => {
+    if (id === null) return;
+    
     // ユーザーのアイコンを取得
     const res = await mittyFetch({
       route: "user/get_icon",
       post_data: {
-        user_id: user_id,
+        user_id: id,
       }
     });
 
     const url = URL.createObjectURL(await res.blob());
-    icon_cache.set(user_id, url);
     return url;
   }
-}
+});
