@@ -18,7 +18,7 @@ import styles from "./icon.css";
 
 import useWebSocket from "components/common/useWebSocket";
 import mittyFetch from "utils/fetch";
-import { mittyCache } from "utils/cache/cache";
+import { mittyCacheManager } from "utils/cache";
 
 type Props = {
   user_id: string,
@@ -56,7 +56,7 @@ export default function UserIcon(props: Props) {
 }
 
 // アイコンのキャッシュ処理
-const iconCache = new mittyCache<string, string>({
+const iconCache = new mittyCacheManager<string, string>({
   fetcher: async (id) => {
     if (id === null) return;
     

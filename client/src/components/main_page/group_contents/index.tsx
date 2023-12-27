@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useContext, useRef } from 'react';
+import { useContext } from 'react';
 
 import { MainContext } from '../contexts';
 import GroupContentsContainer from './container';
-import { getGroupList } from '../common/group/name';
+import { getCacheManager } from 'utils/cache/list';
 
 export default function GroupContents() {
   const { group_id } = useContext(MainContext);
@@ -27,11 +27,11 @@ export default function GroupContents() {
       width: "100%",
       height: "100%"
     }}>{
-      getGroupList().map(group => (
+      getCacheManager('group_name').getDataList().map(group => (
         <GroupContentsContainer
-          key={group.group_id}
-          group_id={group.group_id}
-          is_selected={group_id === group.group_id}
+          key={group.id}
+          group_id={group.id}
+          is_selected={group_id === group.id}
         />
       ))
     }</div>

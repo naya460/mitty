@@ -16,6 +16,8 @@ import { useEffect, useState } from "react";
 import mittyFetch from "utils/fetch";
 
 import styles from "./name.css"
+import { mittyCacheManager } from "utils/cache/manager";
+import { addCacheManager } from "utils/cache";
 
 type Props = {
   group_id: string,
@@ -27,8 +29,7 @@ export default function GroupName(props: Props) {
   // 名前を取得
   useEffect(() => {
     (async () => {
-      const name = await getGroupName(props.group_id);
-      setGroupName(name);
+      setGroupName(await nameCache.getData(props.group_id));
     })();
   }, [props.group_id]);
 
@@ -37,29 +38,21 @@ export default function GroupName(props: Props) {
   );
 }
 
-export const getGroupList = () => {
-  getGroupName(null);
-  return Array.from(name_cache).map(value => {
-    return { group_id: value[0], group_name: value[1] };
-  });
-}
-
 // グループ名のキャッシュ処理
-const name_cache = new Map<string, string>();
-
-const getGroupName = async (group_id: string): Promise<string> => {
-  if (name_cache.has(group_id)) {
-    return name_cache.get(group_id);
-  } else {
+const nameCache = new mittyCacheManager<string, string>({
+  initialize: async () => {
     // グループを取得
     const res = await mittyFetch({
       route: 'group/get',
     });
     const groups = await res.json();
 
-    groups.forEach(group => {
-      name_cache.set(group.group_id, group.group_name);
+    return groups.map(group => {
+      return {id : group.group_id, data: group.group_name};
     });
-    return name_cache.get(group_id);
+  },
+  fetcher: async (id) => {
+    return null;
   }
-}
+});
+addCacheManager('group_name', nameCache);

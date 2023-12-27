@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class mittyCache<IdT, DataT> {
+export class mittyCacheManager<IdT, DataT> {
   // キャッシュされたデータ
   private cache = new Map<IdT, DataT>;
 
@@ -21,7 +21,7 @@ export class mittyCache<IdT, DataT> {
 
   // コンストラクタ
   constructor(option: {
-    initialize?: () => {id: IdT, data: DataT}[],
+    initialize?: () => Promise<{id: IdT, data: DataT}[]>,
     fetcher: (id: IdT) => Promise<DataT>,
   }) {
     // 関数を設定
@@ -29,9 +29,11 @@ export class mittyCache<IdT, DataT> {
 
     // 初期化を行う
     if (option.initialize === undefined) return;
-    option.initialize().forEach(value => {
-      this.cache.set(value.id, value.data);
-    });
+    (async () => {
+      return (await option.initialize()).forEach(value => {
+        this.cache.set(value.id, value.data);
+      });
+    })();
   }
 
   // データを取得する関数
@@ -46,6 +48,13 @@ export class mittyCache<IdT, DataT> {
       this.cache.set(id, data);
       return data;
     }
+  }
+
+  // データの一覧を返却する関数
+  getDataList(): {id: IdT, data: DataT}[] {
+    return Array.from(this.cache).map(value => {
+      return { id: value[0], data: value[1]};
+    });
   }
   
   // データを更新する関数
