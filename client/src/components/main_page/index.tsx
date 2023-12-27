@@ -29,21 +29,48 @@ interface Props {
 export default function MainPage(props: Props) {
   const router = useRouter();
   const [selectedGroupId, setSelectedGroupId] = useState(null);
-  const [selectedGroupName, setSelectedGroupName] = useState(null);
   const [selectedUserProfile, setSelectedUserProfile] = useState(null);
   
   // 表示するグループを変更する関数
-  const handleSetSelectedGroupData = (id: string, name: string) => {
-    setSelectedGroupId(() => id);
-    setSelectedGroupName(() => name);
-    setSelectedUserProfile(() => null);
+  const handleSetSelectedGroupData = (id: string) => {
+    if (id === null) {
+      router.back();
+      return;
+    }
+
+    const option = {
+      pathname: '/',
+      query: { group_id: id }
+    };
+    
+    if (router.query.group_id == null) {
+      router.push(option);
+    }
+    // グループを選択しているとき、ページを置き換え
+    else {
+      router.replace(option);
+    }
   }
 
   // 表示するユーザープロフィールを変更する関数
   const handleSetSelectedUserProfile = (id: string) => {
-    setSelectedGroupId(() => null);
-    setSelectedGroupName(() => null);
-    setSelectedUserProfile(() => id);
+    if (id === null) {
+      router.back();
+      return;
+    }
+    
+    const option = {
+      pathname: '/',
+      query: { profile: id }
+    };
+    
+    if (router.query.profile == null) {
+      router.push(option);
+    }
+    // グループを選択しているとき、ページを置き換え
+    else {
+      router.replace(option);
+    }
   }
   
   useEffect(() => {
@@ -64,6 +91,11 @@ export default function MainPage(props: Props) {
         setSelectedGroupId(() => query.find(value => value.key === 'group_id').value);
         setSelectedUserProfile(() => null);
       }
+      // プロフィールの指定があるとき
+      else if (query.find(value => value.key === 'profile')) {
+        setSelectedGroupId(() => null);
+        setSelectedUserProfile(() => query.find(value => value.key === 'profile').value)
+      }
     }
     router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
@@ -77,7 +109,6 @@ export default function MainPage(props: Props) {
         <MainContext.Provider value={{
           user_id: props.user_id,
           group_id: selectedGroupId,
-          group_name: selectedGroupName,
           set_group: handleSetSelectedGroupData,
           unset_group: () => router.back(),
           set_user_profile: handleSetSelectedUserProfile,

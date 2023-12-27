@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useContext, useState } from 'react';
 import styles from './group.css';
 import useWebSocket from 'components/common/useWebSocket';
 import ListItem from 'components/common/list/list_item';
+import { MainContext } from 'components/main_page/contexts';
 
 interface Props {
   group_name: string;
@@ -25,7 +25,7 @@ interface Props {
 }
 
 export default function Group(props: Props) {
-  const router = useRouter();
+  const {set_group} = useContext(MainContext);
   const [newMessageCount, setNewMessageCount] = useState(0);
   
   // メッセージを受信したとき、数を増やす
@@ -43,20 +43,7 @@ export default function Group(props: Props) {
 
   // ボタンを押したとき
   const onClick = () => {
-    // router optionを作成
-    const option = {
-      pathname: '/',
-      query: { group_id: props.group_id }
-    };
-
-    // グループを選択していないとき、ページを追加して移動
-    if (router.query.group_id == null) {
-      router.push(option);
-    }
-    // グループを選択しているとき、ページを置き換え
-    else {
-      router.replace(option);
-    }
+    set_group(props.group_id);
 
     // 未読メッセージ数を0にする
     setNewMessageCount(() => 0);

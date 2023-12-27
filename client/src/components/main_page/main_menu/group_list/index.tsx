@@ -23,25 +23,13 @@ import mittyFetch from 'utils/fetch';
 
 export default function GroupList() {
   const [groupList, setGroupList] = useState<{ id: string, name: string}[]>(null);
-  const { group_id, set_group } = useContext(MainContext);
+  const { group_id } = useContext(MainContext);
 
   useWebSocket(
     (message) => {
       setGroupList([ ...groupList, { id: message.group_id, name: message.group_name }]);
     }, 'group/create'
   );
-
-  // クエリが更新されたとき表示を変更
-  useEffect(() => {
-    // グループが存在しないとき、何もしない
-    if (groupList == null) return;
-
-    // 表示を更新
-    set_group(
-      group_id,
-      groupList.find(list => list.id === group_id)?.name
-    );
-  }, [group_id]);
 
   // 最初にグループの一覧を読み込む
   useEffect(() => {
