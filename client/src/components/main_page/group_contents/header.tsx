@@ -18,13 +18,15 @@ import styles from './header.css';
 
 import { MainContext } from '../contexts';
 import Button from 'components/common/button';
+import GroupName from '../common/group/name';
 
 type Props = {
+  group_id: string,
   toggleMemberList: () => void,
 }
 
 export default function GroupContentsHeader(props: Props) {
-  const { unset_group, group_name } = useContext(MainContext);
+  const { unset_group } = useContext(MainContext);
 
   return (
   <div className={styles.header}>
@@ -32,10 +34,10 @@ export default function GroupContentsHeader(props: Props) {
       className={styles.back_button}
       onClick={unset_group}
     >←</button>
-    <div className={styles.group_name}>{group_name}</div>
+    <GroupName group_id={props.group_id} />
     <Button
       onClick={props.toggleMemberList}
     >Member</Button>
   </div>
-  )
+  );
 }

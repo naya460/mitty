@@ -22,7 +22,6 @@ import GroupContentsHeader from './header';
 
 type Props = {
   group_id: string,
-  group_name: string,
   is_selected: boolean,
 }
 
@@ -35,7 +34,7 @@ export default function GroupContentsContainer(props: Props) {
       ${(!props.is_selected) && styles.top_null}
     `}>
       <GroupContentsHeader
-        group_name={props.group_name}
+        group_id={props.group_id}
         toggleMemberList={() => setMemberList(!displayMemberList)}
       />
       <div className={styles.side}>

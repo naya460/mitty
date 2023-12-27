@@ -14,17 +14,20 @@
 
 import { style } from "@vanilla-extract/css";
 import { gvars } from "components/common/global_vars.css";
+import { GroupNameVars } from "../common/group/name.css";
 
 export default {
   header: style({
-    display: "flex",
-    flexDirection: "row",
-    flexBasis: "0",
-    flexGrow: "0",
+    display: "grid",
+    gridTemplateColumns: "auto 1fr auto",
+    gap: "0.5rem",
     padding: "0.5rem",
     backgroundColor: gvars.color.bg.light,
     boxShadow: "0 0 4px 0 rgba(0, 0, 0, 40%)",
     zIndex: 1,
+    vars: {
+      [GroupNameVars.fontSize]: "1.2rem",
+    },
   }),
   back_button: style({
     width: "0",
@@ -48,15 +51,5 @@ export default {
         },
       },
     },
-  }),
-  group_name: style({
-    display: "flex",
-    fontSize: "1.2rem",
-    fontFamily: "sans-serif",
-    color: gvars.color.font._0,
-    height: "100%",
-    marginLeft: "0.5rem",
-    alignItems: "center",
-    flexGrow: "1",
   }),
 };

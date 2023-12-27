@@ -16,16 +16,10 @@ import { useContext, useRef } from 'react';
 
 import { MainContext } from '../contexts';
 import GroupContentsContainer from './container';
+import { getGroupList } from '../common/group/name';
 
 export default function GroupContents() {
-  const containers = useRef<{group_id: string, group_name: string}[]>([]);
-  const { group_id, group_name } = useContext(MainContext);
-
-  if (containers.current.some(value => { return value.group_id === group_id }) === false) {
-    if (group_id !== null) {
-      containers.current.push({group_id, group_name});
-    }
-  }
+  const { group_id } = useContext(MainContext);
 
   return (
     <div style={{
@@ -33,12 +27,11 @@ export default function GroupContents() {
       width: "100%",
       height: "100%"
     }}>{
-      containers.current.map((container) => (
+      getGroupList().map(group => (
         <GroupContentsContainer
-          key={container.group_id}
-          group_id={container.group_id}
-          group_name={container.group_name}
-          is_selected={group_id === container.group_id}
+          key={group.group_id}
+          group_id={group.group_id}
+          is_selected={group_id === group.group_id}
         />
       ))
     }</div>
