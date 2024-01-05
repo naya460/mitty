@@ -25,6 +25,9 @@ export default async function getUserFileList(
     where: {
       author_id: user_id,
     },
+    orderBy: {
+      time: "desc",
+    },
   });
 
   return list;
