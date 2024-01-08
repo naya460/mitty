@@ -1,4 +1,4 @@
-// Copyright 2023 naya460
+// Copyright 2024 naya460
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,33 +13,12 @@
 // limitations under the License.
 
 import { style } from "@vanilla-extract/css";
-import { gvars } from "components/common/global_vars.css";
 
 export default {
-  top: style({
-    position: "sticky",
-    bottom: "0",
-    paddingTop: "0.4rem",
-    paddingBottom: "0.5rem",
-    backgroundColor: gvars.color.bg.light,
-    boxSizing: "border-box",
-  }),
-  form: style({
-    display: "grid",
-    gridTemplateColumns: "auto 1fr auto",
-    gap: "0.5rem",
+  image: style({
+    aspectRatio: "1/1",
     width: "100%",
-    height: "fit-content",
-  }),
-  message_box: style({
-    width: "100%",
-  }),
-  send_button: style({
-    width: "100%",
-    height: "100%",
-  }),
-  images: style({
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(10rem, 1fr))"
+    height: "auto",
+    objectFit: "cover",
   })
 };

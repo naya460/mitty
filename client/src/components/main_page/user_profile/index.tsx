@@ -18,7 +18,7 @@ import UserIcon from "../common/user/icon";
 import UserName from "../common/user/name";
 import { useEffect, useState } from "react";
 import mittyFetch from "utils/fetch";
-import ImagePreview from "./image_preview";
+import ImagePreview from "../common/image_preview";
 
 type Props = {
   user_id: string,

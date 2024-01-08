@@ -19,6 +19,7 @@ import { MainContext } from 'components/main_page/contexts';
 import TextBox, { TextBoxRef } from 'components/common/textbox';
 import Button, { LabelButton } from 'components/common/button';
 import mittyFetch from 'utils/fetch';
+import ImagePreview from 'components/main_page/common/image_preview';
 
 export default function MessageInput() {
   const textbox_ref = useRef<TextBoxRef>();
@@ -31,13 +32,16 @@ export default function MessageInput() {
     if (text === '') return;
 
     // 画像を送信
-    const res = await mittyFetch({
-      route: "file/add",
-      post_data: {
-        file: fileUrl,
-      },
-    });
-    console.log(await res.text());
+    if (fileUrl !== '') {
+      const res = await mittyFetch({
+        route: "file/add",
+        post_data: {
+          file: fileUrl,
+        },
+      });
+      console.log(await res.text());
+      setFileUrl('');
+    }
 
     // メッセージを送信
     await mittyFetch({
@@ -74,6 +78,10 @@ export default function MessageInput() {
 
   const handleFileChange: react.ChangeEventHandler<HTMLInputElement> = (event) => {
     const file = event.target.files[0];
+    if (file === undefined) {
+      setFileUrl('');
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -85,6 +93,15 @@ export default function MessageInput() {
 
   return (
     <div className={styles.top}>
+      {(() => {
+        if (fileUrl !== '') {
+          return (
+            <div className={styles.images}>
+              <ImagePreview src={fileUrl} />
+            </div>
+          );
+        }
+      })()}
       <form onSubmit={handleSend} className={styles.form}>
         <input
           type="file"

@@ -17,7 +17,8 @@ import styles from "./index.css";
 import mittyFetch from "utils/fetch";
 
 type Props = {
-  file_id: string,
+  file_id?: string,
+  src?: string,
 };
 
 export default function ImagePreview(props: Props) {
@@ -25,6 +26,7 @@ export default function ImagePreview(props: Props) {
 
   useEffect(() => {
     (async () => {
+      if (props.file_id === undefined) return;
       const res = await mittyFetch({
         route: 'file/get',
         post_data: {
@@ -38,7 +40,7 @@ export default function ImagePreview(props: Props) {
 
   return (
     <div>
-      <img src={url} className={styles.image} />
+      <img src={(props.src)? props.src : url} className={styles.image} />
     </div>
   );
 }
