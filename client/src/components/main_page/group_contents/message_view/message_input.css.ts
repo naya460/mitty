@@ -27,7 +27,7 @@ export default {
   }),
   form: style({
     display: "grid",
-    gridTemplateColumns: "1fr auto",
+    gridTemplateColumns: "auto 1fr auto",
     gap: "0.5rem",
     width: "100%",
     height: "fit-content",

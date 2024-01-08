@@ -18,13 +18,14 @@ export default async function addFile(
   user_id: string,
   file_type: string,
   file_data: Buffer,
-): Promise<void> {
+): Promise<string> {
   // ファイルを追加
-  await prisma.file.create({
+  const created = await prisma.file.create({
     data: {
       file_type: file_type,
       file_data: file_data,
       author_id: user_id,
     },
   });
+  return created.file_id;
 }

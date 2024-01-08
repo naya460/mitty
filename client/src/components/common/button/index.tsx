@@ -38,3 +38,19 @@ export default function Button(props: Props) {
     </div>
   );
 }
+
+type LabelButtonProps = {
+  children?: React.ReactNode,
+  for: string,
+};
+
+export const LabelButton = (props: LabelButtonProps) => {
+  return (
+    <label
+      htmlFor={props.for}
+      className={`${styles.button} ${styles.label_button}`}
+    >
+      {props.children}
+    </label>
+  );
+}

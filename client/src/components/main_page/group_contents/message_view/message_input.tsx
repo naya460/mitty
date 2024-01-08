@@ -12,22 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import react, { useContext, useRef } from 'react';
+import react, { useContext, useRef, useState } from 'react';
 
 import styles from './message_input.css';
 import { MainContext } from 'components/main_page/contexts';
 import TextBox, { TextBoxRef } from 'components/common/textbox';
-import Button from 'components/common/button';
+import Button, { LabelButton } from 'components/common/button';
 import mittyFetch from 'utils/fetch';
 
 export default function MessageInput() {
   const textbox_ref = useRef<TextBoxRef>();
+  const [fileUrl, setFileUrl] = useState('');
 
   const { group_id } = useContext(MainContext);
 
   const sendMessage = async () => {
     const text = textbox_ref.current.text;
     if (text === '') return;
+
+    // 画像を送信
+    const res = await mittyFetch({
+      route: "file/add",
+      post_data: {
+        file: fileUrl,
+      },
+    });
+    console.log(await res.text());
 
     // メッセージを送信
     await mittyFetch({
@@ -62,9 +72,30 @@ export default function MessageInput() {
 
   const disabled = group_id == null;
 
+  const handleFileChange: react.ChangeEventHandler<HTMLInputElement> = (event) => {
+    const file = event.target.files[0];
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setFileUrl(reader.result as string);
+
+    }
+    reader.readAsDataURL(file);
+  }
+
   return (
     <div className={styles.top}>
       <form onSubmit={handleSend} className={styles.form}>
+        <input
+          type="file"
+          id="file"
+          accept="image/*"
+          style={{display: "none"}}
+          onChange={handleFileChange}
+        />
+        <LabelButton for="file">
+          ＋
+        </LabelButton>
         <TextBox
           name='message'
           autoComplete='off'
@@ -78,7 +109,6 @@ export default function MessageInput() {
           type='submit'
           accent={true}
           disabled={disabled}
-          className={styles.send_button}
         >Send</Button>
       </form>
     </div>

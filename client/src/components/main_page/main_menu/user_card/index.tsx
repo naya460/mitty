@@ -36,8 +36,6 @@ export default function UserCard() {
   const [iconDialog, setIconDialog] = useState(false);
   const canvas_ref = useRef<HTMLCanvasElement>();
 
-  const [imageDialog, setImageDialog] = useState(false);
-
   // サインアウト処理
   const handleSignOut = async () => {
     await mittyFetch({
@@ -105,31 +103,6 @@ export default function UserCard() {
     reader.readAsDataURL(file);
   }
 
-  // 画像を送信する処理
-  const handleSendImage = async (event) => {
-    event.preventDefault();
-
-    const file = event.target.image.files[0];
-    if (file === undefined) return;
-
-    const reader = new FileReader();
-    reader.onload = async () => {
-  
-      await mittyFetch({
-        route: "file/add",
-        post_data: {
-          file: reader.result
-        },
-      });
-  
-      const data = await mittyFetch({
-        route: 'user/get_file_list',
-      });
-      console.log(await data.json());
-    }
-    reader.readAsDataURL(file);
-  }
-
   return (
     <div className={styles.top}>
       { /* button */ }
@@ -155,10 +128,7 @@ export default function UserCard() {
             onClick: () => { setDisplayPopup(false); setIconDialog(true); }
           }, {
             text: 'Sign Out', onClick: handleSignOut
-          }, {
-            text: '［開発段階］画像を送信',
-            onClick: () => { setDisplayPopup(false); setImageDialog(true); }
-          }
+          },
         ]}
       />
       { /* dialog */ }
@@ -191,15 +161,6 @@ export default function UserCard() {
           style={{borderRadius: '128px'}}
         />
         <input id='icon' type='file' accept='image/*' onChange={handleChange} />
-      </FormDialog>
-      <FormDialog
-        title='画像を送信'
-        display={imageDialog}
-        setHidden={() => setImageDialog(false)}
-        onSubmit={handleSendImage}
-        accept_text='送信'
-      >
-        <input id='image' type='file' accept='image/*' />
       </FormDialog>
     </div>
   );

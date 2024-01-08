@@ -57,4 +57,9 @@ export default {
       }
     }
   }),
+  label_button: style({
+    display: "flex",
+    boxSizing: "border-box",
+    alignItems: "center"
+  }),
 };
