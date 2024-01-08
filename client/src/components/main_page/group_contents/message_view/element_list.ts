@@ -44,6 +44,7 @@ export type Element = {
   message_id: string,
   message_text: string,
   author: { user_id: string, display_name: string },
+  files?: { file_id: string }[],
   time: Date,
 }
 

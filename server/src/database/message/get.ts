@@ -58,6 +58,11 @@ export default async function getMessage(
           display_name: true,
         },
       },
+      files: {
+        select: {
+          file_id: true,
+        },
+      },
       time: true,
     },
     where: {

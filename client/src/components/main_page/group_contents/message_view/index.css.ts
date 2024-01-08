@@ -64,5 +64,8 @@ export default {
     fontSize: "0.9rem",
     color: "#777777",
     margin: "0 0.5rem",
-  })
+  }),
+  image: style({
+    width: "15rem",
+  }),
 };

@@ -21,6 +21,7 @@ import useElementList, { Element } from './element_list';
 import styles from './index.css';
 import { MainContext } from 'components/main_page/contexts';
 import MessageInput from './message_input';
+import ImagePreview from 'components/main_page/common/image_preview';
 
 interface Props {
   group_id: string,
@@ -115,6 +116,16 @@ export default function MessageView(props: Props) {
             status={status}
           >
             {value.message_text}
+            {(() => {
+              console.log(value.files);
+              if (value.files === undefined) return <></>;
+              if (value.files.length === 0) return <></>;
+              return (
+                <div className={styles.image}>
+                  <ImagePreview file_id={value.files[0].file_id} />
+                </div>
+              );
+            })()}
           </Message>
         );
       }

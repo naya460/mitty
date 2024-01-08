@@ -37,6 +37,7 @@ model Group {
     group_name String
     messages   Message[]
     members    GroupsOnUsers[]
+    files      FilesOnMessages[]
 }
 
 model GroupsOnUsers {
@@ -51,10 +52,15 @@ model GroupsOnUsers {
 model Message {
     message_id   String   @id @default(cuid())
     message_text String
+
     author       User     @relation(fields: [author_id], references: [user_id])
     author_id    String
+
     group        Group    @relation(fields: [group_id], references: [group_id])   
     group_id     String
+
+    files        FilesOnMessages[]
+
     time         DateTime @default(now())
 
     @@index([message_id, group_id])
@@ -68,7 +74,22 @@ model File {
     author     User     @relation(fields: [author_id], references: [user_id])
     author_id  String
 
+    messages   FilesOnMessages[]
+
     time       DateTime @default(now())
 
     @@index([author_id])
+}
+
+model FilesOnMessages {
+    file       File    @relation(fields: [file_id], references: [file_id])
+    file_id    String
+
+    message    Message @relation(fields: [message_id], references: [message_id])
+    message_id String
+
+    group      Group   @relation(fields: [group_id], references: [group_id])
+    group_id   String
+
+    @@id([file_id, message_id])
 }

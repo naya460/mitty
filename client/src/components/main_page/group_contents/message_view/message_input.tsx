@@ -32,23 +32,25 @@ export default function MessageInput() {
     if (text === '') return;
 
     // 画像を送信
-    if (fileUrl !== '') {
+    const file_id = await (async () => {
+      if (fileUrl === '') return;
       const res = await mittyFetch({
         route: "file/add",
         post_data: {
           file: fileUrl,
         },
       });
-      console.log(await res.text());
       setFileUrl('');
-    }
+      return await res.text();
+    })();
 
     // メッセージを送信
     await mittyFetch({
       route: "message/send",
       post_data: {
         message_text: text,
-        group_id: group_id
+        group_id: group_id,
+        files: JSON.stringify([file_id]),
       }
     });
 

@@ -14,7 +14,6 @@
 
 import prisma from 'lib/prisma';
 
-import getUserId from 'database/user/get_user_id';
 import hasMember from 'database/group/has_member';
 
 // # addMessage
@@ -40,6 +39,7 @@ export default async function addMessage(
   user_id: string,
   group_id: string,
   message_text: string,
+  file_id?: string,
 ): Promise<boolean> {
   // 投稿ユーザーがグループに所属しているか調べる
   if (!(await hasMember(user_id, group_id))) {
@@ -47,13 +47,29 @@ export default async function addMessage(
   }
 
   // メッセージを追加
-  await prisma.message.create({
-    data: {
-      message_text: message_text,
-      author_id: user_id,
-      group_id: group_id,
-    },
-  });
+  if (file_id === undefined) {
+    await prisma.message.create({
+      data: {
+        message_text: message_text,
+        author_id: user_id,
+        group_id: group_id,
+      },
+    });
+  } else {
+    await prisma.message.create({
+      data: {
+        message_text: message_text,
+        author_id: user_id,
+        group_id: group_id,
+        files: {
+          create: {
+            file_id: file_id,
+            group_id: group_id,
+          }
+        }
+      },
+    });
+  }
 
   return true;
 }

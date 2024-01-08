@@ -22,6 +22,7 @@ export const sendMessageBodySchema = {
   properties: {
     message_text: { type: 'string' },
     group_id: { type: 'string' },
+    files: { type: 'string' },
   },
   required: [
     'message_text',
@@ -33,14 +34,29 @@ export const sendMessageRoute: UseRouteHandlerMethod<{
   Body: {
     message_text: string,
     group_id: string,
+    files?: string,
   }
 }> = async (req, res) => {
   // ユーザーを認証
   const auth = await authUser(req, res);
   if (auth === null) return;
 
+  // ファイル一覧の取り出し
+  const files = await (async () => {
+    if (req.body.files === undefined) return undefined;
+    const file = await JSON.parse(req.body.files);
+    if (file.length === 0) return undefined;
+    if (file[0] === null) return undefined;
+    return file[0];
+  })();
+
   // メッセージを追加
-  const success = await addMessage(auth.user_id, req.body.group_id, req.body.message_text);
+  const success = await addMessage(
+    auth.user_id,
+    req.body.group_id,
+    req.body.message_text,
+    files
+  );
   if (success === false) {
     return;
   }
