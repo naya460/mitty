@@ -28,7 +28,7 @@ export default function subscribeMessageSend() {
 }
 
 redis.on('message', async (channel, message) => {
-  const {user_id, group_id, message_text} = JSON.parse(message);
+  const {user_id, group_id, message_text, files} = JSON.parse(message);
 
   // グループのメンバーのクッキーを取得
   const member_cookie = await prisma.groupsOnUsers.findMany({
@@ -55,17 +55,34 @@ redis.on('message', async (channel, message) => {
     if (ws_list === undefined) return;
 
     // 全てのwsに配信する
-    ws_list.forEach((local_ws) => {
-      local_ws.ws.send(JSON.stringify({
-        route: 'message/send',
-        message_text: message_text,
-        author: {
-          user_id: user_id,
-          display_name: display_name,
-        },
-        group_id: group_id,
-        time: new Date()
-      }));
-    });
+    console.log(files);
+    if (files === undefined) {
+      ws_list.forEach((local_ws) => {
+        local_ws.ws.send(JSON.stringify({
+          route: 'message/send',
+          message_text: message_text,
+          author: {
+            user_id: user_id,
+            display_name: display_name,
+          },
+          group_id: group_id,
+          time: new Date()
+        }));
+      });
+    } else {
+      ws_list.forEach((local_ws) => {
+        local_ws.ws.send(JSON.stringify({
+          route: 'message/send',
+          message_text: message_text,
+          author: {
+            user_id: user_id,
+            display_name: display_name,
+          },
+          group_id: group_id,
+          files: [{file_id: files}],
+          time: new Date()
+        }));
+      });
+    }
   });
 });

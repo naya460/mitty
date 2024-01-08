@@ -66,6 +66,7 @@ export const sendMessageRoute: UseRouteHandlerMethod<{
     user_id: auth.user_id,
     group_id: req.body.group_id,
     message_text: req.body.message_text,
+    files: files,
   }));
 
   res.status(201);
