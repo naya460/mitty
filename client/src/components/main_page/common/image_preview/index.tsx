@@ -15,6 +15,7 @@
 import { useEffect, useState } from "react";
 import styles from "./index.css";
 import mittyFetch from "utils/fetch";
+import { mittyCacheManager } from "utils/cache";
 
 type Props = {
   file_id?: string,
@@ -27,14 +28,8 @@ export default function ImagePreview(props: Props) {
   useEffect(() => {
     (async () => {
       if (props.file_id === undefined) return;
-      const res = await mittyFetch({
-        route: 'file/get',
-        post_data: {
-          file_id: props.file_id,
-        },
-      });
-      const url = URL.createObjectURL(await res.blob());
-      setUrl(url);
+
+      setUrl(await imageCache.getData(props.file_id));
     })();    
   }, [props.file_id]);
 
@@ -44,3 +39,21 @@ export default function ImagePreview(props: Props) {
     </div>
   );
 }
+
+// 画像のキャッシュ処理
+const imageCache = new mittyCacheManager<string, string>({
+  fetcher: async (id) => {
+    if (id === null) return;
+
+    // 画像を取得
+    const res = await mittyFetch({
+      route: "file/get",
+      post_data: {
+        file_id: id,
+      },
+    });
+
+    const url = URL.createObjectURL(await res.blob());
+    return url;
+  }
+});
