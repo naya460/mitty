@@ -31,12 +31,15 @@ export default function UserProfile(props: Props) {
     (async () => {
       const res = await mittyFetch({
         route: 'user/get_file_list',
+        post_data: {
+          user_id: props.user_id,
+        },
       });
       const json = await res.json();
       const tmp = json.map(value => value.file_id);
       setFiles(tmp);
     })()
-  }, []);
+  }, [props.user_id]);
 
   return (
     <div className={styles.top}>

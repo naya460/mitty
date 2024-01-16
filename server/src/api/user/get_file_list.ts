@@ -16,13 +16,24 @@ import authUser from "common/auth_user";
 import getUserFileList from "database/user/get_file_list";
 import { UseRouteHandlerMethod } from "lib/use_route_handler";
 
-export const getUserFileListRoute: UseRouteHandlerMethod = async (req, res) => {
+export const getUserFileListSchema = {
+  type: 'object',
+  properties: {
+    user_id: { type: 'string' },
+  },
+};
+
+export const getUserFileListRoute: UseRouteHandlerMethod<{
+  Body: {
+    user_id: string,
+  }
+}> = async (req, res) => {
   // ユーザーを認証
   const auth = await authUser(req, res);
   if (auth === null) return;
 
   // ファイル一覧を取得
-  const list = await getUserFileList(auth.user_id);
+  const list = await getUserFileList(req.body.user_id);
 
   res.status(200).type('application/json');
   return list;
